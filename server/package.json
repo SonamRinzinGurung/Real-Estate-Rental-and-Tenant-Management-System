@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend real estate rental system",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "npm run server",
     "dev": "nodemon server.js",

@@ -1,9 +1,10 @@
-const express = require("express");
+import express from "express";
 const app = express();
+import authRoutes from "./routes/authRoutes.js";
 
 app.use(express.json());
 
-app.use("/", require("./routes/authRoutes"));
+app.use("/", authRoutes);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");

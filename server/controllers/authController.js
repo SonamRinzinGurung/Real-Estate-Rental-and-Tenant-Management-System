@@ -6,7 +6,4 @@ const register = async (req, res) => {
   res.json({ message: "Register route" });
 };
 
-module.exports = {
-  login,
-  register,
-};
+export { login, register };
