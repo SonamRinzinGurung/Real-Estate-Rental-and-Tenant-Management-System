@@ -9,7 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 
 app.use(express.json()); //to parse json data
 
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT || 5000; //port number
 
