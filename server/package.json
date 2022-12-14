@@ -12,6 +12,7 @@
   "author": "Sonam Rinzin Gurung",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.8.0"
