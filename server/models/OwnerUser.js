@@ -55,4 +55,8 @@ OwnerUserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+OwnerUserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 export default mongoose.model("OwnerUser", OwnerUserSchema);
