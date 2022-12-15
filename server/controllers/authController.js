@@ -1,36 +1,36 @@
 import OwnerUser from "../models/OwnerUser.js";
 import TenantUser from "../models/TenantUser.js";
+import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
 
 const login = async (req, res) => {
-  const { role } = req.body;
+  const { role, email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError("Provide email and password");
+  }
   if (role === "owner") {
-    const owner = await OwnerUser.findOne({ email: req.body.email }).select(
-      "+password"
-    );
+    const owner = await OwnerUser.findOne({ email }).select("+password");
     if (!owner) {
-      res.status(404).json({ message: "User not found" });
+      throw new UnAuthorizedError("Invalid Email");
     }
-    const isMatch = await owner.matchPassword(req.body.password);
+    const isMatch = await owner.matchPassword(password);
     if (!isMatch) {
-      res.status(401).json({ message: "Invalid password" });
+      throw new UnAuthorizedError("Invalid Credentials");
     }
     owner.password = undefined;
     res.status(200).json({ owner });
   } else if (role === "tenant") {
-    const tenant = await TenantUser.findOne({ email: req.body.email }).select(
-      "+password"
-    );
+    const tenant = await TenantUser.findOne({ email }).select("+password");
     if (!tenant) {
-      res.status(404).json({ message: "User not found" });
+      throw new UnAuthorizedError("Invalid Email");
     }
-    const isMatch = await tenant.matchPassword(req.body.password);
+    const isMatch = await tenant.matchPassword(password);
     if (!isMatch) {
-      res.status(401).json({ message: "Invalid password" });
+      throw new UnAuthorizedError("Invalid Credentials");
     }
     tenant.password = undefined;
     res.status(200).json({ tenant });
   } else {
-    res.status(400).json({ message: "Invalid role" });
+    throw new BadRequestError("Invalid Role");
   }
 };
 
@@ -45,7 +45,7 @@ const register = async (req, res) => {
     tenant.password = undefined;
     res.status(201).json({ tenant });
   } else {
-    res.status(400).json({ message: "Invalid role" });
+    throw new BadRequestError("Invalid Role");
   }
 };
 
