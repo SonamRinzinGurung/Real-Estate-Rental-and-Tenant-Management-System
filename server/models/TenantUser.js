@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const TenantUserSchema = new mongoose.Schema(
   {
@@ -57,6 +58,12 @@ TenantUserSchema.pre("save", async function () {
 
 TenantUserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+TenantUserSchema.methods.createJWT = function () {
+  return jwt.sign({ userId: this._id }, process.env.JWT_KEY, {
+    expiresIn: process.env.JWT_LIFETIME,
+  });
 };
 
 export default mongoose.model("TenantUser", TenantUserSchema);

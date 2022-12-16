@@ -16,8 +16,9 @@ const login = async (req, res) => {
     if (!isMatch) {
       throw new UnAuthorizedError("Invalid Credentials");
     }
+    const token = owner.createJWT();
     owner.password = undefined;
-    res.status(200).json({ owner });
+    res.status(200).json({ owner, token });
   } else if (role === "tenant") {
     const tenant = await TenantUser.findOne({ email }).select("+password");
     if (!tenant) {
@@ -27,8 +28,9 @@ const login = async (req, res) => {
     if (!isMatch) {
       throw new UnAuthorizedError("Invalid Credentials");
     }
+    const token = tenant.createJWT();
     tenant.password = undefined;
-    res.status(200).json({ tenant });
+    res.status(200).json({ tenant, token });
   } else {
     throw new BadRequestError("Invalid Role");
   }
@@ -39,11 +41,14 @@ const register = async (req, res) => {
   if (role === "owner") {
     const owner = await OwnerUser.create(req.body);
     owner.password = undefined;
-    res.status(201).json({ owner });
+    const token = owner.createJWT();
+    res.status(201).json({ owner, token });
   } else if (role === "tenant") {
     const tenant = await TenantUser.create(req.body);
     tenant.password = undefined;
-    res.status(201).json({ tenant });
+    const token = tenant.createJWT();
+
+    res.status(201).json({ tenant, token });
   } else {
     throw new BadRequestError("Invalid Role");
   }
