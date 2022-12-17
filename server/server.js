@@ -8,13 +8,21 @@ import "express-async-errors";
 import connectDB from "./database/connectDB.js"; //function to connect to the database
 //routes
 import authRoutes from "./routes/authRoutes.js";
+import ownerRealEstateRoutes from "./routes/owner/owner-real-estate.js";
+import tenantRealEstateRoutes from "./routes/tenant/tenant-real-estate.js";
 
 import routeNotFoundMiddleware from "./middleware/route-not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
+import {
+  authenticateOwnerUser,
+  authenticateTenantUser,
+} from "./middleware/userAuthentication.js";
 
 app.use(express.json()); //to parse json data
 
 app.use("/auth", authRoutes);
+app.use("/owner/real-estate", authenticateOwnerUser, ownerRealEstateRoutes);
+app.use("/tenant/real-estate", authenticateTenantUser, tenantRealEstateRoutes);
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);

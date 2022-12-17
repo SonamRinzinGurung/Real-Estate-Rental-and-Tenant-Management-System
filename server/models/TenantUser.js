@@ -49,6 +49,7 @@ const TenantUserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Hash password before saving to database
 TenantUserSchema.pre("save", async function () {
   if (!this.isModified("password")) return; //avoid re-hashing of password
 
@@ -56,12 +57,14 @@ TenantUserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+// Compare entered password with hashed password in database
 TenantUserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Create JWT and return it to the client for authentication
 TenantUserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_KEY, {
+  return jwt.sign({ userId: this._id }, process.env.JWT_KEY_TENANT, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };

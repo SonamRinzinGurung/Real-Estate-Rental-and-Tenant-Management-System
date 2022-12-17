@@ -49,19 +49,23 @@ const OwnerUserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Hash password before saving to database
 OwnerUserSchema.pre("save", async function () {
   if (!this.isModified("password")) return; //avoid re-hashing of password
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  const salt = await bcrypt.genSalt(10); // generate salt
+  this.password = await bcrypt.hash(this.password, salt); // hash password
 });
 
+// Compare entered password with hashed password in database
 OwnerUserSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  return await bcrypt.compare(enteredPassword, this.password); // return true if passwords match else false
 };
 
+// create JWT token for owner user authentication
 OwnerUserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_KEY, {
+  // return JWT token with user id
+  return jwt.sign({ userId: this._id }, process.env.JWT_KEY_OWNER, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };
