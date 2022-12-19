@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "npm run server",
-    "dev": "nodemon server.js",
+    "server": "nodemon app --ignore client",
+    "client": "npm start --prefix ../client",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \" npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sonam Rinzin Gurung",
@@ -20,6 +22,7 @@
     "mongoose": "^6.8.0"
   },
   "devDependencies": {
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.20"
   }
 }
