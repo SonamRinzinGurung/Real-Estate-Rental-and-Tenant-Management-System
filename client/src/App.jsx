@@ -1,12 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Login, Register } from "./pages";
+import { Login, Register, Homepage, Landing } from "./pages";
+import { ProtectedRoutes, SharedLayout } from "./components";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoutes>
+              <SharedLayout />
+            </ProtectedRoutes>
+          }
+        >
+          <Route index element={<Homepage />} />
+        </Route>
+
+        <Route path="/login/:role" element={<Login />} />
+        <Route path="/register/:role" element={<Register />} />
+        <Route path="/landing" element={<Landing />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,26 +1,33 @@
-import React from "react";
+import { useEffect } from "react";
 import FormRow from "../components/FormRow";
-import axios from "axios";
-
+import { useDispatch, useSelector } from "react-redux";
+import { loginOwner, loginTenant } from "../features/auth/authSlice";
+import { useNavigate, useParams } from "react-router-dom";
 const Login = () => {
+  const { user } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
+  const param = useParams();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
+
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const userInfo = {
       email: e.target[0].value,
       password: e.target[1].value,
-      role: "owner",
+      role: param.role,
     };
-    login(userInfo);
-  };
-
-  const login = async (userInfo) => {
-    try {
-      const { data } = await axios.post("/auth/login", userInfo);
-      const { owner, token } = data;
-      console.log(owner, token);
-    } catch (error) {
-      console.log(error);
+    if (param.role === "owner") {
+      dispatch(loginOwner({ userInfo }));
+    } else if (param.role === "tenant") {
+      dispatch(loginTenant({ userInfo }));
     }
   };
 

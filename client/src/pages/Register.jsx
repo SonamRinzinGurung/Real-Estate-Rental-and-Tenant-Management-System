@@ -1,10 +1,22 @@
-import { useState } from "react";
 import FormRow from "../components/FormRow";
 import FormSelect from "../components/FormSelect";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { registerOwner, registerTenant } from "../features/auth/authSlice";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Register = () => {
-  const [owner, setOwner] = useState({});
+  const { user } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
+  const param = useParams();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
+
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
     const userInfo = {
@@ -16,19 +28,15 @@ const Register = () => {
       age: e.target[5].value,
       gender: e.target[6].value,
       password: e.target[7].value,
-      role: "owner",
+      role: param.role,
     };
-    register(userInfo);
-  };
-
-  const register = async (userInfo) => {
-    try {
-      const { data } = await axios.post("/auth/register", userInfo);
-      const { owner, token } = data;
-    } catch (error) {
-      console.log(error);
+    if (param.role === "owner") {
+      dispatch(registerOwner({ userInfo }));
+    } else if (param.role === "tenant") {
+      dispatch(registerTenant({ userInfo }));
     }
   };
+
   return (
     <div className="bg-gray-200 min-h-screen">
       <div className="flex flex-col justify-center items-center h-full max-w-xl mx-auto">
