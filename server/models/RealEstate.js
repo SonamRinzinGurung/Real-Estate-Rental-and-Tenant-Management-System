@@ -55,4 +55,4 @@ const RealEstateSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models("RealEstate", RealEstateSchema);
+export default mongoose.model("RealEstate", RealEstateSchema);
