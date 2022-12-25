@@ -4,16 +4,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#68904D",
-        primaryLight: "#8ABF6F",
-        primaryDark: "#14471E",
+        primary: "#ada2ff",
+        primaryDark: "#8f86d7",
         secondary: "#EE9B01",
-        tertiary: "#DA6A00",
+        secondaryDark: "#d48b02",
+        tertiary: "#00ACCF",
+        tertiaryDark: "#0496b4",
       },
     },
     fontFamily: {
-      serif: ["Cabin", "sans-serif"],
-      display: ["Roboto Condensed", "sans-serif"],
+      serif: ["Open Sans", "sans-serif"],
+      display: ["Righteous", "sans-serif"],
+      roboto: ["Roboto Condensed", "sans-serif"],
     },
   },
   plugins: [],
