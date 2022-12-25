@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Logo from "../assets/images/logo.png";
+import { Logo } from "../components";
 import landingImg from "../assets/images/landing1.svg";
 import landingImg2 from "../assets/images/landing2.svg";
 
@@ -16,7 +16,7 @@ const Landing = () => {
   return (
     <div>
       <nav className="flex m-5 shadow-sm">
-        <img className="w-24 h-14 " src={Logo} alt="" />
+        <Logo />
         <div className="flex flex-col justify-center ml-2">
           <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
           <p className="text-xs md:text-sm">
@@ -44,13 +44,13 @@ const Landing = () => {
           <p className="tracking-wide">Keep track of your tenant's payments</p>
           <div className="flex justify-center mt-7">
             <Link to={"/login/owner"}>
-              <button className="btn bg-secondary text-white px-4 py-2 rounded-lg w-28 mx-4 hover:bg-secondaryDark">
+              <button className="btn bg-secondary text-white  rounded-lg w-28 mx-4 hover:bg-secondaryDark">
                 Login
               </button>
             </Link>
-            <span className="text-2xl">or</span>
+            <span className="sm:text-2xl">or</span>
             <Link to={"/register/owner"}>
-              <button className="btn bg-primary text-white px-4 py-2 rounded-lg w-28 mx-4 hover:bg-primaryDark">
+              <button className="btn bg-primary text-white  rounded-lg w-28 mx-4 hover:bg-primaryDark">
                 Register
               </button>
             </Link>
@@ -78,13 +78,13 @@ const Landing = () => {
           </p>
           <div className="flex justify-center mt-7">
             <Link to={"/login/tenant"}>
-              <button className="btn bg-secondary text-white px-4 py-2 rounded-lg w-28 mx-4 hover:bg-secondaryDark">
+              <button className="btn bg-secondary text-white rounded-lg w-28 mx-4 hover:bg-secondaryDark">
                 Login
               </button>
             </Link>
-            <span className="text-2xl">or</span>
+            <span className="sm:text-2xl">or</span>
             <Link to={"/register/tenant"}>
-              <button className="btn bg-tertiary text-white px-4 py-2 rounded-lg w-28 mx-4 hover:bg-tertiaryDark">
+              <button className="btn bg-tertiary text-white rounded-lg w-28 mx-4 hover:bg-tertiaryDark">
                 Register
               </button>
             </Link>
@@ -94,22 +94,16 @@ const Landing = () => {
 
       <footer class="p-4 shadow-sm md:px-6 md:py-8 bg-slate-300">
         <div class="sm:flex sm:items-center sm:justify-between">
-          <a
-            href="http://localhost:3000"
-            class="flex items-center mb-4 sm:mb-0"
-          >
-            <img
-              src={Logo}
-              class="mr-3 max-h-12 md:max-h-16"
-              alt="Property Plus Logo"
-            />
-            <div className="flex flex-col justify-center">
+          <div class="flex items-center mb-4 sm:mb-0">
+            <Logo />
+
+            <div className="flex flex-col ml-3 justify-center">
               <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
               <p className="text-xs md:text-sm">
                 Find and Manage your rentals in one place
               </p>
             </div>
-          </a>
+          </div>
           <ul class="flex flex-wrap items-center mb-6 text-sm sm:mb-0">
             <li>
               <a href="#" class="mr-4 hover:underline md:mr-6 ">
