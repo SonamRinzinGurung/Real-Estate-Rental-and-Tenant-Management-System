@@ -46,31 +46,31 @@ const Login = () => {
 
       <div className="px-6 h-full">
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-          <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+          <div className="grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
             <img src={loginImg} className="w-full" alt="login banner" />
           </div>
           <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
             <form onSubmit={handleSubmit}>
-              <div className="flex justify-center  mb-6">
+              <div className="flex justify-center mb-6">
                 <h4 className="">Login to your account</h4>
               </div>
+              <div className="flex flex-col gap-2 mb-2">
+                <FormRow labelName="Email" type="email" />
 
-              <FormRow labelName="Email" type="email" />
-
-              <FormRow labelName="Password" type="password" />
+                <FormRow labelName="Password" type="password" />
+              </div>
 
               <div className="text-center lg:text-left">
                 <button
                   type="submit"
-                  className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase  hover:bg-primaryDark md:text-base"
+                  className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase hover:bg-primaryDark md:text-base"
                 >
                   Login
                 </button>
-                <p className="text-sm font-semibold mt-2 pt-1 mb-0 md:text-base">
+                <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Don't have an account?{" "}
                   <Link
                     to={`/register/${param.role}`}
-                    href="#!"
                     className="text-secondary hover:text-secondaryDark transition duration-200 ease-in-out"
                   >
                     Register

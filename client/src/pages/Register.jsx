@@ -1,9 +1,9 @@
-import FormRow from "../components/FormRow";
-import FormSelect from "../components/FormSelect";
+import { FormRow, FormSelect, Logo } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { registerOwner, registerTenant } from "../features/auth/authSlice";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import registerImg from "../assets/images/registerImg.svg";
 
 const Register = () => {
   const { user } = useSelector((store) => store.auth);
@@ -38,35 +38,63 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-gray-200 min-h-screen">
-      <div className="flex flex-col justify-center items-center h-full max-w-xl mx-auto">
-        <h1 className="font-bold text-4xl text-gray-800 font-mono text-center my-4 py-5">
-          Register
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-row bg-white shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 hover:shadow-xl flex-wrap"
-        >
-          <FormRow labelName="first name" type="text" />
-          <FormRow labelName="last name" type="text" />
-          <FormRow labelName="email" type="email" />
-          <FormRow labelName="address" type="text" />
-          <FormRow labelName="phone number" type="text" />
-          <FormRow labelName="age" type="text" />
-          <FormSelect
-            labelName="gender"
-            options={["male", "female", "other"]}
-          />
-          <FormRow labelName="password" type="password" />
-          <div className="flex items-center justify-center">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign Up
-            </button>
+    <div>
+      <nav className="flex m-5 shadow-sm">
+        <Logo />
+        <div className="flex flex-col justify-center ml-2">
+          <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
+          <p className="text-xs md:text-sm">
+            Find and Manage your rentals in one place
+          </p>
+        </div>
+      </nav>
+
+      <div className="px-6 h-full">
+        <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
+          <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+            <form onSubmit={handleSubmit}>
+              <div className="flex justify-center mt-3 mb-4">
+                <h4 className="">Register for your new account</h4>
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <FormRow labelName="first name" type="text" />
+                <FormRow labelName="last name" type="text" />
+                <FormRow labelName="email" type="email" />
+                <FormRow labelName="address" type="text" />
+                <FormRow labelName="phone number" type="text" />
+                <FormRow labelName="age" type="text" />
+                <FormSelect
+                  labelName="gender"
+                  options={["male", "female", "other"]}
+                />
+              </div>
+              <div className="w-1/2 mx-auto">
+                <FormRow labelName="password" type="password" />
+              </div>
+
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase mt-2 hover:bg-primaryDark md:text-base"
+                >
+                  Register
+                </button>
+                <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
+                  Already have an account?{" "}
+                  <Link
+                    to={`/login/${param.role}`}
+                    className="text-secondary hover:text-secondaryDark transition duration-200 ease-in-out"
+                  >
+                    Login
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
-        </form>
+          <div className="hidden grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0 sm:block">
+            <img src={registerImg} className="w-full" alt="login banner" />
+          </div>
+        </div>
       </div>
     </div>
   );
