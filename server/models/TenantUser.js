@@ -7,10 +7,12 @@ const TenantUserSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: [true, "Please provide a first name"],
+      maxLength: 20,
     },
     lastName: {
       type: String,
       required: [true, "Please provide a last name"],
+      maxLength: 20,
     },
     email: {
       type: String,
@@ -27,15 +29,20 @@ const TenantUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a phone number"],
       unique: true,
+      match: [/^[9]+[7-8]+\d{8}$/, "Please provide a valid phone number"],
     },
     age: {
       type: String,
       required: [true, "Please provide an age"],
+      match: [
+        /^(1[6789]|[2-9][0-9]|[1][0-1][0-9])$/,
+        "Only 16 and above allowed",
+      ],
     },
     gender: {
       type: String,
       enum: {
-        values: ["male", "female", "other"],
+        values: ["Male", "Female", "Other"],
         message: "{VALUE} is not supported",
       },
     },

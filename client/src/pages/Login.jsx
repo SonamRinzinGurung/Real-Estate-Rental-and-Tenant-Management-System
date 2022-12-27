@@ -1,28 +1,39 @@
-import { useEffect } from "react";
-import { FormRow, Logo } from "../components";
+import { useEffect, useState, useCallback } from "react";
+import { Logo, FormPasswordField, FormTextField } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { loginOwner, loginTenant } from "../features/auth/authSlice";
+import {
+  clearAlert,
+  loginOwner,
+  loginTenant,
+} from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
-
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 const Login = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user, errorMsg, errorFlag } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
+
+  const vertical = "bottom";
+  const horizontal = "right";
+
+  const [values, setFormValues] = useState({ email: "", password: "" });
 
   useEffect(() => {
     if (user) {
       navigate("/");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { email, password } = values;
     const userInfo = {
-      email: e.target[0].value,
-      password: e.target[1].value,
+      email,
+      password,
       role: param.role,
     };
     if (param.role === "owner") {
@@ -32,6 +43,22 @@ const Login = () => {
     }
   };
 
+  const handleClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
+
+  const handleChange = useCallback(
+    (e) => {
+      setFormValues({ ...values, [e.target.name]: e.target.value });
+    },
+    [values]
+  );
   return (
     <div>
       <nav className="flex m-5 shadow-sm">
@@ -54,10 +81,19 @@ const Login = () => {
               <div className="flex justify-center mb-6">
                 <h4 className="">Login to your account</h4>
               </div>
-              <div className="flex flex-col gap-2 mb-2">
-                <FormRow labelName="Email" type="email" />
 
-                <FormRow labelName="Password" type="password" />
+              <div className="flex flex-col gap-2 mb-2">
+                <FormTextField
+                  value={values.email}
+                  name={"email"}
+                  type={"email"}
+                  label={"Email"}
+                  handleChange={handleChange}
+                />
+                <FormPasswordField
+                  value={values.password}
+                  handleChange={handleChange}
+                />
               </div>
 
               <div className="text-center lg:text-left">
@@ -81,6 +117,16 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={errorFlag}
+        anchorOrigin={{ vertical, horizontal }}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert severity="error" sx={{ width: "250px" }}>
+          {errorMsg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import OwnerUser from "../models/OwnerUser.js";
 import TenantUser from "../models/TenantUser.js";
 import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
+import { isEmailValid } from "../utils/validateEmail.js";
 
 const login = async (req, res) => {
   const { role, email, password } = req.body;
@@ -10,11 +11,11 @@ const login = async (req, res) => {
   if (role === "owner") {
     const owner = await OwnerUser.findOne({ email }).select("+password");
     if (!owner) {
-      throw new UnAuthorizedError("Invalid Email");
+      throw new UnAuthorizedError("Email not found!");
     }
     const isMatch = await owner.matchPassword(password);
     if (!isMatch) {
-      throw new UnAuthorizedError("Invalid Credentials");
+      throw new UnAuthorizedError("Incorrect Password!");
     }
     const token = owner.createJWT();
     owner.password = undefined;
@@ -22,11 +23,11 @@ const login = async (req, res) => {
   } else if (role === "tenant") {
     const tenant = await TenantUser.findOne({ email }).select("+password");
     if (!tenant) {
-      throw new UnAuthorizedError("Invalid Email");
+      throw new UnAuthorizedError("Email not found!");
     }
     const isMatch = await tenant.matchPassword(password);
     if (!isMatch) {
-      throw new UnAuthorizedError("Invalid Credentials");
+      throw new UnAuthorizedError("Incorrect Password!");
     }
     const token = tenant.createJWT();
     tenant.password = undefined;
@@ -37,7 +38,11 @@ const login = async (req, res) => {
 };
 
 const register = async (req, res) => {
-  const { role } = req.body;
+  const { role, email } = req.body;
+  const { valid, reason, validators } = await isEmailValid(email);
+  if (!valid) {
+    throw new BadRequestError(validators[reason].reason);
+  }
   if (role === "owner") {
     const owner = await OwnerUser.create(req.body);
     owner.password = undefined;

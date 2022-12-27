@@ -1,14 +1,31 @@
-import { FormRow, FormSelect, Logo } from "../components";
+import { useEffect, useState, useCallback } from "react";
+import {
+  Logo,
+  FormTextField,
+  FormPasswordField,
+  FormSelectField,
+} from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { registerOwner, registerTenant } from "../features/auth/authSlice";
-import { useEffect } from "react";
+import {
+  registerOwner,
+  registerTenant,
+  clearAlert,
+} from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Register = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user, errorFlag, errorMsg, isLoading } = useSelector(
+    (store) => store.auth
+  );
   const navigate = useNavigate();
   const param = useParams();
+
+  const vertical = "bottom";
+  const horizontal = "left";
 
   useEffect(() => {
     if (user) {
@@ -16,18 +33,46 @@ const Register = () => {
     }
   }, [user]);
 
+  const [values, setFormValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+    age: "",
+    gender: "",
+    password: "",
+  });
+
+  const handleChange = useCallback(
+    (e) => {
+      setFormValues({ ...values, [e.target.name]: e.target.value });
+    },
+    [values]
+  );
+
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
+    const {
+      firstName,
+      lastName,
+      email,
+      address,
+      phoneNumber,
+      age,
+      gender,
+      password,
+    } = values;
     const userInfo = {
-      firstName: e.target[0].value,
-      lastName: e.target[1].value,
-      email: e.target[2].value,
-      address: e.target[3].value,
-      phoneNumber: e.target[4].value,
-      age: e.target[5].value,
-      gender: e.target[6].value,
-      password: e.target[7].value,
+      firstName,
+      lastName,
+      email,
+      address,
+      phoneNumber,
+      age,
+      gender,
+      password,
       role: param.role,
     };
     if (param.role === "owner") {
@@ -35,6 +80,13 @@ const Register = () => {
     } else if (param.role === "tenant") {
       dispatch(registerTenant({ userInfo }));
     }
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(clearAlert());
   };
 
   return (
@@ -57,19 +109,62 @@ const Register = () => {
                 <h4 className="">Register for your new account</h4>
               </div>
               <div className="flex flex-wrap gap-2 justify-center">
-                <FormRow labelName="first name" type="text" />
-                <FormRow labelName="last name" type="text" />
-                <FormRow labelName="email" type="email" />
-                <FormRow labelName="address" type="text" />
-                <FormRow labelName="phone number" type="text" />
-                <FormRow labelName="age" type="text" />
-                <FormSelect
-                  labelName="gender"
-                  options={["male", "female", "other"]}
+                <FormTextField
+                  label="First Name"
+                  name="firstName"
+                  type={"text"}
+                  value={values.firstName}
+                  handleChange={handleChange}
+                />
+                <FormTextField
+                  label="Last Name"
+                  name="lastName"
+                  type={"text"}
+                  value={values.lastName}
+                  handleChange={handleChange}
+                />
+                <FormTextField
+                  label="Email"
+                  name="email"
+                  type={"email"}
+                  value={values.email}
+                  handleChange={handleChange}
+                />
+                <FormTextField
+                  label="Address"
+                  name="address"
+                  type={"text"}
+                  value={values.address}
+                  handleChange={handleChange}
+                />
+                <FormTextField
+                  label="Phone Number"
+                  name="phoneNumber"
+                  type={"number"}
+                  value={values.phoneNumber}
+                  handleChange={handleChange}
+                />
+
+                <FormSelectField
+                  label="Age"
+                  name="age"
+                  options={Array.from(new Array(100), (x, i) => i + 16)}
+                  value={values.age}
+                  handleChange={handleChange}
+                />
+                <FormSelectField
+                  label="Gender"
+                  name="gender"
+                  options={["Male", "Female", "Other"]}
+                  value={values.gender}
+                  handleChange={handleChange}
                 />
               </div>
-              <div className="w-1/2 mx-auto">
-                <FormRow labelName="password" type="password" />
+              <div className="w-1/2 mx-auto mt-2">
+                <FormPasswordField
+                  value={values.password}
+                  handleChange={handleChange}
+                />
               </div>
 
               <div className="text-center">
@@ -77,7 +172,16 @@ const Register = () => {
                   type="submit"
                   className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase mt-2 hover:bg-primaryDark md:text-base"
                 >
-                  Register
+                  {isLoading ? (
+                    <CircularProgress
+                      size={22}
+                      sx={{
+                        color: "tertiary.dark",
+                      }}
+                    />
+                  ) : (
+                    "Register"
+                  )}
                 </button>
                 <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Already have an account?{" "}
@@ -96,6 +200,16 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={errorFlag}
+        anchorOrigin={{ vertical, horizontal }}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert severity="error" sx={{ width: "250px" }}>
+          {errorMsg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

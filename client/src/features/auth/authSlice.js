@@ -65,9 +65,19 @@ const authSlice = createSlice({
     user: user ? JSON.parse(user) : null,
     token: localStorage.getItem("token") || "",
     isLoading: false,
+    errorFlag: false,
     errorMsg: "",
   },
-  reducers: {},
+  reducers: {
+    logOut: (state) => {
+      state.user = null;
+      state.token = "";
+    },
+    clearAlert: (state) => {
+      state.errorFlag = false;
+      state.errorMsg = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginOwner.pending, (state) => {
@@ -80,6 +90,7 @@ const authSlice = createSlice({
       })
       .addCase(loginOwner.rejected, (state, action) => {
         state.isLoading = false;
+        state.errorFlag = true;
         state.errorMsg = action.payload;
       })
       .addCase(registerOwner.pending, (state) => {
@@ -92,6 +103,7 @@ const authSlice = createSlice({
       })
       .addCase(registerOwner.rejected, (state, action) => {
         state.isLoading = false;
+        state.errorFlag = true;
         state.errorMsg = action.payload;
       })
       .addCase(loginTenant.pending, (state) => {
@@ -104,6 +116,7 @@ const authSlice = createSlice({
       })
       .addCase(loginTenant.rejected, (state, action) => {
         state.isLoading = false;
+        state.errorFlag = true;
         state.errorMsg = action.payload;
       })
       .addCase(registerTenant.pending, (state) => {
@@ -116,9 +129,12 @@ const authSlice = createSlice({
       })
       .addCase(registerTenant.rejected, (state, action) => {
         state.isLoading = false;
+        state.errorFlag = true;
         state.errorMsg = action.payload;
       });
   },
 });
+
+export const { logOut, clearAlert } = authSlice.actions;
 
 export default authSlice.reducer;
