@@ -16,6 +16,7 @@ import registerImg from "../assets/images/registerImg.svg";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Button } from "@mui/material";
 
 const Register = () => {
   const { user, errorFlag, errorMsg, isLoading } = useSelector(
@@ -91,7 +92,7 @@ const Register = () => {
 
   return (
     <div>
-      <nav className="flex m-5 shadow-sm">
+      <header className="flex m-1 shadow-sm">
         <Logo />
         <div className="flex flex-col justify-center ml-2">
           <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
@@ -99,9 +100,9 @@ const Register = () => {
             Find and Manage your rentals in one place
           </p>
         </div>
-      </nav>
+      </header>
 
-      <div className="px-6 h-full">
+      <main className="px-6 h-full mt-7">
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
             <form onSubmit={handleSubmit}>
@@ -167,10 +168,20 @@ const Register = () => {
                 />
               </div>
 
-              <div className="text-center">
-                <button
+              <div className="text-center mt-2">
+                <Button
                   type="submit"
-                  className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase mt-2 hover:bg-primaryDark md:text-base"
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  sx={{
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "primary.dark",
+                      opacity: [0.9, 0.8, 0.7],
+                    },
+                    width: "25%",
+                  }}
                 >
                   {isLoading ? (
                     <CircularProgress
@@ -182,7 +193,7 @@ const Register = () => {
                   ) : (
                     "Register"
                   )}
-                </button>
+                </Button>
                 <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Already have an account?{" "}
                   <Link
@@ -199,7 +210,7 @@ const Register = () => {
             <img src={registerImg} className="w-full" alt="login banner" />
           </div>
         </div>
-      </div>
+      </main>
       <Snackbar
         open={errorFlag}
         anchorOrigin={{ vertical, horizontal }}

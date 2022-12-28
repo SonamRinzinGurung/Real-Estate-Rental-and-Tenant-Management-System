@@ -10,6 +10,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
+import { Button } from "@mui/material";
 const Login = () => {
   const { user, errorMsg, errorFlag } = useSelector((store) => store.auth);
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const Login = () => {
   );
   return (
     <div>
-      <nav className="flex m-5 shadow-sm">
+      <header className="flex m-1 shadow-sm">
         <Logo />
         <div className="flex flex-col justify-center ml-2">
           <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
@@ -69,9 +70,9 @@ const Login = () => {
             Find and Manage your rentals in one place
           </p>
         </div>
-      </nav>
+      </header>
 
-      <div className="px-6 h-full">
+      <main className="px-6 h-full mt-7">
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
             <img src={loginImg} className="w-full" alt="login banner" />
@@ -97,12 +98,22 @@ const Login = () => {
               </div>
 
               <div className="text-center lg:text-left">
-                <button
+                <Button
+                  variant="contained"
                   type="submit"
-                  className="btn bg-primary w-1/4 text-white font-medium text-sm uppercase hover:bg-primaryDark md:text-base"
+                  size="medium"
+                  color="primary"
+                  sx={{
+                    color: "white",
+                    width: "25%",
+                    "&:hover": {
+                      backgroundColor: "primary.dark",
+                      opacity: [0.9, 0.8, 0.7],
+                    },
+                  }}
                 >
                   Login
-                </button>
+                </Button>
                 <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Don't have an account?{" "}
                   <Link
@@ -116,7 +127,7 @@ const Login = () => {
             </form>
           </div>
         </div>
-      </div>
+      </main>
       <Snackbar
         open={errorFlag}
         anchorOrigin={{ vertical, horizontal }}

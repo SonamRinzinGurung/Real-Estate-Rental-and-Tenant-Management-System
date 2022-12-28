@@ -48,14 +48,3 @@ a {
 p {
   font-size: clamp(0.8rem, 2.5vw, 1.1rem);
 }
-
-.btn {
-  cursor: pointer;
-  border: transparent;
-  border-radius: 0.25rem;
-  padding: 0.375rem 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: 0.3s ease-in-out all;
-  text-transform: capitalize;
-  display: inline-block;
-}
