@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Login, Register, Homepage, Landing } from "./pages";
+import { Login, Register, Homepage, Landing, NotFound } from "./pages";
 import { ProtectedRoutes, SharedLayout } from "./components";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -39,6 +39,7 @@ function App() {
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
