@@ -17,6 +17,8 @@ import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 const Register = () => {
   const { user, errorFlag, errorMsg, isLoading } = useSelector(
@@ -32,7 +34,7 @@ const Register = () => {
     if (user) {
       navigate("/");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const [values, setFormValues] = useState({
     firstName: "",
@@ -42,6 +44,7 @@ const Register = () => {
     phoneNumber: "",
     age: "",
     gender: "",
+    image: "",
     password: "",
   });
 
@@ -55,31 +58,15 @@ const Register = () => {
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {
-      firstName,
-      lastName,
-      email,
-      address,
-      phoneNumber,
-      age,
-      gender,
-      password,
-    } = values;
-    const userInfo = {
-      firstName,
-      lastName,
-      email,
-      address,
-      phoneNumber,
-      age,
-      gender,
-      password,
-      role: param.role,
-    };
+
+    const form = document.getElementById("form");
+    const formData = new FormData(form);
+    formData.append("role", param.role);
+
     if (param.role === "owner") {
-      dispatch(registerOwner({ userInfo }));
+      dispatch(registerOwner({ formData }));
     } else if (param.role === "tenant") {
-      dispatch(registerTenant({ userInfo }));
+      dispatch(registerTenant({ formData }));
     }
   };
 
@@ -105,7 +92,7 @@ const Register = () => {
       <main className="px-6 h-full mt-7">
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id="form">
               <div className="flex justify-center mt-3 mb-4">
                 <h4 className="">Register for your new account</h4>
               </div>
@@ -160,6 +147,33 @@ const Register = () => {
                   value={values.gender}
                   handleChange={handleChange}
                 />
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  sx={{
+                    fontFamily: "Roboto",
+                    fontSize: "1rem",
+                  }}
+                >
+                  <label
+                    htmlFor="image"
+                    className="cursor-pointer text-[#000000dd] mr-1"
+                  >
+                    Upload Profile Image
+                  </label>
+                  <input
+                    required
+                    hidden
+                    id="image"
+                    name="profileImage"
+                    accept="image/*"
+                    type="file"
+                    onChange={(e) =>
+                      setFormValues({ ...values, image: e.target.files[0] })
+                    }
+                  />
+                  <PhotoCamera color="primary" />
+                </IconButton>
               </div>
               <div className="w-1/2 mx-auto mt-2">
                 <FormPasswordField

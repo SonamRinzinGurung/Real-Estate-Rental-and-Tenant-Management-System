@@ -19,9 +19,9 @@ export const loginOwner = createAsyncThunk(
 
 export const registerOwner = createAsyncThunk(
   "registerOwner",
-  async ({ userInfo }, thunkAPI) => {
+  async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/auth/register", userInfo);
+      const { data } = await axios.post("/auth/register", formData);
       localStorage.setItem("user", JSON.stringify(data.owner));
       localStorage.setItem("token", data.token);
       return await data;
@@ -47,9 +47,9 @@ export const loginTenant = createAsyncThunk(
 
 export const registerTenant = createAsyncThunk(
   "registerTenant",
-  async ({ userInfo }, thunkAPI) => {
+  async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/auth/register", userInfo);
+      const { data } = await axios.post("/auth/register", formData);
       localStorage.setItem("user", JSON.stringify(data.tenant));
       localStorage.setItem("token", data.token);
       return await data;

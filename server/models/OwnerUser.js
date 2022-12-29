@@ -46,6 +46,10 @@ const OwnerUserSchema = new mongoose.Schema(
         message: "{VALUE} is not supported",
       },
     },
+    profileImage: {
+      type: String,
+      required: [true, "Please provide a profile image"],
+    },
     password: {
       type: String,
       required: [true, "Please provide a password"],
