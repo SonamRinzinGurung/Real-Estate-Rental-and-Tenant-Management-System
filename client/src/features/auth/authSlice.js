@@ -67,6 +67,7 @@ const authSlice = createSlice({
     isLoading: false,
     errorFlag: false,
     errorMsg: "",
+    alertType: null,
   },
   reducers: {
     logOut: (state) => {
@@ -92,6 +93,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
+        state.alertType = "error";
       })
       .addCase(registerOwner.pending, (state) => {
         state.isLoading = true;
@@ -105,6 +107,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
+        state.alertType = "error";
       })
       .addCase(loginTenant.pending, (state) => {
         state.isLoading = true;
@@ -118,6 +121,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
+        state.alertType = "error";
       })
       .addCase(registerTenant.pending, (state) => {
         state.isLoading = true;
@@ -131,6 +135,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
+        state.alertType = "error";
       });
   },
 });

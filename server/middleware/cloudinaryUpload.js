@@ -1,4 +1,5 @@
 import cloudinary from "cloudinary";
+import { BadRequestError } from "../request-errors/index.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -28,5 +29,29 @@ export const cloudinaryProfileImageUpload = async (req, res, next) => {
       req.body.profileImage = result.secure_url;
     }
   );
+  next();
+};
+
+export const cloudinaryMultipleUpload = async (req, res, next) => {
+  const files = req.files;
+  req.body.realEstateImages = [];
+  if (!files) {
+    throw new BadRequestError("Please upload at least one image.");
+  }
+  for (const file of files) {
+    await cloudinary.v2.uploader.upload(
+      file.path,
+      {
+        folder: "real-estate-system/realEstateImages",
+      },
+      (err, result) => {
+        if (err) {
+          throw new BadRequestError("Error uploading image");
+        }
+        req.body.realEstateImages.push(result.secure_url);
+      }
+    );
+  }
+
   next();
 };

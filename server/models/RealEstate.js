@@ -11,6 +11,7 @@ const RealEstateSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please provide a price for the property"],
+      min: [1000, "Price cannot be less than 1000"],
     },
     address: {
       location: {
@@ -31,7 +32,7 @@ const RealEstateSchema = new mongoose.Schema(
     category: {
       type: String,
       enum: {
-        values: ["house", "apartment", "room", "shop", "office"],
+        values: ["House", "Apartment", "Room", "Shop", "Office"],
         message: "{VALUE} is not in the category list",
       },
     },
@@ -44,7 +45,7 @@ const RealEstateSchema = new mongoose.Schema(
       default: null,
     },
 
-    // image: [Object],
+    realEstateImages: [Object],
 
     propertyOwner: {
       type: mongoose.Types.ObjectId,

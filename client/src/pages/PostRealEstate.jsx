@@ -1,48 +1,40 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   Logo,
   FormTextField,
-  FormPasswordField,
   FormSelectField,
   AlertToast,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  registerOwner,
-  registerTenant,
+  postRealEstate,
   clearAlert,
-} from "../features/auth/authSlice";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import registerImg from "../assets/images/registerImg.svg";
+} from "../features/realEstate/realEstateSlice";
+import postRealEstateImg from "../assets/images/postRealEstateImg.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import { locationNames } from "../utils/locationNames";
 
-const Register = () => {
-  const { user, errorFlag, errorMsg, isLoading, alertType } = useSelector(
-    (store) => store.auth
+const PostRealEstate = () => {
+  const { alertFlag, alertMsg, alertType, isLoading } = useSelector(
+    (store) => store.realEstate
   );
-  const navigate = useNavigate();
-  const param = useParams();
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user, navigate]);
+  const initialFormValues = {
+    title: "",
+    price: "",
+    description: "",
+    location: "",
+    streetName: "",
+    category: "",
+    realEstateImages: null,
+  };
 
-  const [values, setFormValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    address: "",
-    phoneNumber: "",
-    age: "",
-    gender: "",
-    image: "",
-    password: "",
-  });
+  const [values, setFormValues] = useState(initialFormValues);
 
   const handleChange = useCallback(
     (e) => {
@@ -57,13 +49,8 @@ const Register = () => {
 
     const form = document.getElementById("form");
     const formData = new FormData(form);
-    formData.append("role", param.role);
-
-    if (param.role === "owner") {
-      dispatch(registerOwner({ formData }));
-    } else if (param.role === "tenant") {
-      dispatch(registerTenant({ formData }));
-    }
+    dispatch(postRealEstate({ formData }));
+    setFormValues(initialFormValues);
   };
 
   const handleClose = useCallback(
@@ -90,62 +77,69 @@ const Register = () => {
 
       <main className="px-6 h-full mt-7">
         <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
-          <div className="lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+          <div className="lg:w-5/12 md:w-8/12 mb-12">
             <form onSubmit={handleSubmit} id="form">
-              <div className="flex justify-center mt-3 mb-4">
-                <h4 className="">Register for your new account</h4>
+              <div className="flex justify-center items-center flex-col mt-3 mb-4">
+                <h4 className="">Post your Property </h4>
+                <p>Enter the details of your property</p>
               </div>
               <div className="flex flex-wrap gap-2 justify-center">
                 <FormTextField
-                  label="First Name"
-                  name="firstName"
+                  label="Title"
+                  name="title"
                   type={"text"}
-                  value={values.firstName}
+                  value={values.title}
                   handleChange={handleChange}
                 />
-                <FormTextField
-                  label="Last Name"
-                  name="lastName"
-                  type={"text"}
-                  value={values.lastName}
-                  handleChange={handleChange}
-                />
-                <FormTextField
-                  label="Email"
-                  name="email"
-                  type={"email"}
-                  value={values.email}
-                  handleChange={handleChange}
-                />
-                <FormTextField
-                  label="Address"
-                  name="address"
-                  type={"text"}
-                  value={values.address}
-                  handleChange={handleChange}
-                />
-                <FormTextField
-                  label="Phone Number"
-                  name="phoneNumber"
-                  type={"number"}
-                  value={values.phoneNumber}
-                  handleChange={handleChange}
+                <TextField
+                  label="Price"
+                  name="price"
+                  type="number"
+                  placeholder="Price"
+                  value={values.price}
+                  color="tertiary"
+                  onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">Rs.</InputAdornment>
+                    ),
+                  }}
                 />
 
                 <FormSelectField
-                  label="Age"
-                  name="age"
-                  options={Array.from(new Array(100), (x, i) => i + 16)}
-                  value={values.age}
+                  label="Location"
+                  name="location"
+                  options={locationNames}
+                  value={values.location}
                   handleChange={handleChange}
                 />
+                <FormTextField
+                  label="Street Name"
+                  name="streetName"
+                  type={"text"}
+                  value={values.streetName}
+                  handleChange={handleChange}
+                />
+
+                <TextField
+                  label="Description"
+                  multiline
+                  rows={3}
+                  color="tertiary"
+                  placeholder="Description of your property"
+                  name="description"
+                  value={values.description}
+                  onChange={handleChange}
+                />
+
                 <FormSelectField
-                  label="Gender"
-                  name="gender"
-                  options={["Male", "Female", "Other"]}
-                  value={values.gender}
+                  label="Category"
+                  name="category"
+                  options={["House", "Apartment", "Room", "Shop", "Office"]}
+                  value={values.category}
                   handleChange={handleChange}
                 />
+
                 <IconButton
                   color="primary"
                   aria-label="upload picture"
@@ -158,27 +152,24 @@ const Register = () => {
                     htmlFor="image"
                     className="cursor-pointer text-[#000000dd] mr-1"
                   >
-                    Upload Profile Image
+                    Upload Images of the Real Estate
                   </label>
                   <input
                     required
                     hidden
                     id="image"
-                    name="profileImage"
-                    accept="image/*"
+                    name="realEstateImages"
                     type="file"
+                    multiple
                     onChange={(e) =>
-                      setFormValues({ ...values, image: e.target.files[0] })
+                      setFormValues({
+                        ...values,
+                        realEstateImages: e.target.value,
+                      })
                     }
                   />
                   <PhotoCamera color="primary" />
                 </IconButton>
-              </div>
-              <div className="w-1/2 mx-auto mt-2">
-                <FormPasswordField
-                  value={values.password}
-                  handleChange={handleChange}
-                />
               </div>
 
               <div className="text-center mt-2">
@@ -204,29 +195,25 @@ const Register = () => {
                       }}
                     />
                   ) : (
-                    "Register"
+                    "Post"
                   )}
                 </Button>
-                <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
-                  Already have an account?{" "}
-                  <Link
-                    to={`/login/${param.role}`}
-                    className="text-secondary hover:text-secondaryDark transition duration-200 ease-in-out"
-                  >
-                    Login
-                  </Link>
-                </p>
               </div>
             </form>
           </div>
-          <div className="hidden grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0 sm:block">
-            <img src={registerImg} className="w-full" alt="login banner" />
+          <div className="hidden grow-0 shrink-1 md:shrink-0 basis-auto w-5/12 lg:w-5/12 md:w-5/12 mb-12 sm:block">
+            <img
+              src={postRealEstateImg}
+              className="w-full"
+              alt="Cartoon of a person holding a card"
+            />
           </div>
         </div>
       </main>
+
       <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
+        alertFlag={alertFlag}
+        alertMsg={alertMsg}
         alertType={alertType}
         handleClose={handleClose}
       />
@@ -234,4 +221,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default PostRealEstate;

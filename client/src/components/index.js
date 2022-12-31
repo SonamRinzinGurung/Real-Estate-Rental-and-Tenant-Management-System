@@ -6,6 +6,7 @@ import FormTextField from "./FormTextField";
 import FormSelectField from "./FormSelectField";
 import NavBarLinks from "./NavBarLinks";
 import Header from "./Header";
+import AlertToast from "./AlertToast";
 
 export {
   ProtectedRoutes,
@@ -16,4 +17,5 @@ export {
   FormSelectField,
   NavBarLinks,
   Header,
+  AlertToast,
 };

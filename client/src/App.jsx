@@ -1,5 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Login, Register, Homepage, Landing, NotFound } from "./pages";
+import {
+  Login,
+  Register,
+  Homepage,
+  Landing,
+  NotFound,
+  PostRealEstate,
+} from "./pages";
 import { ProtectedRoutes, SharedLayout } from "./components";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -34,6 +41,7 @@ function App() {
             }
           >
             <Route index element={<Homepage />} />
+            <Route path="/property/post" element={<PostRealEstate />} />
           </Route>
 
           <Route path="/login/:role" element={<Login />} />

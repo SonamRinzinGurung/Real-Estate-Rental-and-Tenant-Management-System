@@ -1,5 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
-import { Logo, FormPasswordField, FormTextField } from "../components";
+import {
+  Logo,
+  FormPasswordField,
+  FormTextField,
+  AlertToast,
+} from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearAlert,
@@ -8,16 +13,13 @@ import {
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
 import { Button } from "@mui/material";
 const Login = () => {
-  const { user, errorMsg, errorFlag } = useSelector((store) => store.auth);
+  const { user, errorMsg, errorFlag, alertType } = useSelector(
+    (store) => store.auth
+  );
   const navigate = useNavigate();
   const param = useParams();
-
-  const vertical = "bottom";
-  const horizontal = "right";
 
   const [values, setFormValues] = useState({ email: "", password: "" });
 
@@ -73,11 +75,11 @@ const Login = () => {
       </header>
 
       <main className="px-6 h-full mt-7">
-        <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
+        <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
             <img src={loginImg} className="w-full" alt="login banner" />
           </div>
-          <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+          <div className="lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-6">
                 <h4 className="">Login to your account</h4>
@@ -128,16 +130,12 @@ const Login = () => {
           </div>
         </div>
       </main>
-      <Snackbar
-        open={errorFlag}
-        anchorOrigin={{ vertical, horizontal }}
-        autoHideDuration={4000}
-        onClose={handleClose}
-      >
-        <Alert severity="error" sx={{ width: "250px" }}>
-          {errorMsg}
-        </Alert>
-      </Snackbar>
+      <AlertToast
+        alertFlag={errorFlag}
+        alertMsg={errorMsg}
+        alertType={alertType}
+        handleClose={handleClose}
+      />
     </div>
   );
 };
