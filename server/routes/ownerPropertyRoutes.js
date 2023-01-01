@@ -6,7 +6,7 @@ import { cloudinaryMultipleUpload } from "../middleware/cloudinaryUpload.js";
 
 router.post(
   "/",
-  upload.array("realEstateImages", 5),
+  upload.array("realEstateImages", 10),
   cloudinaryMultipleUpload,
   postRealEstate
 );

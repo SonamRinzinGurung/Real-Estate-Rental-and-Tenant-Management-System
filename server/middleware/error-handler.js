@@ -16,7 +16,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
   }
   //multer error for more than 5 file upload
   if (err.code === "LIMIT_UNEXPECTED_FILE") {
-    defaultError.msg = `Please select only 5 images`;
+    defaultError.msg = `Please upload only 10 images`;
     defaultError.statusCode = 400;
   }
   //multer error for file size

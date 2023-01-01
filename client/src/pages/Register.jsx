@@ -16,8 +16,6 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 const Register = () => {
   const { user, errorFlag, errorMsg, isLoading, alertType } = useSelector(
@@ -95,7 +93,7 @@ const Register = () => {
               <div className="flex justify-center mt-3 mb-4">
                 <h4 className="">Register for your new account</h4>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="flex flex-wrap gap-2 ml-16">
                 <FormTextField
                   label="First Name"
                   name="firstName"
@@ -146,33 +144,29 @@ const Register = () => {
                   value={values.gender}
                   handleChange={handleChange}
                 />
-                <IconButton
-                  color="primary"
-                  aria-label="upload picture"
-                  sx={{
-                    fontFamily: "Roboto",
-                    fontSize: "1rem",
-                  }}
-                >
+
+                <div className="flex flex-col justify-center my-2">
                   <label
-                    htmlFor="image"
-                    className="cursor-pointer text-[#000000dd] mr-1"
+                    htmlFor="profileImg"
+                    className="form-label inline-block mb-2 text-[#000000dd] cursor-pointer font-robotoNormal"
                   >
-                    Upload Profile Image
+                    Upload Profile Images
                   </label>
+
                   <input
                     required
-                    hidden
-                    id="image"
                     name="profileImage"
-                    accept="image/*"
+                    className="form-control block font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
                     type="file"
+                    id="profileImg"
                     onChange={(e) =>
-                      setFormValues({ ...values, image: e.target.files[0] })
+                      setFormValues({ ...values, image: e.target.value })
                     }
                   />
-                  <PhotoCamera color="primary" />
-                </IconButton>
+                  <p className="mt-1 text-sm text-gray-500">
+                    JPG, JPEG, PNG or GIF (MAX 3.5mb per)
+                  </p>
+                </div>
               </div>
               <div className="w-1/2 mx-auto mt-2">
                 <FormPasswordField

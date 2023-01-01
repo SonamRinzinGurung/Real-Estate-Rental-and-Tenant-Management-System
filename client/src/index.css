@@ -48,3 +48,29 @@ a {
 p {
   font-size: clamp(0.8rem, 2.5vw, 1.1rem);
 }
+
+/* Button in file upload input field */
+input::file-selector-button {
+  font-weight: bold;
+  color: #00accf;
+  background-color: #f0f4f8;
+  padding: 0.5em;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease-in-out all;
+}
+
+input::file-selector-button:hover {
+  background-color: #00accf;
+  color: #f0f4f8;
+  border-radius: 5px;
+}
+
+/* Remove the Spinner in number input field */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

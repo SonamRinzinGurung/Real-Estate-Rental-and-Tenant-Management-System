@@ -16,6 +16,7 @@ module.exports = {
       serif: ["Open Sans", "sans-serif"],
       display: ["Righteous", "sans-serif"],
       roboto: ["Roboto Condensed", "sans-serif"],
+      robotoNormal: ["Roboto", "sans-serif"],
     },
   },
   plugins: [],
