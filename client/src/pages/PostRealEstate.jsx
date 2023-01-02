@@ -19,6 +19,10 @@ import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { locationNames } from "../utils/locationNames";
+import InfoIcon from "@mui/icons-material/Info";
+import BungalowIcon from "@mui/icons-material/Bungalow";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 
 const PostRealEstate = () => {
   const { alertFlag, alertMsg, alertType, isLoading } = useSelector(
@@ -90,7 +94,9 @@ const PostRealEstate = () => {
               </div>
               <div className="flex flex-wrap flex-col gap-2 ml-5">
                 <div className="flex flex-col gap-2 my-2">
-                  <h5>Initial Details</h5>
+                  <h5 className="mb-1">
+                    <InfoIcon /> Initial Details
+                  </h5>
                   <FormTextField
                     label="Title"
                     name="title"
@@ -110,7 +116,9 @@ const PostRealEstate = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-2 my-2">
-                  <h5>Property Info</h5>
+                  <h5 className="mb-1">
+                    <BungalowIcon /> Property Info
+                  </h5>
                   <TextField
                     label="Price"
                     name="price"
@@ -155,7 +163,9 @@ const PostRealEstate = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-2 my-2">
-                  <h5>Address</h5>
+                  <h5 className="mb-1">
+                    <LocationOnIcon /> Address
+                  </h5>
                   <FormSelectField
                     label="Location"
                     name="location"
@@ -185,7 +195,9 @@ const PostRealEstate = () => {
                   />
                 </div>
                 <div className="flex flex-col my-2">
-                  <h5>Media</h5>
+                  <h5>
+                    <PermMediaIcon /> Media
+                  </h5>
                   <div className="flex flex-col justify-center pb-2">
                     <label
                       htmlFor="formFileMultiple"

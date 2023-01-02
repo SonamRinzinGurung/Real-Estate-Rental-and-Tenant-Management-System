@@ -3,6 +3,12 @@ import TenantUser from "../models/TenantUser.js";
 import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
 import { isEmailValid } from "../utils/validateEmail.js";
 
+/**
+ * @description Login a user
+ * @route POST /auth/login
+ * @returns {object} user
+ * @returns {string} token
+ */
 const login = async (req, res) => {
   const { role, email, password } = req.body;
   if (!email || !password) {
@@ -37,6 +43,12 @@ const login = async (req, res) => {
   }
 };
 
+/**
+ * @description Register a user
+ * @route POST /auth/register
+ * @returns {object} user
+ * @returns {string} token
+ */
 const register = async (req, res) => {
   const { role, email } = req.body;
   const { valid, reason, validators } = await isEmailValid(email);

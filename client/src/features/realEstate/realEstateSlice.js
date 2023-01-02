@@ -1,15 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosFetch from "../../utils/axiosCreate";
 
 export const postRealEstate = createAsyncThunk(
   "postRealEstate",
   async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/owner/real-estate", formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const { data } = await axiosFetch.post("/owner/real-estate", formData);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const getAllRealEstate = createAsyncThunk(
+  "getAllRealEstate",
+  async (arg, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get("/tenant/real-estate");
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -44,6 +52,20 @@ const realEstateSlice = createSlice({
         state.alertType = "success";
       })
       .addCase(postRealEstate.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getAllRealEstate.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllRealEstate.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.realEstate = action.payload.realEstate;
+        state.alertFlag = false;
+      })
+      .addCase(getAllRealEstate.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

@@ -14,15 +14,15 @@ import tenantPropertyRoutes from "./routes/tenantPropertyRoutes.js";
 import routeNotFoundMiddleware from "./middleware/route-not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 import {
-  authenticateOwnerUser,
-  authenticateTenantUser,
-} from "./middleware/userAuthentication.js";
+  authorizeOwnerUser,
+  authorizeTenantUser,
+} from "./middleware/userAuthorization.js";
 
 app.use(express.json()); //to parse json data
 
-app.use("/auth", authRoutes);
-app.use("/owner/real-estate", authenticateOwnerUser, ownerPropertyRoutes);
-app.use("/tenant/real-estate", authenticateTenantUser, tenantPropertyRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/owner/real-estate", authorizeOwnerUser, ownerPropertyRoutes);
+app.use("/api/tenant/real-estate", authorizeTenantUser, tenantPropertyRoutes);
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);

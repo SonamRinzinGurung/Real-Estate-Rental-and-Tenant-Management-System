@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { UnAuthorizedError } from "../request-errors/index.js";
 
 // Authenticate Owner User using JWT Token and add userId to req.user object for further use
-const authenticateOwnerUser = async (req, res, next) => {
+const authorizeOwnerUser = async (req, res, next) => {
   const authHeader = req.headers.authorization; // Get Authorization Header from request
 
   // If Authorization Header is not present or does not start with Bearer
@@ -21,7 +21,7 @@ const authenticateOwnerUser = async (req, res, next) => {
 };
 
 // Authenticate Tenant User using JWT Token and add userId to req.user object for further use
-const authenticateTenantUser = async (req, res, next) => {
+const authorizeTenantUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
@@ -38,4 +38,4 @@ const authenticateTenantUser = async (req, res, next) => {
   }
 };
 
-export { authenticateOwnerUser, authenticateTenantUser };
+export { authorizeOwnerUser, authorizeTenantUser };

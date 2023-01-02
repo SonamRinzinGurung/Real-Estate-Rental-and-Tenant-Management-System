@@ -1,5 +1,10 @@
 import RealEstate from "../models/RealEstate.js";
 
+/**
+ * @description Post Real Estate
+ * @route POST /owner/real-estate
+ * @returns {object} realEstate
+ */
 const postRealEstate = async (req, res) => {
   const location = req.body.location;
   const streetName = req.body.streetName;

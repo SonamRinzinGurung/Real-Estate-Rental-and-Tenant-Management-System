@@ -1,8 +1,10 @@
 import express from "express";
 const router = express.Router();
+import { viewProperties } from "../controllers/tenantPropertyControllers.js";
 
-router.get("/", (req, res) => {
-  res.send("Tenant Testing");
-});
+/**
+ * @route GET /api/tenant/real-estate
+ */
+router.get("/", viewProperties);
 
 export default router;
