@@ -1,16 +1,14 @@
 import { Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Logo, NavBarLinks } from "../components";
+import { Logo, NavBarLinksOwner, NavBarLinksTenant } from "../components";
 import { logOut } from "../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = ({ toggleMenu, menuOpen }) => {
+  const { userType } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const logOutUser = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userType");
     dispatch(logOut());
   };
   return (
@@ -36,7 +34,11 @@ const Header = ({ toggleMenu, menuOpen }) => {
                 </div>
               </div>
               <div class="modal-body relative p-4 flex flex-col h-3/4 gap-5">
-                <NavBarLinks />
+                {userType === "owner" ? (
+                  <NavBarLinksOwner />
+                ) : (
+                  <NavBarLinksTenant />
+                )}
               </div>
             </div>
           </div>
@@ -52,7 +54,7 @@ const Header = ({ toggleMenu, menuOpen }) => {
         </div>
 
         <nav className="hidden justify-evenly items-center w-1/4 lg:flex">
-          <NavBarLinks />
+          {userType === "owner" ? <NavBarLinksOwner /> : <NavBarLinksTenant />}
         </nav>
 
         <div className="mr-1 lg:hidden">

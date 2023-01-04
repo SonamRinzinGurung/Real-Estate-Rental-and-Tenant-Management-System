@@ -18,17 +18,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 
 const Register = () => {
-  const { user, errorFlag, errorMsg, isLoading, alertType } = useSelector(
-    (store) => store.auth
-  );
+  const { user, userType, errorFlag, errorMsg, isLoading, alertType } =
+    useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(`/${userType}`);
     }
-  }, [user, navigate]);
+  }, [user, navigate, userType]);
 
   const [values, setFormValues] = useState({
     firstName: "",

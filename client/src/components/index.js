@@ -1,21 +1,23 @@
-import ProtectedRoutes from "./ProtectedRoutes";
-import SharedLayout from "./SharedLayout";
+import SharedLayoutOwner from "./SharedLayoutOwner";
+import SharedLayoutTenant from "./SharedLayoutTenant";
+
 import Logo from "./Logo";
 import FormPasswordField from "./FormPasswordField";
 import FormTextField from "./FormTextField";
 import FormSelectField from "./FormSelectField";
-import NavBarLinks from "./NavBarLinks";
+import { NavBarLinksOwner, NavBarLinksTenant } from "./NavBarLinks";
 import Header from "./Header";
 import AlertToast from "./AlertToast";
 
 export {
-  ProtectedRoutes,
-  SharedLayout,
+  SharedLayoutOwner,
+  SharedLayoutTenant,
   Logo,
   FormPasswordField,
   FormTextField,
   FormSelectField,
-  NavBarLinks,
+  NavBarLinksOwner,
+  NavBarLinksTenant,
   Header,
   AlertToast,
 };

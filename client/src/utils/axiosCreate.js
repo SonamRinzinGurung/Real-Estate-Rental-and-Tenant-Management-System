@@ -28,18 +28,23 @@ axiosFetch.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log(error);
+    const originalRequest = error.config;
     if (
-      error.response.status === 401 &&
-      error.response.data.msg === "Access Token is not valid"
+      error?.response.status === 401 &&
+      error?.response.data.msg === "Access Token is not valid" &&
+      !originalRequest._retry
     ) {
+      originalRequest._retry = true;
+
       try {
         const rs = await axiosFetch.get(`/auth/${userType}/refresh`);
         localStorage.setItem("token", rs.data.accessToken);
         return axiosFetch(error.config);
       } catch (err) {
         if (
-          err.response.status === 401 &&
-          err.response.data.msg === "Invalid refresh token"
+          err?.response.status === 401 &&
+          err?.response.data.msg === "Invalid refresh token"
         ) {
           try {
             store.dispatch(logOut());

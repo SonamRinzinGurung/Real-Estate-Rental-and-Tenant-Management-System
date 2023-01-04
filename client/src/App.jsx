@@ -2,12 +2,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Login,
   Register,
-  Homepage,
+  HomepageOwner,
+  HomepageTenant,
   Landing,
   NotFound,
   PostRealEstate,
 } from "./pages";
-import { ProtectedRoutes, SharedLayout } from "./components";
+import { SharedLayoutOwner, SharedLayoutTenant } from "./components";
+import {
+  ProtectedRoutesOwner,
+  ProtectedRoutesTenant,
+} from "./components/ProtectedRoutes";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -33,17 +38,26 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/"
+            path="/owner"
             element={
-              <ProtectedRoutes>
-                <SharedLayout />
-              </ProtectedRoutes>
+              <ProtectedRoutesOwner>
+                <SharedLayoutOwner />
+              </ProtectedRoutesOwner>
             }
           >
-            <Route index element={<Homepage />} />
-            <Route path="/property/post" element={<PostRealEstate />} />
+            <Route index element={<HomepageOwner />} />
+            <Route path="/owner/property/post" element={<PostRealEstate />} />
           </Route>
-
+          <Route
+            path="/tenant"
+            element={
+              <ProtectedRoutesTenant>
+                <SharedLayoutTenant />
+              </ProtectedRoutesTenant>
+            }
+          >
+            <Route index element={<HomepageTenant />} />
+          </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
           <Route path="/landing" element={<Landing />} />

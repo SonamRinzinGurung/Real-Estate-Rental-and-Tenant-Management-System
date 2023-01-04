@@ -7,13 +7,13 @@ import landingImg2 from "../assets/images/landing2.svg";
 import { Button } from "@mui/material";
 
 const Landing = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user, userType } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(`/${userType}`);
     }
-  }, [user, navigate]);
+  }, [user, navigate, userType]);
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex m-1 shadow-sm">
@@ -172,7 +172,7 @@ const Landing = () => {
         <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
         <span className="block text-sm  sm:text-center ">
           © 2022{" "}
-          <a href="http://localhost:3000" className="hover:underline">
+          <a href="http://localhost:3000/landing" className="hover:underline">
             Property Plus™
           </a>
           . All Rights Reserved.

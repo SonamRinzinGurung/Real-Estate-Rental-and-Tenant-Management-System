@@ -15,7 +15,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
 import { Button } from "@mui/material";
 const Login = () => {
-  const { user, errorMsg, errorFlag, alertType } = useSelector(
+  const { user, userType, errorMsg, errorFlag, alertType } = useSelector(
     (store) => store.auth
   );
   const navigate = useNavigate();
@@ -25,9 +25,9 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(`/${userType}`);
     }
-  }, [user, navigate]);
+  }, [user, navigate, userType]);
 
   const dispatch = useDispatch();
 

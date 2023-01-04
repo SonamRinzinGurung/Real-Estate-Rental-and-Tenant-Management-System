@@ -1,24 +1,19 @@
 import { useState, useCallback } from "react";
-import {
-  Logo,
-  FormTextField,
-  FormSelectField,
-  AlertToast,
-} from "../components";
+import { FormTextField, FormSelectField, AlertToast } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   postRealEstate,
   clearAlert,
-} from "../features/realEstateOwner/realEstateOwnerSlice";
-import postRealEstateImg from "../assets/images/postRealEstateImg.svg";
-import postRealEstateImg2 from "../assets/images/postRealEstateImg2.svg";
-import postRealEstateImg3 from "../assets/images/postRealEstateImg3.svg";
+} from "../../features/realEstateOwner/realEstateOwnerSlice";
+import postRealEstateImg from "../../assets/images/postRealEstateImg.svg";
+import postRealEstateImg2 from "../../assets/images/postRealEstateImg2.svg";
+import postRealEstateImg3 from "../../assets/images/postRealEstateImg3.svg";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
-import { locationNames } from "../utils/locationNames";
+import { locationNames } from "../../utils/locationNames";
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -26,7 +21,7 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 
 const PostRealEstate = () => {
   const { alertFlag, alertMsg, alertType, isLoading } = useSelector(
-    (store) => store.realEstate
+    (store) => store.realEstateOwner
   );
 
   const initialFormValues = {
@@ -72,16 +67,6 @@ const PostRealEstate = () => {
 
   return (
     <div>
-      <header className="flex m-1 shadow-sm">
-        <Logo />
-        <div className="flex flex-col justify-center ml-2">
-          <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
-          <p className="text-xs md:text-sm">
-            Find and Manage your rentals in one place
-          </p>
-        </div>
-      </header>
-
       <main className="px-6 h-full mt-7">
         <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="lg:w-5/12 md:w-8/12 mb-12">

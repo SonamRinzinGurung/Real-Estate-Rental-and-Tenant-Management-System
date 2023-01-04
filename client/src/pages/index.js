@@ -1,7 +1,16 @@
 import Login from "./Login";
 import Register from "./Register";
-import Homepage from "./Homepage";
+import HomepageOwner from "./ownerPages/Homepage-Owner";
+import HomepageTenant from "./tenantPages/Homepage-Tenant";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
-import PostRealEstate from "./PostRealEstate";
-export { Login, Register, Homepage, Landing, NotFound, PostRealEstate };
+import PostRealEstate from "./ownerPages/PostRealEstate";
+export {
+  Login,
+  Register,
+  HomepageOwner,
+  HomepageTenant,
+  Landing,
+  NotFound,
+  PostRealEstate,
+};

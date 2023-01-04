@@ -80,6 +80,7 @@ const authSlice = createSlice({
   initialState: {
     user: user ? JSON.parse(user) : null,
     token: localStorage.getItem("token") || "",
+    userType: localStorage.getItem("userType") || "",
     isLoading: false,
     errorFlag: false,
     errorMsg: "",
@@ -89,6 +90,7 @@ const authSlice = createSlice({
     stateClear: (state) => {
       state.user = null;
       state.token = "";
+      state.userType = "";
     },
     clearAlert: (state) => {
       state.errorFlag = false;
@@ -108,6 +110,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.owner;
         state.token = action.payload.accessToken;
+        state.userType = action.payload.userType;
       })
       .addCase(loginOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -122,6 +125,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.owner;
         state.token = action.payload.accessToken;
+        state.userType = action.payload.userType;
       })
       .addCase(registerOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -136,6 +140,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.tenant;
         state.token = action.payload.accessToken;
+        state.userType = action.payload.userType;
       })
       .addCase(loginTenant.rejected, (state, action) => {
         state.isLoading = false;
@@ -150,6 +155,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.tenant;
         state.token = action.payload.accessToken;
+        state.userType = action.payload.userType;
       })
       .addCase(registerTenant.rejected, (state, action) => {
         state.isLoading = false;
