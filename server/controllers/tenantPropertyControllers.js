@@ -10,7 +10,7 @@ const viewProperties = async (req, res) => {
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
   });
-  res.status(201).json({ realEstate });
+  res.status(200).json({ realEstate });
 };
 
 export { viewProperties };

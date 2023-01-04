@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosFetch from "../../utils/axiosCreate";
 
 const user = localStorage.getItem("user");
 
@@ -7,9 +7,10 @@ export const loginOwner = createAsyncThunk(
   "loginOwner",
   async ({ userInfo }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/auth/login", userInfo);
+      const { data } = await axiosFetch.post("/auth/login", userInfo);
       localStorage.setItem("user", JSON.stringify(data.owner));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userType", data.userType);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -21,9 +22,10 @@ export const registerOwner = createAsyncThunk(
   "registerOwner",
   async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/auth/register", formData);
+      const { data } = await axiosFetch.post("/auth/register", formData);
       localStorage.setItem("user", JSON.stringify(data.owner));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userType", data.userType);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -35,9 +37,10 @@ export const loginTenant = createAsyncThunk(
   "loginTenant",
   async ({ userInfo }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/auth/login", userInfo);
+      const { data } = await axiosFetch.post("/auth/login", userInfo);
       localStorage.setItem("user", JSON.stringify(data.tenant));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userType", data.userType);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -49,15 +52,28 @@ export const registerTenant = createAsyncThunk(
   "registerTenant",
   async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axios.post("/api/auth/register", formData);
+      const { data } = await axiosFetch.post("/auth/register", formData);
       localStorage.setItem("user", JSON.stringify(data.tenant));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("userType", data.userType);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   }
 );
+
+export const logOut = createAsyncThunk("logOut", async (arg, thunkAPI) => {
+  try {
+    await axiosFetch.post("/auth/logout");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType");
+    thunkAPI.dispatch(stateClear());
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -70,13 +86,17 @@ const authSlice = createSlice({
     alertType: null,
   },
   reducers: {
-    logOut: (state) => {
+    stateClear: (state) => {
       state.user = null;
       state.token = "";
     },
     clearAlert: (state) => {
       state.errorFlag = false;
       state.errorMsg = "";
+    },
+    setCredentials: (state, action) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
   },
   extraReducers: (builder) => {
@@ -87,7 +107,7 @@ const authSlice = createSlice({
       .addCase(loginOwner.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.owner;
-        state.token = action.payload.token;
+        state.token = action.payload.accessToken;
       })
       .addCase(loginOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -101,7 +121,7 @@ const authSlice = createSlice({
       .addCase(registerOwner.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.owner;
-        state.token = action.payload.token;
+        state.token = action.payload.accessToken;
       })
       .addCase(registerOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -115,7 +135,7 @@ const authSlice = createSlice({
       .addCase(loginTenant.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.tenant;
-        state.token = action.payload.token;
+        state.token = action.payload.accessToken;
       })
       .addCase(loginTenant.rejected, (state, action) => {
         state.isLoading = false;
@@ -129,7 +149,7 @@ const authSlice = createSlice({
       .addCase(registerTenant.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.tenant;
-        state.token = action.payload.token;
+        state.token = action.payload.accessToken;
       })
       .addCase(registerTenant.rejected, (state, action) => {
         state.isLoading = false;
@@ -140,6 +160,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logOut, clearAlert } = authSlice.actions;
+export const { stateClear, clearAlert } = authSlice.actions;
 
 export default authSlice.reducer;

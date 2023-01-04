@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   postRealEstate,
   clearAlert,
-} from "../features/realEstate/realEstateSlice";
+} from "../features/realEstateOwner/realEstateOwnerSlice";
 import postRealEstateImg from "../assets/images/postRealEstateImg.svg";
 import postRealEstateImg2 from "../assets/images/postRealEstateImg2.svg";
 import postRealEstateImg3 from "../assets/images/postRealEstateImg3.svg";

@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
-import realEstateReducer from "../features/realEstate/realEstateSlice";
+import realEstateOwnerReducer from "../features/realEstateOwner/realEstateOwnerSlice";
+import realEstateTenantReducer from "../features/realEstateTenant/realEstateTenantSlice";
 
 export default configureStore({
   reducer: {
     auth: authReducer,
-    realEstate: realEstateReducer,
+    realEstateOwner: realEstateOwnerReducer,
+    realEstateTenant: realEstateTenantReducer,
   },
 });

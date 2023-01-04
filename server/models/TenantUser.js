@@ -73,11 +73,28 @@ TenantUserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Create JWT and return it to the client for authentication
-TenantUserSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id }, process.env.JWT_KEY_TENANT, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+// create JWT ACCESS token for tenant user authentication
+TenantUserSchema.methods.createAccessToken = function () {
+  // return JWT token with user id
+  return jwt.sign(
+    { userId: this._id, userType: "tenant" },
+    process.env.ACCESS_TOKEN_SECRET_TENANT,
+    {
+      expiresIn: process.env.ACCESS_LIFETIME,
+    }
+  );
+};
+
+// create JWT Refresh token for tenant user authentication
+TenantUserSchema.methods.createRefreshToken = function () {
+  // return JWT token with user id
+  return jwt.sign(
+    { userId: this._id, userType: "tenant" },
+    process.env.REFRESH_TOKEN_SECRET_TENANT,
+    {
+      expiresIn: process.env.REFRESH_LIFETIME,
+    }
+  );
 };
 
 export default mongoose.model("TenantUser", TenantUserSchema);

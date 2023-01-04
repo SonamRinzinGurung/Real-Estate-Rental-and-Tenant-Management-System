@@ -1,17 +1,27 @@
 import express from "express";
 const router = express.Router();
-import { login, register } from "../controllers/authController.js";
+import {
+  login,
+  register,
+  refreshOwner,
+  refreshTenant,
+  logout,
+} from "../controllers/authController.js";
 import upload from "../middleware/multerImageMiddleware.js";
 import { cloudinaryProfileImageUpload } from "../middleware/cloudinaryUpload.js";
-import rateLimiter from "express-rate-limit";
+import { apiLimiter } from "../middleware/rateLimiter.js";
 
-// rate limiter for login and register routes
-const apiLimiter = rateLimiter({
-  windowMs: 60 * 1000, // 1 minute
-  max: 5, // limit each IP to 5 requests per windowMs
-  message:
-    "Request Limit reached for this IP Address. Please wait for 60 seconds and try again",
-});
+/**
+ * @description generate new access token for owner user
+ * @route POST /api/auth/owner/refresh
+ */
+router.get("/owner/refresh", refreshOwner);
+
+/**
+ * @description generate new access token for tenant user
+ * @route POST /api/auth/tenant/refresh
+ */
+router.get("/tenant/refresh", refreshTenant);
 
 /**
  * @route POST /api/auth/login
@@ -28,5 +38,10 @@ router.post(
   cloudinaryProfileImageUpload,
   register
 );
+
+/**
+ * @route POST /api/auth/logout
+ */
+router.post("/logout", logout);
 
 export default router;

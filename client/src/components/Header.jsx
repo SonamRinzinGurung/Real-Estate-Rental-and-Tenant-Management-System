@@ -10,6 +10,7 @@ const Header = ({ toggleMenu, menuOpen }) => {
   const logOutUser = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("userType");
     dispatch(logOut());
   };
   return (
