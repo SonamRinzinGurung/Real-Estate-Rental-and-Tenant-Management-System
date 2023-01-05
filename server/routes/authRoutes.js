@@ -24,11 +24,13 @@ router.get("/owner/refresh", refreshOwner);
 router.get("/tenant/refresh", refreshTenant);
 
 /**
+ * @description login user
  * @route POST /api/auth/login
  */
 router.post("/login", apiLimiter, login);
 
 /**
+ * @description register new user
  * @route POST /api/auth/register
  */
 router.post(
@@ -40,6 +42,7 @@ router.post(
 );
 
 /**
+ * @description logout user
  * @route POST /api/auth/logout
  */
 router.post("/logout", logout);

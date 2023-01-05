@@ -10,7 +10,6 @@ import jwt from "jsonwebtoken";
 
 /**
  * @description Login a user
- * @route POST /auth/login
  * @returns {object} user
  * @returns {string} token
  */
@@ -68,7 +67,6 @@ const login = async (req, res) => {
 
 /**
  * @description Register a user
- * @route POST /auth/register
  * @returns {object} user
  * @returns {string} token
  */
@@ -116,7 +114,6 @@ const register = async (req, res) => {
 
 /**
  * @description generate new access token
- * @route POST /auth/refresh
  * @returns {string} access token
  */
 const refreshOwner = async (req, res) => {
@@ -147,7 +144,6 @@ const refreshOwner = async (req, res) => {
 
 /**
  * @description generate new access token
- * @route POST /auth/refresh
  * @returns {string} access token
  */
 const refreshTenant = async (req, res) => {
@@ -178,7 +174,6 @@ const refreshTenant = async (req, res) => {
 
 /**
  * @description Logout a user
- * @route POST /auth/logout
  */
 const logout = (req, res) => {
   const cookies = req.cookies;
