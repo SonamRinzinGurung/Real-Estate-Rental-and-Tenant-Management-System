@@ -14,10 +14,10 @@ const Header = ({ toggleMenu, menuOpen }) => {
   return (
     <>
       {menuOpen && (
-        <section class="modal-container bg-[rgb(0,0,0,0.7)] fixed inset-0 outline-none overflow-x-hidden overflow-y-auto z-10 lg:hidden">
-          <div class="modal-dialog relative w-11/12 h-5/6 mx-auto mt-10 pointer-events-none">
-            <div class="modal-content border-none shadow-lg relative w-full h-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
-              <div class="modal-header flex flex-col flex-shrink-0  items-start p-4 border-b border-gray-200 rounded-t-md">
+        <section className="modal-container bg-[rgb(0,0,0,0.7)] fixed inset-0 outline-none overflow-x-hidden overflow-y-auto z-10 lg:hidden">
+          <div className="modal-dialog relative w-11/12 h-5/6 mx-auto mt-10 pointer-events-none">
+            <div className="modal-content border-none shadow-lg relative w-full h-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+              <div className="modal-header flex flex-col flex-shrink-0  items-start p-4 border-b border-gray-200 rounded-t-md">
                 <CloseIcon
                   fontSize="large"
                   color="error"
@@ -33,7 +33,7 @@ const Header = ({ toggleMenu, menuOpen }) => {
                   <Logo />
                 </div>
               </div>
-              <div class="modal-body relative p-4 flex flex-col h-3/4 gap-5">
+              <div className="modal-body relative p-4 flex flex-col h-3/4 gap-5">
                 {userType === "owner" ? (
                   <NavBarLinksOwner />
                 ) : (

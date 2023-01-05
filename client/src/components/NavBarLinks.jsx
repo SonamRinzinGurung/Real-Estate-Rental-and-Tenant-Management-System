@@ -61,7 +61,7 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        href="#"
+        href="/tenant/real-estate/all"
         sx={{
           color: "black",
           "&:hover": {
@@ -69,7 +69,7 @@ const NavBarLinksTenant = () => {
           },
         }}
       >
-        About
+        Browse Property
       </Button>
       <Button
         type="text"

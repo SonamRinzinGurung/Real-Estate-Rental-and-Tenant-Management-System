@@ -172,7 +172,7 @@ const Landing = () => {
         <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
         <span className="block text-sm  sm:text-center ">
           © 2022{" "}
-          <a href="http://localhost:3000/landing" className="hover:underline">
+          <a href="http://localhost:3000/" className="hover:underline">
             Property Plus™
           </a>
           . All Rights Reserved.

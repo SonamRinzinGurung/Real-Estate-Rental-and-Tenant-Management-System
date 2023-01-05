@@ -5,6 +5,7 @@ import HomepageTenant from "./tenantPages/Homepage-Tenant";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
 import PostRealEstate from "./ownerPages/PostRealEstate";
+import AllRealEstate from "./tenantPages/AllRealEstate";
 export {
   Login,
   Register,
@@ -13,4 +14,5 @@ export {
   Landing,
   NotFound,
   PostRealEstate,
+  AllRealEstate,
 };

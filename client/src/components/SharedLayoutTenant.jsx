@@ -10,7 +10,7 @@ const SharedLayoutTenant = () => {
   return (
     <>
       <Header toggleMenu={toggleMenu} menuOpen={menuOpen} />
-      <Outlet />;
+      <Outlet />
     </>
   );
 };

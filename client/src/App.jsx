@@ -7,6 +7,7 @@ import {
   Landing,
   NotFound,
   PostRealEstate,
+  AllRealEstate,
 } from "./pages";
 import { SharedLayoutOwner, SharedLayoutTenant } from "./components";
 import {
@@ -57,10 +58,11 @@ function App() {
             }
           >
             <Route index element={<HomepageTenant />} />
+            <Route path="/tenant/real-estate/all" element={<AllRealEstate />} />
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
-          <Route path="/landing" element={<Landing />} />
+          <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -15,7 +15,7 @@ const NotFound = () => {
         <h3>Sorry, Page Not Found</h3>
         <p>The page you are looking for does not exists</p>
         <Button
-          href={`/${userType ? userType : "landing"}`}
+          href={`/${userType ? userType : ""}`}
           sx={{
             fontSize: "1rem",
             color: "secondary.main",

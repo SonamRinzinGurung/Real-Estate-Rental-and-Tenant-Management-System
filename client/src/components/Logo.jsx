@@ -6,8 +6,12 @@ import { useSelector } from "react-redux";
 const Logo = () => {
   const { userType } = useSelector((store) => store.auth);
   return (
-    <Link to={`/${userType ? userType : "landing"}`}>
-      <img className="w-20 h-12 md:w-24 md:h-14" src={logoImg} alt="" />
+    <Link to={`/${userType ? userType : ""}`}>
+      <img
+        className="w-20 h-12 md:w-24 md:h-14"
+        src={logoImg}
+        alt="Property Plus Logo"
+      />
     </Link>
   );
 };

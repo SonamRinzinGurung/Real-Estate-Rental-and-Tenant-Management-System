@@ -8,6 +8,7 @@ import FormSelectField from "./FormSelectField";
 import { NavBarLinksOwner, NavBarLinksTenant } from "./NavBarLinks";
 import Header from "./Header";
 import AlertToast from "./AlertToast";
+import RealEstateCard from "./RealEstateCard";
 
 export {
   SharedLayoutOwner,
@@ -20,4 +21,5 @@ export {
   NavBarLinksTenant,
   Header,
   AlertToast,
+  RealEstateCard,
 };

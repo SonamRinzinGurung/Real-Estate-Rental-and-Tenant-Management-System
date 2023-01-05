@@ -9,7 +9,7 @@ export const ProtectedRoutesOwner = ({ children }) => {
 
   if (!user || userType !== "owner") {
     dispatch(logOut());
-    return <Navigate to="/landing" />;
+    return <Navigate to="/" />;
   }
   return children;
 };
@@ -21,7 +21,7 @@ export const ProtectedRoutesTenant = ({ children }) => {
 
   if (!user || userType !== "tenant") {
     dispatch(logOut());
-    return <Navigate to="/landing" />;
+    return <Navigate to="/" />;
   }
   return children;
 };
