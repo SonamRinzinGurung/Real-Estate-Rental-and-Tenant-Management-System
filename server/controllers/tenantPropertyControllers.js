@@ -6,11 +6,11 @@ import { NotFoundError } from "../request-errors/index.js";
  * @returns {object} realEstate array
  */
 const getAllProperties = async (req, res) => {
-  const realEstate = await RealEstate.find({}).populate({
+  const allRealEstate = await RealEstate.find({}).populate({
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
   });
-  res.json({ realEstate });
+  res.json({ allRealEstate });
 };
 
 /**

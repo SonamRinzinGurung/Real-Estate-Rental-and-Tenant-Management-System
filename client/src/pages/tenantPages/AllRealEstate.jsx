@@ -5,7 +5,7 @@ import { RealEstateCard } from "../../components";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const AllRealEstate = () => {
-  const { realEstate, isLoading } = useSelector(
+  const { allRealEstate, isLoading } = useSelector(
     (store) => store.realEstateTenant
   );
 
@@ -22,13 +22,13 @@ const AllRealEstate = () => {
       </div>
     );
 
-  if (realEstate?.length === 0) return <h1>No Real Estate Found</h1>;
+  if (allRealEstate?.length === 0) return <h1>No Real Estate Found</h1>;
 
   return (
     <>
       <h2 className="text-center m-4">All Properties</h2>
       <main className="flex flex-wrap gap-5 justify-center md:justify-center">
-        {realEstate?.map((item) => {
+        {allRealEstate?.map((item) => {
           return <RealEstateCard key={item._id} {...item} />;
         })}
       </main>

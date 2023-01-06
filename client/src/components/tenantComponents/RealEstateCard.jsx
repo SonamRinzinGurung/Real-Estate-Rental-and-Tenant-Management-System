@@ -2,17 +2,17 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { Button, CardActionArea, CardActions } from "@mui/material";
-import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
+import { Button, CardActionArea } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import { format } from "../../utils/valueFormatter";
 const RealEstateCard = ({
+  _id,
   title,
-  description,
   price,
   category,
   address,
-  area,
   realEstateImages,
+  propertyOwner,
 }) => {
   return (
     <>
@@ -28,7 +28,7 @@ const RealEstateCard = ({
           color: "#102a43",
         }}
       >
-        <CardActionArea href="#">
+        <CardActionArea href={`/tenant/real-estate/${_id}`}>
           <CardMedia
             component="img"
             sx={{ maxHeight: 150 }}
@@ -44,7 +44,7 @@ const RealEstateCard = ({
             </h4>
             <p className="text-sm text-gray-400">{category}</p>
             <p className="font-semibold">
-              NPR. <span className="">{price}</span> / month
+              NPR. <span className="">{format(price)}</span> / month
             </p>
             <p className="text-base">
               <LocationOnOutlinedIcon color="secondary" /> {address?.location},{" "}
@@ -52,17 +52,31 @@ const RealEstateCard = ({
             </p>
           </CardContent>
         </CardActionArea>
-        <CardActions>
+        <div className="flex p-2">
+          <div className="flex items-center gap-1">
+            <img
+              className="w-6 h-6 rounded-full ml-1"
+              src={propertyOwner?.profileImage}
+              alt="Rounded avatar"
+            />
+            <span className="font-semibold text-xs text-gray-600">
+              {propertyOwner?.firstName} {propertyOwner?.lastName}
+            </span>
+          </div>
           <Button
             href="#"
             size="small"
             color="tertiary"
             variant="outlined"
-            sx={{ color: "#0496b4" }}
+            sx={{
+              color: "#0496b4",
+              marginLeft: "auto",
+              marginRight: "0.25rem",
+            }}
           >
             More Details
           </Button>
-        </CardActions>
+        </div>
       </Card>
     </>
   );

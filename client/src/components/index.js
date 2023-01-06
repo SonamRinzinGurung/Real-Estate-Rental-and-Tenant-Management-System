@@ -1,6 +1,6 @@
-import SharedLayoutOwner from "./SharedLayoutOwner";
-import SharedLayoutTenant from "./SharedLayoutTenant";
-
+import SharedLayoutOwner from "./ownerComponents/SharedLayoutOwner";
+import SharedLayoutTenant from "./tenantComponents/SharedLayoutTenant";
+import { ProtectedRoutesOwner, ProtectedRoutesTenant } from "./ProtectedRoutes";
 import Logo from "./Logo";
 import FormPasswordField from "./FormPasswordField";
 import FormTextField from "./FormTextField";
@@ -8,11 +8,15 @@ import FormSelectField from "./FormSelectField";
 import { NavBarLinksOwner, NavBarLinksTenant } from "./NavBarLinks";
 import Header from "./Header";
 import AlertToast from "./AlertToast";
-import RealEstateCard from "./RealEstateCard";
+import RealEstateCard from "./tenantComponents/RealEstateCard";
+import RealEstateDetailCard from "./RealEstateDetailCard";
+import ImageCarousal from "./ImageCarousal";
 
 export {
   SharedLayoutOwner,
   SharedLayoutTenant,
+  ProtectedRoutesOwner,
+  ProtectedRoutesTenant,
   Logo,
   FormPasswordField,
   FormTextField,
@@ -22,4 +26,6 @@ export {
   Header,
   AlertToast,
   RealEstateCard,
+  RealEstateDetailCard,
+  ImageCarousal,
 };

@@ -8,12 +8,15 @@ import {
   NotFound,
   PostRealEstate,
   AllRealEstate,
+  RealEstateDetail,
 } from "./pages";
-import { SharedLayoutOwner, SharedLayoutTenant } from "./components";
 import {
+  SharedLayoutOwner,
+  SharedLayoutTenant,
   ProtectedRoutesOwner,
   ProtectedRoutesTenant,
-} from "./components/ProtectedRoutes";
+} from "./components";
+
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -59,6 +62,10 @@ function App() {
           >
             <Route index element={<HomepageTenant />} />
             <Route path="/tenant/real-estate/all" element={<AllRealEstate />} />
+            <Route
+              path="/tenant/real-estate/:id"
+              element={<RealEstateDetail />}
+            />
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />

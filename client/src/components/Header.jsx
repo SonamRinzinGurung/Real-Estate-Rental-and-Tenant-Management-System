@@ -53,7 +53,7 @@ const Header = ({ toggleMenu, menuOpen }) => {
           </p>
         </div>
 
-        <nav className="hidden justify-evenly items-center w-1/4 lg:flex">
+        <nav className="hidden justify-evenly items-center w-1/3 lg:flex">
           {userType === "owner" ? <NavBarLinksOwner /> : <NavBarLinksTenant />}
         </nav>
 

@@ -6,6 +6,7 @@ import Landing from "./Landing";
 import NotFound from "./NotFound";
 import PostRealEstate from "./ownerPages/PostRealEstate";
 import AllRealEstate from "./tenantPages/AllRealEstate";
+import RealEstateDetail from "./tenantPages/RealEstateDetail";
 export {
   Login,
   Register,
@@ -15,4 +16,5 @@ export {
   NotFound,
   PostRealEstate,
   AllRealEstate,
+  RealEstateDetail,
 };
