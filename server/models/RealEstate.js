@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const RealEstateSchema = new mongoose.Schema(
   {
+    propertyId: {
+      type: String,
+      required: [true, "Please provide a property ID"],
+      unique: true,
+    },
     title: {
       type: String,
       required: [true, "Please provide a title for the property"],
@@ -37,24 +42,37 @@ const RealEstateSchema = new mongoose.Schema(
       required: [true, "Please provide the area of the property"],
       min: [100, "Area cannot be less than 100"],
     },
+    floors: {
+      type: Number,
+      required: [true, "Please provide the number of floors in the property"],
+      min: [1, "Number of floors cannot be less than 1"],
+    },
+
+    facing: {
+      type: String,
+      required: [true, "Please provide the facing direction of the property"],
+      enum: {
+        values: [
+          "North",
+          "South",
+          "East",
+          "West",
+          "North-East",
+          "North-West",
+          "South-East",
+          "South-West",
+        ],
+        message: "{VALUE} is not in the facing list",
+      },
+    },
+
     category: {
       type: String,
+      required: [true, "Please provide a category for the property"],
       enum: {
         values: ["House", "Apartment", "Room", "Shop Space", "Office Space"],
         message: "{VALUE} is not in the category list",
       },
-    },
-    googleIframe: {
-      type: String,
-    },
-
-    rating: {
-      type: Number,
-      enum: {
-        values: [1, 2, 3, 4, 5],
-        message: "{VALUE} is not a valid rating",
-      },
-      default: null,
     },
 
     realEstateImages: [Object],

@@ -10,6 +10,7 @@ const RealEstateDetailCard = ({
   realEstateImages,
   createdAt,
   category,
+  propertyId,
 }) => {
   return (
     <>
@@ -18,12 +19,15 @@ const RealEstateDetailCard = ({
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">{title}</h3>
             <p className="-ml-1 text-base tracking-tight">
-              <LocationOnOutlinedIcon color="secondary" />
+              <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
               {address?.location}, {address?.streetName} ,Kathmandu
             </p>
             <div className="">
               <p className="font-robotoNormal text-xs font-semibold tracking-tight">
                 Posted on: {dateFormatter(createdAt)}
+              </p>
+              <p className="font-robotoNormal text-xs tracking-tight">
+                Id: {propertyId}
               </p>
             </div>
           </div>

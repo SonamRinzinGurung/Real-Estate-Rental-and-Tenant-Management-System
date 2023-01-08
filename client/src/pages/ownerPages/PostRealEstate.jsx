@@ -32,7 +32,8 @@ const PostRealEstate = () => {
     streetName: "",
     category: "",
     area: "",
-    googleIframe: "",
+    floors: "",
+    facing: "",
     realEstateImages: null,
   };
 
@@ -100,7 +101,7 @@ const PostRealEstate = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="flex flex-col gap-2 my-2">
+                <div className="flex flex-col gap-3 my-2">
                   <h5 className="mb-1">
                     <BungalowIcon /> Property Info
                   </h5>
@@ -146,8 +147,38 @@ const PostRealEstate = () => {
                       ),
                     }}
                   />
+                  <TextField
+                    label="Floors"
+                    name="floors"
+                    type="number"
+                    placeholder="Number of floors"
+                    value={values.floors}
+                    color="tertiary"
+                    onChange={handleChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">floors</InputAdornment>
+                      ),
+                    }}
+                  />
+                  <FormSelectField
+                    label="Property Facing"
+                    name="facing"
+                    options={[
+                      "North",
+                      "South",
+                      "East",
+                      "West",
+                      "North-East",
+                      "North-West",
+                      "South-East",
+                      "South-West",
+                    ]}
+                    value={values.facing}
+                    handleChange={handleChange}
+                  />
                 </div>
-                <div className="flex flex-col gap-2 my-2">
+                <div className="flex flex-col gap-3 my-2">
                   <h5 className="mb-1">
                     <LocationOnIcon /> Address
                   </h5>
@@ -170,13 +201,6 @@ const PostRealEstate = () => {
                     color="tertiary"
                     disabled
                     value="Kathmandu"
-                  />
-                  <FormTextField
-                    label="Google Map Iframe"
-                    name="googleIframe"
-                    type="text"
-                    value={values.googleIframe}
-                    handleChange={handleChange}
                   />
                 </div>
                 <div className="flex flex-col my-2">
