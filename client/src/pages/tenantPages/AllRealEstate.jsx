@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { getAllRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RealEstateCard } from "../../components";
-import CircularProgress from "@mui/material/CircularProgress";
+import { PageLoading, RealEstateCard } from "../../components";
 
 const AllRealEstate = () => {
   const { allRealEstate, isLoading } = useSelector(
@@ -15,12 +14,7 @@ const AllRealEstate = () => {
     dispatch(getAllRealEstate());
   }, [dispatch]);
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <CircularProgress size={"8rem"} />
-      </div>
-    );
+  if (isLoading) return <PageLoading />;
 
   if (allRealEstate?.length === 0) return <h1>No Real Estate Found</h1>;
 

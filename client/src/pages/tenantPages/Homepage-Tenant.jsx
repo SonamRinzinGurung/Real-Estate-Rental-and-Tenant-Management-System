@@ -1,12 +1,9 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { PageLoading } from "../../components";
 const Homepage = () => {
-  const [currentImageIndex, setCurrentImage] = useState(0);
-
   const { isLoading } = useSelector((store) => store.realEstateTenant);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <PageLoading />;
   return (
     <>
       <main></main>

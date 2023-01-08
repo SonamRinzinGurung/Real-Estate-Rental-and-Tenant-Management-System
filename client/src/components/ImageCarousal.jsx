@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const ImageCarousal = ({ realEstateImages }) => {
   const [currentImageIndex, setCurrentImage] = useState(0);
 
+  // loop the images in the array for continuous slider
   useEffect(() => {
     const lastIndex = realEstateImages?.length - 1;
     if (currentImageIndex < 0) {
@@ -13,6 +14,7 @@ const ImageCarousal = ({ realEstateImages }) => {
     }
   }, [currentImageIndex, realEstateImages]);
 
+  // automatic slider
   useEffect(() => {
     let slider = setInterval(() => {
       setCurrentImage(currentImageIndex + 1);
@@ -23,17 +25,27 @@ const ImageCarousal = ({ realEstateImages }) => {
   }, [currentImageIndex]);
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden rounded-md shadow-lg h-72 md:h-96">
       {realEstateImages?.map((image, imageIndex) => {
-        let position = "hidden";
-        if (imageIndex === currentImageIndex) {
-          position = "block";
-        }
+        // default position and opacity of the image
+        let position = "opacity-0 translate-x-full";
 
+        // if the current image matches the image index
+        if (imageIndex === currentImageIndex) {
+          position = "opacity-1 translate-x-0";
+        }
+        if (
+          // if the current image is the last one and the next one is the first one
+          imageIndex === currentImageIndex - 1 ||
+          (currentImageIndex === 0 &&
+            imageIndex === realEstateImages?.length - 1)
+        ) {
+          position = "opacity-0 -translate-x-full";
+        }
         return (
           <article
             key={imageIndex}
-            className={`${position} relative h-72 md:h-96 overflow-hidden rounded-md duration-700 ease-in-out`}
+            className={`${position} absolute w-full h-72 md:h-96 overflow-hidden rounded-md duration-700 ease-in-out`}
           >
             <img
               src={image}

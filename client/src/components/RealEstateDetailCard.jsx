@@ -13,8 +13,8 @@ const RealEstateDetailCard = ({
 }) => {
   return (
     <>
-      <section className="flex flex-col max-w-3xl m-4 py-4 px-6 gap-4 shadow-md">
-        <div className="flex justify-between p-1 rounded-md">
+      <section className="flex flex-col gap-4 rounded-md ">
+        <div className="flex justify-between rounded-md">
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">{title}</h3>
             <p className="-ml-1 text-base tracking-tight">
@@ -27,7 +27,7 @@ const RealEstateDetailCard = ({
               </p>
             </div>
           </div>
-          <div className="self-start p-1 rounded-md  hover:shadow-inner transition-all ease-out duration-300">
+          <div className="self-start p-1 rounded-md  hover:shadow-inner ease-out duration-500">
             <p className="font-roboto text-primaryDark -mb-2">RENT per month</p>
             <span className="font-semibold text-lg text-primaryDark">
               NPR. {format(price)}
