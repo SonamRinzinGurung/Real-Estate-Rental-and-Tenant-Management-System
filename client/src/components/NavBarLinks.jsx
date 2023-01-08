@@ -18,7 +18,7 @@ const NavBarLinksOwner = () => {
       </Button>
       <Button
         type="text"
-        href="#"
+        href="/owner/property/post"
         sx={{
           color: "black",
           "&:hover": {
@@ -26,7 +26,7 @@ const NavBarLinksOwner = () => {
           },
         }}
       >
-        About
+        Post Property
       </Button>
       <Button
         type="text"

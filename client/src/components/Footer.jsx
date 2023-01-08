@@ -1,5 +1,6 @@
 import { Logo } from "./";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const { userType } = useSelector((store) => store.auth);
@@ -39,12 +40,9 @@ const Footer = () => {
       <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
       <span className="block text-sm  sm:text-center ">
         © 2022{" "}
-        <a
-          href={`http://localhost:3000/${userType}`}
-          className="hover:underline"
-        >
+        <Link to={`/${userType}`} className="hover:underline">
           Property Plus™
-        </a>
+        </Link>
         . All Rights Reserved.
       </span>
     </footer>

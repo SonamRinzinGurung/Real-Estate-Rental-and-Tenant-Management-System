@@ -10,10 +10,10 @@ const SharedLayoutOwner = () => {
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header toggleMenu={toggleMenu} menuOpen={menuOpen} />
-      <Outlet />;
-    </>
+      <Outlet />
+    </div>
   );
 };
 

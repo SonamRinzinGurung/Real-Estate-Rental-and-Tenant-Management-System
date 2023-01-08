@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { Button, CardActionArea } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { format } from "../../utils/valueFormatter";
+import { format } from "../utils/valueFormatter";
 const RealEstateCard = ({
   _id,
   title,
@@ -13,6 +13,7 @@ const RealEstateCard = ({
   address,
   realEstateImages,
   propertyOwner,
+  fromOwnerUser,
 }) => {
   return (
     <>
@@ -28,7 +29,9 @@ const RealEstateCard = ({
           color: "#102a43",
         }}
       >
-        <CardActionArea href={`/tenant/real-estate/${_id}`}>
+        <CardActionArea
+          href={fromOwnerUser ? "#" : `/tenant/real-estate/${_id}`}
+        >
           <CardMedia
             component="img"
             sx={{ maxHeight: 150 }}
@@ -52,31 +55,35 @@ const RealEstateCard = ({
             </p>
           </CardContent>
         </CardActionArea>
-        <div className="flex p-2">
-          <div className="flex items-center gap-1">
-            <img
-              className="w-6 h-6 rounded-full ml-1"
-              src={propertyOwner?.profileImage}
-              alt="Rounded avatar"
-            />
-            <span className="font-semibold text-xs text-gray-600">
-              {propertyOwner?.firstName} {propertyOwner?.lastName}
-            </span>
+
+        {/*  render the contact bar only if the user is not the owner of the property */}
+        {!fromOwnerUser && (
+          <div className="flex p-2">
+            <div className="flex items-center gap-1">
+              <img
+                className="w-6 h-6 rounded-full ml-1"
+                src={propertyOwner?.profileImage}
+                alt="Rounded avatar"
+              />
+              <span className="font-semibold text-xs text-gray-600">
+                {propertyOwner?.firstName} {propertyOwner?.lastName}
+              </span>
+            </div>
+            <Button
+              href="#"
+              size="small"
+              color="tertiary"
+              variant="outlined"
+              sx={{
+                color: "#0496b4",
+                marginLeft: "auto",
+                marginRight: "0.25rem",
+              }}
+            >
+              More Details
+            </Button>
           </div>
-          <Button
-            href="#"
-            size="small"
-            color="tertiary"
-            variant="outlined"
-            sx={{
-              color: "#0496b4",
-              marginLeft: "auto",
-              marginRight: "0.25rem",
-            }}
-          >
-            More Details
-          </Button>
-        </div>
+        )}
       </Card>
     </>
   );

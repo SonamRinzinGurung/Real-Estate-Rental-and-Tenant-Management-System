@@ -7,6 +7,8 @@ import NotFound from "./NotFound";
 import PostRealEstate from "./ownerPages/PostRealEstate";
 import AllRealEstate from "./tenantPages/AllRealEstate";
 import RealEstateDetail from "./tenantPages/RealEstateDetail";
+import OwnerRealEstateDetail from "./ownerPages/OwnerRealEstateDetail";
+
 export {
   Login,
   Register,
@@ -17,4 +19,5 @@ export {
   PostRealEstate,
   AllRealEstate,
   RealEstateDetail,
+  OwnerRealEstateDetail,
 };
