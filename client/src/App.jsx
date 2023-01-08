@@ -9,6 +9,7 @@ import {
   PostRealEstate,
   AllRealEstate,
   RealEstateDetail,
+  PersonalRealEstateDetail,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -51,6 +52,10 @@ function App() {
           >
             <Route index element={<HomepageOwner />} />
             <Route path="/owner/property/post" element={<PostRealEstate />} />
+            <Route
+              path="/owner/real-estate/:id"
+              element={<PersonalRealEstateDetail />}
+            />
           </Route>
           <Route
             path="/tenant"

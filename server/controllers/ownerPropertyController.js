@@ -1,5 +1,6 @@
 import RealEstate from "../models/RealEstate.js";
 import { nanoid } from "nanoid";
+import { NotFoundError } from "../request-errors/index.js";
 
 /**
  * @description Post Real Estate
@@ -24,4 +25,18 @@ const getOwnerRealEstates = async (req, res) => {
   const realEstates = await RealEstate.find({ propertyOwner: req.user.userId });
   res.json({ realEstates });
 };
-export { postRealEstate, getOwnerRealEstates };
+
+/**
+ * @description Get single property
+ * @returns {object} realEstate
+ */
+const getSingleProperty = async (req, res) => {
+  const { id } = req.params;
+  const realEstate = await RealEstate.findById(id);
+  if (!realEstate) {
+    throw new NotFoundError(`Property with id: ${id} not found`);
+  }
+  res.json({ realEstate });
+};
+
+export { postRealEstate, getOwnerRealEstates, getSingleProperty };

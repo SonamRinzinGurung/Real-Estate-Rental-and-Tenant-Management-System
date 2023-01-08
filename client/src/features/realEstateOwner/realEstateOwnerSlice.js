@@ -25,6 +25,18 @@ export const getPersonalRealEstate = createAsyncThunk(
   }
 );
 
+export const getRealEstateDetail = createAsyncThunk(
+  "getRealEstateDetail",
+  async ({ id }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(`/owner/real-estate/${id}`);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const realEstateOwnerSlice = createSlice({
   name: "property",
   initialState: {
@@ -68,6 +80,20 @@ const realEstateOwnerSlice = createSlice({
         state.alertFlag = false;
       })
       .addCase(getPersonalRealEstate.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getRealEstateDetail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getRealEstateDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.realEstate = action.payload.realEstate;
+        state.alertFlag = false;
+      })
+      .addCase(getRealEstateDetail.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

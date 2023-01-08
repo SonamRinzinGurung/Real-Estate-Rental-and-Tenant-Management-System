@@ -30,7 +30,11 @@ const RealEstateCard = ({
         }}
       >
         <CardActionArea
-          href={fromOwnerUser ? "#" : `/tenant/real-estate/${_id}`}
+          href={
+            fromOwnerUser
+              ? `/owner/real-estate/${_id}`
+              : `/tenant/real-estate/${_id}`
+          }
         >
           <CardMedia
             component="img"

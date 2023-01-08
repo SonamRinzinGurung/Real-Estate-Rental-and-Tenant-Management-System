@@ -17,7 +17,14 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     defaultError.statusCode = 400;
     defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique`;
   }
-  //multer error for more than 5 file upload
+
+  //cast error in job id
+  if (err.name === "CastError") {
+    defaultError.msg = `No item found with id ${err.value}`;
+    defaultError.statusCode = 404;
+  }
+
+  //multer error for more than 10 file upload
   if (err.code === "LIMIT_UNEXPECTED_FILE") {
     defaultError.msg = `Please upload only 10 images`;
     defaultError.statusCode = 400;
