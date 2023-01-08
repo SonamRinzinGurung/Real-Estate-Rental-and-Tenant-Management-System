@@ -46,6 +46,7 @@ const realEstateOwnerSlice = createSlice({
     alertFlag: false,
     alertMsg: "",
     alertType: null,
+    postSuccess: false,
   },
   reducers: {
     clearAlert: (state) => {
@@ -61,6 +62,7 @@ const realEstateOwnerSlice = createSlice({
       .addCase(postRealEstate.fulfilled, (state, action) => {
         state.isLoading = false;
         state.realEstate = action.payload.realEstate;
+        state.postSuccess = true;
         state.alertFlag = true;
         state.alertMsg = "Property added successfully";
         state.alertType = "success";
@@ -70,6 +72,7 @@ const realEstateOwnerSlice = createSlice({
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
+        state.postSuccess = false;
       })
       .addCase(getPersonalRealEstate.pending, (state) => {
         state.isLoading = true;

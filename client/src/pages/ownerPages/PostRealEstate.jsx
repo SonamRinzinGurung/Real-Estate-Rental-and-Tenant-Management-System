@@ -1,6 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FormTextField, FormSelectField, AlertToast } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   postRealEstate,
   clearAlert,
@@ -20,9 +21,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 
 const PostRealEstate = () => {
-  const { alertFlag, alertMsg, alertType, isLoading } = useSelector(
-    (store) => store.realEstateOwner
-  );
+  const { alertFlag, alertMsg, alertType, isLoading, postSuccess, realEstate } =
+    useSelector((store) => store.realEstateOwner);
 
   const initialFormValues = {
     title: "",
@@ -53,7 +53,6 @@ const PostRealEstate = () => {
     const form = document.getElementById("form");
     const formData = new FormData(form);
     dispatch(postRealEstate({ formData }));
-    setFormValues(initialFormValues);
   };
 
   const handleClose = useCallback(
@@ -65,6 +64,18 @@ const PostRealEstate = () => {
     },
     [dispatch]
   );
+
+  const navigate = useNavigate();
+
+  // Redirect to detail page of the property after successful posting
+  useEffect(() => {
+    if (postSuccess) {
+      const timer = setTimeout(() => {
+        navigate(`/owner/real-estate/${realEstate?._id}`);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [postSuccess, navigate, realEstate]);
 
   return (
     <div>
