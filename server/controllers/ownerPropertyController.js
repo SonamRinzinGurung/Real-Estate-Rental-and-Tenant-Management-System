@@ -16,4 +16,12 @@ const postRealEstate = async (req, res) => {
   res.status(201).json({ realEstate });
 };
 
-export { postRealEstate };
+/**
+ * @description Get Owner's Real Estates
+ * @returns {object} realEstate
+ */
+const getOwnerRealEstates = async (req, res) => {
+  const realEstates = await RealEstate.find({ propertyOwner: req.user.userId });
+  res.json({ realEstates });
+};
+export { postRealEstate, getOwnerRealEstates };

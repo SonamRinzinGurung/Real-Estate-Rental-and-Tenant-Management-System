@@ -1,6 +1,9 @@
 import express from "express";
 const router = express.Router();
-import { postRealEstate } from "../controllers/ownerPropertyController.js";
+import {
+  postRealEstate,
+  getOwnerRealEstates,
+} from "../controllers/ownerPropertyController.js";
 import upload from "../middleware/multerImageMiddleware.js";
 import { cloudinaryMultipleUpload } from "../middleware/cloudinaryUpload.js";
 
@@ -14,5 +17,11 @@ router.post(
   cloudinaryMultipleUpload,
   postRealEstate
 );
+
+/**
+ * @description Get Owner's personal real estates
+ * @route GET /api/owner/real-estate
+ */
+router.get("/", getOwnerRealEstates);
 
 export default router;
