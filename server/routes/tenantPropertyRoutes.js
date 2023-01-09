@@ -4,6 +4,7 @@ import {
   getAllProperties,
   getSingleProperty,
   savePropertyToggle,
+  getAllSavedProperties,
 } from "../controllers/tenantPropertyControllers.js";
 
 /**
@@ -23,5 +24,11 @@ router.get("/:id", getSingleProperty);
  * @route PATCH /api/tenant/real-estate/save/:id
  */
 router.patch("/save/:id", savePropertyToggle);
+
+/**
+ * @description Get all saved properties
+ * @route GET /api/tenant/real-estate/save/all
+ */
+router.get("/saved/all", getAllSavedProperties);
 
 export default router;

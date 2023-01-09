@@ -87,4 +87,32 @@ const savePropertyToggle = async (req, res) => {
     });
   }
 };
-export { getAllProperties, getSingleProperty, savePropertyToggle };
+
+/**
+ * @description Get all properties
+ * @returns {object} realEstate array
+ */
+const getAllSavedProperties = async (req, res) => {
+  const { userId } = req.user;
+
+  const currentTenantUser = await TenantUser.findById(userId).populate({
+    path: "savedProperties",
+    populate: {
+      path: "propertyOwner",
+      model: "OwnerUser",
+    },
+  });
+
+  if (!currentTenantUser) {
+    throw new NotFoundError(`User with id: ${userId} not found`);
+  }
+
+  res.json({ savedProperties: currentTenantUser.savedProperties });
+};
+
+export {
+  getAllProperties,
+  getSingleProperty,
+  savePropertyToggle,
+  getAllSavedProperties,
+};

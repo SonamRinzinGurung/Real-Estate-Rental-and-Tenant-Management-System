@@ -73,7 +73,7 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        href="#"
+        href="/tenant/real-estate/saved/all"
         sx={{
           color: "black",
           "&:hover": {
@@ -81,7 +81,7 @@ const NavBarLinksTenant = () => {
           },
         }}
       >
-        Contact
+        Saved
       </Button>
     </>
   );

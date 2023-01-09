@@ -10,6 +10,7 @@ import {
   AllRealEstate,
   RealEstateDetail,
   PersonalRealEstateDetail,
+  SavedRealEstate,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -70,6 +71,10 @@ function App() {
             <Route
               path="/tenant/real-estate/:id"
               element={<RealEstateDetail />}
+            />
+            <Route
+              path="/tenant/real-estate/saved/all"
+              element={<SavedRealEstate />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />
