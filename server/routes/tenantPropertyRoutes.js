@@ -3,6 +3,7 @@ const router = express.Router();
 import {
   getAllProperties,
   getSingleProperty,
+  savePropertyToggle,
 } from "../controllers/tenantPropertyControllers.js";
 
 /**
@@ -16,5 +17,11 @@ router.get("/", getAllProperties);
  * @route GET /api/tenant/real-estate/:id
  */
 router.get("/:id", getSingleProperty);
+
+/**
+ * @description Toggle save property for tenant user
+ * @route PATCH /api/tenant/real-estate/save/:id
+ */
+router.patch("/save/:id", savePropertyToggle);
 
 export default router;

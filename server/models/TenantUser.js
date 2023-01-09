@@ -56,6 +56,13 @@ const TenantUserSchema = new mongoose.Schema(
       minlength: 5,
       select: false,
     },
+    savedProperties: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "RealEstate",
+        default: [],
+      },
+    ],
   },
   { timestamps: true }
 );
