@@ -20,6 +20,8 @@ const getAllProperties = async (req, res) => {
  */
 const getSingleProperty = async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.user;
+
   const realEstate = await RealEstate.findById(id).populate({
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
@@ -27,7 +29,12 @@ const getSingleProperty = async (req, res) => {
   if (!realEstate) {
     throw new NotFoundError(`Property with id: ${id} not found`);
   }
-  res.json({ realEstate });
+
+  //check if property is saved by user
+  const currentTenantUser = await TenantUser.findById(userId);
+  const isSaved = currentTenantUser.savedProperties.includes(id);
+
+  res.json({ realEstate, isSaved });
 };
 
 /**
@@ -61,7 +68,7 @@ const savePropertyToggle = async (req, res) => {
     res.json({
       updatedUser,
       message: "Property removed from saved properties",
-      saved: false,
+      isSaved: false,
     });
   } else {
     //add property to saved properties
@@ -76,7 +83,7 @@ const savePropertyToggle = async (req, res) => {
     res.json({
       updatedUser,
       message: "Property saved successfully",
-      saved: true,
+      isSaved: true,
     });
   }
 };

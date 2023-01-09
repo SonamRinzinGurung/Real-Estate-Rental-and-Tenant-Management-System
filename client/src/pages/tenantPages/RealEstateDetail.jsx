@@ -1,8 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSingleRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
-import { RealEstateDetailCard, PageLoading, Footer } from "../../components";
+import {
+  getSingleRealEstate,
+  clearAlert,
+} from "../../features/realEstateTenant/realEstateTenantSlice";
+import {
+  RealEstateDetailCard,
+  PageLoading,
+  Footer,
+  AlertToast,
+} from "../../components";
 import { format } from "../../utils/valueFormatter";
 import { Button, CardActionArea } from "@mui/material";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
@@ -15,10 +23,11 @@ import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 
 const RealEstateDetail = () => {
-  const { realEstate, isLoading } = useSelector(
-    (state) => state.realEstateTenant
-  );
+  const { realEstate, isLoading, alertFlag, alertMsg, alertType, isSaved } =
+    useSelector((state) => state.realEstateTenant);
+
   const { user } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const { id } = useParams();
@@ -27,13 +36,23 @@ const RealEstateDetail = () => {
     dispatch(getSingleRealEstate({ id }));
   }, [id, dispatch]);
 
+  const handleClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
+
   if (isLoading) return <PageLoading />;
 
   return (
     <>
       <main className="flex gap-2 flex-col mb-12 lg:flex-row">
         <div className="flex flex-col gap-8 mt-10 mx-auto p-4 w-4/6 lg:ml-14">
-          <RealEstateDetailCard {...realEstate} />
+          <RealEstateDetailCard {...realEstate} fromTenant isSaved={isSaved} />
 
           <div className="">
             <h3 className="font-semibold p-3">Description</h3>
@@ -136,6 +155,12 @@ const RealEstateDetail = () => {
             </div>
           </div>
         </aside>
+        <AlertToast
+          alertFlag={alertFlag}
+          alertMsg={alertMsg}
+          alertType={alertType}
+          handleClose={handleClose}
+        />
       </main>
       <Footer />
     </>

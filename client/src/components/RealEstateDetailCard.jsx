@@ -2,8 +2,14 @@ import React from "react";
 import { format, dateFormatter } from "../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { ImageCarousal } from "../components";
+import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
+import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
+
+import { useDispatch } from "react-redux";
+import { saveOrUnSaveRealEstate } from "../features/realEstateTenant/realEstateTenantSlice";
 
 const RealEstateDetailCard = ({
+  _id,
   title,
   address,
   price,
@@ -11,7 +17,10 @@ const RealEstateDetailCard = ({
   createdAt,
   category,
   propertyId,
+  fromTenant,
+  isSaved,
 }) => {
+  const dispatch = useDispatch();
   return (
     <>
       <section className="flex flex-col gap-4 rounded-md ">
@@ -31,14 +40,50 @@ const RealEstateDetailCard = ({
               </p>
             </div>
           </div>
-          <div className="self-start p-1 rounded-md  hover:shadow-inner ease-out duration-500">
-            <p className="font-roboto text-primaryDark -mb-2">RENT per month</p>
-            <span className="font-semibold text-lg text-primaryDark">
-              NPR. {format(price)}
-            </span>
-            <div>
-              <p className="font-roboto text-primaryDark">{category}</p>
+          <div className="">
+            <div className="rounded-md p-2 hover:shadow-inner ease-out duration-500">
+              <p className="font-roboto text-primaryDark leading-4 ">
+                RENT per month
+              </p>
+              <span className="font-semibold text-lg text-primaryDark">
+                NPR. {format(price)}
+              </span>
+              <div>
+                <p className="font-roboto text-primaryDark">{category}</p>
+              </div>
             </div>
+            {fromTenant && (
+              <div
+                className="mt-2 flex cursor-pointer items-center justify-center"
+                onClick={() => dispatch(saveOrUnSaveRealEstate({ id: _id }))} // dispatching the action to save or un-save the real estate
+              >
+                {isSaved ? (
+                  <>
+                    <BookmarkRoundedIcon
+                      color="secondary"
+                      sx={{
+                        "&:hover": {
+                          color: "secondary.dark",
+                        },
+                      }}
+                    />
+                    <p className="text-secondary font-robotoNormal">UnSave</p>
+                  </>
+                ) : (
+                  <>
+                    <BookmarkBorderRoundedIcon
+                      color="secondary"
+                      sx={{
+                        "&:hover": {
+                          color: "secondary.dark",
+                        },
+                      }}
+                    />
+                    <p className="text-secondary font-robotoNormal">Save</p>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <ImageCarousal realEstateImages={realEstateImages} />
