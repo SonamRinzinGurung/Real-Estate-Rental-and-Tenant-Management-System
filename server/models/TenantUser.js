@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import slug from "mongoose-slug-generator";
+mongoose.plugin(slug);
 
 const TenantUserSchema = new mongoose.Schema(
   {
@@ -13,6 +15,12 @@ const TenantUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a last name"],
       maxLength: 20,
+    },
+    slug: {
+      type: String,
+      slug: ["firstName", "lastName"],
+      slug_padding_size: 4,
+      unique: true,
     },
     email: {
       type: String,

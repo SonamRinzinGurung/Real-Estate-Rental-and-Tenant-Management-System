@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import slug from "mongoose-slug-generator";
+mongoose.plugin(slug);
 
 const RealEstateSchema = new mongoose.Schema(
   {
@@ -12,6 +14,12 @@ const RealEstateSchema = new mongoose.Schema(
       required: [true, "Please provide a title for the property"],
       trim: true,
       maxLength: [100, "Title cannot be more than 100 characters"],
+    },
+    slug: {
+      type: String,
+      slug: "title",
+      slug_padding_size: 4,
+      unique: true,
     },
     price: {
       type: Number,
