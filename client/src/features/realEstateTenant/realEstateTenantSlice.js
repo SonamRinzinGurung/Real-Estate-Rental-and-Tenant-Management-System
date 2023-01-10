@@ -15,9 +15,9 @@ export const getAllRealEstate = createAsyncThunk(
 
 export const getSingleRealEstate = createAsyncThunk(
   "getSingleRealEstate",
-  async ({ id }, thunkAPI) => {
+  async ({ slug }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/tenant/real-estate/${id}`);
+      const { data } = await axiosFetch.get(`/tenant/real-estate/${slug}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);

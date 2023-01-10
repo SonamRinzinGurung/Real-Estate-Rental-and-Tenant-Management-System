@@ -7,7 +7,6 @@ import NotFound from "./NotFound";
 import PostRealEstate from "./ownerPages/PostRealEstate";
 import AllRealEstate from "./tenantPages/AllRealEstate";
 import RealEstateDetail from "./tenantPages/RealEstateDetail";
-import OwnerRealEstateDetail from "./ownerPages/OwnerRealEstateDetail";
 import PersonalRealEstateDetail from "./ownerPages/PersonalRealEstateDetail";
 import SavedRealEstate from "./tenantPages/SavedRealEstate";
 export {
@@ -20,7 +19,6 @@ export {
   PostRealEstate,
   AllRealEstate,
   RealEstateDetail,
-  OwnerRealEstateDetail,
   PersonalRealEstateDetail,
   SavedRealEstate,
 };

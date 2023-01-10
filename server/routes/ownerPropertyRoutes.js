@@ -27,8 +27,8 @@ router.get("/", getOwnerRealEstates);
 
 /**
  * @description Get single property
- * @route GET /api/owner/real-estate/:id
+ * @route GET /api/owner/real-estate/:slug
  */
-router.get("/:id", getSingleProperty);
+router.get("/:slug", getSingleProperty);
 
 export default router;

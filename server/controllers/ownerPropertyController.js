@@ -31,10 +31,10 @@ const getOwnerRealEstates = async (req, res) => {
  * @returns {object} realEstate
  */
 const getSingleProperty = async (req, res) => {
-  const { id } = req.params;
-  const realEstate = await RealEstate.findById(id);
+  const { slug } = req.params;
+  const realEstate = await RealEstate.findOne({ slug });
   if (!realEstate) {
-    throw new NotFoundError(`Property with id: ${id} not found`);
+    throw new NotFoundError(`Property not found`);
   }
   res.json({ realEstate });
 };

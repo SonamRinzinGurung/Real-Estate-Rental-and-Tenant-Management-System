@@ -8,6 +8,7 @@ import { format } from "../utils/valueFormatter";
 const RealEstateCard = ({
   _id,
   title,
+  slug,
   price,
   category,
   address,
@@ -32,8 +33,8 @@ const RealEstateCard = ({
         <CardActionArea
           href={
             fromOwnerUser
-              ? `/owner/real-estate/${_id}`
-              : `/tenant/real-estate/${_id}`
+              ? `/owner/real-estate/${slug}`
+              : `/tenant/real-estate/${slug}`
           }
         >
           <CardMedia

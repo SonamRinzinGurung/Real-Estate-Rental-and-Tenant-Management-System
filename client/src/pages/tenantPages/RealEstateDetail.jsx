@@ -30,11 +30,11 @@ const RealEstateDetail = () => {
 
   const dispatch = useDispatch();
 
-  const { id } = useParams();
+  const { slug } = useParams();
 
   useEffect(() => {
-    dispatch(getSingleRealEstate({ id }));
-  }, [id, dispatch]);
+    dispatch(getSingleRealEstate({ slug }));
+  }, [slug, dispatch]);
 
   const handleClose = useCallback(
     (event, reason) => {

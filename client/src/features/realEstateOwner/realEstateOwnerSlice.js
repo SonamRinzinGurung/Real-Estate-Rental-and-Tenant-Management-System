@@ -27,9 +27,9 @@ export const getPersonalRealEstate = createAsyncThunk(
 
 export const getRealEstateDetail = createAsyncThunk(
   "getRealEstateDetail",
-  async ({ id }, thunkAPI) => {
+  async ({ slug }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/owner/real-estate/${id}`);
+      const { data } = await axiosFetch.get(`/owner/real-estate/${slug}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);

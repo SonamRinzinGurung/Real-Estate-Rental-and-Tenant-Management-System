@@ -54,7 +54,7 @@ function App() {
             <Route index element={<HomepageOwner />} />
             <Route path="/owner/property/post" element={<PostRealEstate />} />
             <Route
-              path="/owner/real-estate/:id"
+              path="/owner/real-estate/:slug"
               element={<PersonalRealEstateDetail />}
             />
           </Route>
@@ -69,7 +69,7 @@ function App() {
             <Route index element={<HomepageTenant />} />
             <Route path="/tenant/real-estate/all" element={<AllRealEstate />} />
             <Route
-              path="/tenant/real-estate/:id"
+              path="/tenant/real-estate/:slug"
               element={<RealEstateDetail />}
             />
             <Route

@@ -19,20 +19,23 @@ const getAllProperties = async (req, res) => {
  * @returns {object} realEstate
  */
 const getSingleProperty = async (req, res) => {
-  const { id } = req.params;
+  const { slug } = req.params;
   const { userId } = req.user;
 
-  const realEstate = await RealEstate.findById(id).populate({
+  const realEstate = await RealEstate.findOne({ slug }).populate({
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
   });
+
   if (!realEstate) {
-    throw new NotFoundError(`Property with id: ${id} not found`);
+    throw new NotFoundError(`Property was not found`);
   }
+
+  const { _id: id } = realEstate;
 
   //check if property is saved by user
   const currentTenantUser = await TenantUser.findById(userId);
-  const isSaved = currentTenantUser.savedProperties.includes(id);
+  const isSaved = currentTenantUser.savedProperties.includes(id.toString());
 
   res.json({ realEstate, isSaved });
 };

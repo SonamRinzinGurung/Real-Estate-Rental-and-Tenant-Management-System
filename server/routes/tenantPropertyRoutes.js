@@ -15,9 +15,9 @@ router.get("/", getAllProperties);
 
 /**
  * @description Get single property
- * @route GET /api/tenant/real-estate/:id
+ * @route GET /api/tenant/real-estate/:slug
  */
-router.get("/:id", getSingleProperty);
+router.get("/:slug", getSingleProperty);
 
 /**
  * @description Toggle save property for tenant user

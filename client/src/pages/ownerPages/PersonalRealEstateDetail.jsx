@@ -2,26 +2,19 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getRealEstateDetail } from "../../features/realEstateOwner/realEstateOwnerSlice";
-
 import { RealEstateDetailCard, PageLoading, Footer } from "../../components";
 import { format } from "../../utils/valueFormatter";
-import { Button, CardActionArea } from "@mui/material";
-import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import Avatar from "@mui/material/Avatar";
-import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
-import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded";
-import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 
 const PersonalRealEstateDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getRealEstateDetail({ id }));
-  }, [id, dispatch]);
+    dispatch(getRealEstateDetail({ slug }));
+  }, [slug, dispatch]);
 
   const { realEstate, isLoading } = useSelector(
     (store) => store.realEstateOwner
