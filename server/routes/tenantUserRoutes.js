@@ -13,8 +13,8 @@ router.get("/owner-user/:slug", getSingleOwnerUser);
 
 /**
  * @description Get the current user's details
- * @route GET /api/tenant/self
+ * @route GET /api/tenant/profile
  */
-router.get("/self", getSelfDetail);
+router.get("/profile", getSelfDetail);
 
 export default router;

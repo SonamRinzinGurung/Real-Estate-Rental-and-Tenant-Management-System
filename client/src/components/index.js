@@ -13,6 +13,7 @@ import RealEstateDetailCard from "./RealEstateDetailCard";
 import ImageCarousal from "./ImageCarousal";
 import PageLoading from "./PageLoading";
 import Footer from "./Footer";
+import UserProfileComponent from "./UserProfileComponent";
 
 export {
   SharedLayoutOwner,
@@ -32,4 +33,5 @@ export {
   ImageCarousal,
   PageLoading,
   Footer,
+  UserProfileComponent,
 };

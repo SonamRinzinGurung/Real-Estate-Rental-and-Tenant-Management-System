@@ -4,6 +4,7 @@ import {
   getSingleTenantUser,
   getSelfDetail,
 } from "../controllers/ownerUserControllers.js";
+
 /**
  * @description Get Single Tenant User
  * @route GET /api/owner/tenant-user/:slug
@@ -12,8 +13,8 @@ router.get("/tenant-user/:slug", getSingleTenantUser); // Only the tenant user c
 
 /**
  * @description Get the current user's details
- * @route GET /api/owner/self
+ * @route GET /api/owner/profile
  */
-router.get("/self", getSelfDetail);
+router.get("/profile", getSelfDetail);
 
 export default router;

@@ -21,7 +21,7 @@ const getSingleTenantUser = async (req, res) => {
 
 /**
  * @description Get current user's details
- * @route GET /api/owner/self
+ * @route GET /api/owner/profile
  * @returns {object} 200 - An object containing the user
  */
 const getSelfDetail = async (req, res) => {

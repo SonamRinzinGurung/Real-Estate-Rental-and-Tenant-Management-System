@@ -11,6 +11,8 @@ import {
   RealEstateDetail,
   PersonalRealEstateDetail,
   SavedRealEstate,
+  ProfilePageTenant,
+  ProfilePageOwner,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -57,6 +59,7 @@ function App() {
               path="/owner/real-estate/:slug"
               element={<PersonalRealEstateDetail />}
             />
+            <Route path="/owner/profile" element={<ProfilePageOwner />} />
           </Route>
           <Route
             path="/tenant"
@@ -76,6 +79,7 @@ function App() {
               path="/tenant/real-estate/saved/all"
               element={<SavedRealEstate />}
             />
+            <Route path="/tenant/profile" element={<ProfilePageTenant />} />
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
