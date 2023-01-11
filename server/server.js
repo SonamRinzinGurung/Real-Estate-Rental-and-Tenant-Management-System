@@ -12,6 +12,8 @@ import connectDB from "./database/connectDB.js"; //function to connect to the da
 import authRoutes from "./routes/authRoutes.js";
 import ownerPropertyRoutes from "./routes/ownerPropertyRoutes.js";
 import tenantPropertyRoutes from "./routes/tenantPropertyRoutes.js";
+import ownerUserRoutes from "./routes/ownerUserRoutes.js";
+import tenantUserRoutes from "./routes/tenantUserRoutes.js";
 
 import routeNotFoundMiddleware from "./middleware/route-not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
@@ -42,6 +44,9 @@ app.use(function (req, res, next) {
 app.use("/api/auth", authRoutes);
 app.use("/api/owner/real-estate", authorizeOwnerUser, ownerPropertyRoutes);
 app.use("/api/tenant/real-estate", authorizeTenantUser, tenantPropertyRoutes);
+
+app.use("/api/owner", authorizeOwnerUser, ownerUserRoutes);
+app.use("/api/tenant", authorizeTenantUser, tenantUserRoutes);
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);
