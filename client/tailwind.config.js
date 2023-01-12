@@ -17,6 +17,7 @@ module.exports = {
       display: ["Righteous", "sans-serif"],
       roboto: ["Roboto Condensed", "sans-serif"],
       robotoNormal: ["Roboto", "sans-serif"],
+      heading: ["Montserrat", "sans-serif"],
     },
   },
   plugins: [],

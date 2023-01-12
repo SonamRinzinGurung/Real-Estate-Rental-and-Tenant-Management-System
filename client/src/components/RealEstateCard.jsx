@@ -6,7 +6,6 @@ import { Button, CardActionArea } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { format } from "../utils/valueFormatter";
 const RealEstateCard = ({
-  _id,
   title,
   slug,
   price,
@@ -15,6 +14,7 @@ const RealEstateCard = ({
   realEstateImages,
   propertyOwner,
   fromOwnerUser,
+  fromUserProfile,
 }) => {
   return (
     <>
@@ -62,11 +62,11 @@ const RealEstateCard = ({
         </CardActionArea>
 
         {/*  render the contact bar only if the user is not the owner of the property */}
-        {!fromOwnerUser && (
+        {!fromOwnerUser && !fromUserProfile && (
           <div className="flex p-2">
             <div className="flex items-center gap-1">
               <img
-                className="w-6 h-6 rounded-full ml-1"
+                className="w-6 h-6 rounded-full ml-1 object-cover"
                 src={propertyOwner?.profileImage}
                 alt="Rounded avatar"
               />
@@ -75,7 +75,7 @@ const RealEstateCard = ({
               </span>
             </div>
             <Button
-              href="#"
+              href={`/tenant/owner-user/${propertyOwner?.slug}`}
               size="small"
               color="tertiary"
               variant="outlined"

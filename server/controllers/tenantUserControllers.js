@@ -1,6 +1,6 @@
 import OwnerUser from "../models/OwnerUser.js";
 import TenantUser from "../models/TenantUser.js";
-
+import RealEstate from "../models/RealEstate.js";
 import { NotFoundError } from "../request-errors/index.js";
 
 /**
@@ -16,7 +16,10 @@ const getSingleOwnerUser = async (req, res) => {
   if (!user) {
     throw new NotFoundError("User not found");
   }
-  res.json({ user });
+
+  const realEstates = await RealEstate.find({ propertyOwner: user._id });
+
+  res.json({ user, realEstates });
 };
 
 /**

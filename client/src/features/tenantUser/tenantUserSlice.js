@@ -13,10 +13,23 @@ export const getProfileDetails = createAsyncThunk(
   }
 );
 
+export const getOwnerUserDetails = createAsyncThunk(
+  "getOwnerUserDetails",
+  async ({ slug }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(`/tenant/owner-user/${slug}`);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const tenantUserSlice = createSlice({
   name: "tenantUser",
   initialState: {
     user: null,
+    realEstates: null,
     isLoading: false,
     alertFlag: false,
     alertMsg: "",
@@ -39,6 +52,20 @@ const tenantUserSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(getProfileDetails.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getOwnerUserDetails.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getOwnerUserDetails.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.user;
+        state.realEstates = action.payload.realEstates;
+      })
+      .addCase(getOwnerUserDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
