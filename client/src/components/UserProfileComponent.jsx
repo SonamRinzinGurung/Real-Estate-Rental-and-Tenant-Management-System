@@ -3,14 +3,14 @@ import { FormTextField } from "../components";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
-
+import { dateFormatter, ageCalculator } from "../utils/valueFormatter";
 const UserProfileComponent = ({
   firstName,
   lastName,
   email,
   address,
   phoneNumber,
-  age,
+  dateOfBirth,
   gender,
   isLoading,
 }) => {
@@ -20,7 +20,7 @@ const UserProfileComponent = ({
     email: email,
     address: address,
     phoneNumber: phoneNumber,
-    age: age,
+    dateOfBirth: dateOfBirth,
     gender: gender,
   });
   const handleChange = useCallback(
@@ -71,8 +71,20 @@ const UserProfileComponent = ({
           handleChange={handleChange}
         />
 
-        <FormTextField label="Age" name="age" type={"number"} value={age} />
-
+        <TextField
+          label="Date Of Birth"
+          type="text"
+          value={dateFormatter(dateOfBirth)}
+          color="tertiary"
+          disabled
+        />
+        <TextField
+          label="Age"
+          type="text"
+          value={ageCalculator(dateOfBirth)}
+          color="tertiary"
+          disabled
+        />
         <FormTextField
           label="Gender"
           name="gender"

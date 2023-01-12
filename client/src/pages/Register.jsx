@@ -17,6 +17,9 @@ import registerImg from "../assets/images/registerImg.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 
+import DatePicker from "../components/DatePicker";
+import moment from "moment";
+
 const Register = () => {
   const { user, userType, errorFlag, errorMsg, isLoading, alertType } =
     useSelector((store) => store.auth);
@@ -35,11 +38,12 @@ const Register = () => {
     email: "",
     address: "",
     phoneNumber: "",
-    age: "",
     gender: "",
     image: "",
     password: "",
   });
+
+  const [date, setDate] = useState(null);
 
   const handleChange = useCallback(
     (e) => {
@@ -55,6 +59,7 @@ const Register = () => {
     const form = document.getElementById("form");
     const formData = new FormData(form);
     formData.append("role", param.role);
+    formData.append("dateOfBirth", moment(date).format("YYYY-MM-DD"));
 
     if (param.role === "owner") {
       dispatch(registerOwner({ formData }));
@@ -128,13 +133,14 @@ const Register = () => {
                   value={values.phoneNumber}
                   handleChange={handleChange}
                 />
-
-                <FormSelectField
-                  label="Age"
-                  name="age"
-                  options={Array.from(new Array(100), (x, i) => i + 16)}
-                  value={values.age}
-                  handleChange={handleChange}
+                <DatePicker
+                  value={date}
+                  handleChange={useCallback(
+                    (date) => {
+                      setDate(date);
+                    },
+                    [setDate]
+                  )}
                 />
                 <FormSelectField
                   label="Gender"

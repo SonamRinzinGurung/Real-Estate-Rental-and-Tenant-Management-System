@@ -39,13 +39,9 @@ const OwnerUserSchema = new mongoose.Schema(
       unique: true,
       match: [/^[9]+[7-8]+\d{8}$/, "Please provide a valid phone number"],
     },
-    age: {
+    dateOfBirth: {
       type: String,
-      required: [true, "Please provide an age"],
-      match: [
-        /^(1[6789]|[2-9][0-9]|[1][0-1][0-9])$/,
-        "Only 16 and above allowed",
-      ],
+      required: [true, "Please provide a date of birth"],
     },
     gender: {
       type: String,

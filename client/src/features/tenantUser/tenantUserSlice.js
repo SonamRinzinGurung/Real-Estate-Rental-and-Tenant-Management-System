@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosFetch from "../../utils/axiosCreate";
 
 export const getProfileDetails = createAsyncThunk(
-  "getProfileDetails",
+  "getTenantProfileDetails",
   async (arg, thunkAPI) => {
     try {
       const { data } = await axiosFetch.get("/tenant/profile");
