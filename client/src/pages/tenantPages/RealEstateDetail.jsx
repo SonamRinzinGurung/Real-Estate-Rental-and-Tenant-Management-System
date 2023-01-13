@@ -51,7 +51,7 @@ const RealEstateDetail = () => {
   return (
     <>
       <main className="flex gap-2 flex-col mb-12 lg:flex-row">
-        <div className="flex flex-col gap-8 mt-10 mx-auto p-4 w-4/6 lg:ml-14">
+        <div className="flex flex-col gap-8 mt-10 mx-auto p-4 lg:ml-14">
           <RealEstateDetailCard {...realEstate} fromTenant isSaved={isSaved} />
 
           <div className="">
@@ -91,8 +91,10 @@ const RealEstateDetail = () => {
             </div>
           </div>
         </div>
-        <aside className="mx-auto my-10 p-4 w-4/6 lg:w-1/3 lg:mr-14">
-          <CardActionArea href={`#`}>
+        <aside className="mx-auto my-10 p-4 lg:w-1/3 lg:mr-14">
+          <CardActionArea
+            href={`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`}
+          >
             <div className="shadow-lg rounded-md p-4">
               <div className="flex gap-2 items-center">
                 <h4 className="font-medium">Contact Info</h4>

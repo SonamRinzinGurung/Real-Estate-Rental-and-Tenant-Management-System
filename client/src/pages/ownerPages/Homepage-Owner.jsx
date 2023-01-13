@@ -18,7 +18,7 @@ const Homepage = () => {
 
   return (
     <>
-      <main className="mt-7 ml-14">
+      <main className="flex flex-col mb-12 mt-8 md:items-start md:ml-10">
         {allRealEstate?.length === 0 ? (
           <>
             <div>
@@ -34,10 +34,10 @@ const Homepage = () => {
           </>
         ) : (
           <>
-            <h3 className="mb-4">
+            <h3 className="my-4 font-heading font-bold text-center">
               Your {allRealEstate?.length > 1 ? "Properties" : "Property"}
             </h3>
-            <div className="flex flex-wrap gap-8 mb-12">
+            <div className="flex flex-wrap gap-8 justify-center">
               {allRealEstate?.map((item) => {
                 return (
                   <RealEstateCard key={item._id} {...item} fromOwnerUser />

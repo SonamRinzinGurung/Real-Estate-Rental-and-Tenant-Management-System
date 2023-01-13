@@ -84,7 +84,7 @@ const PostRealEstate = () => {
           <div className="lg:w-5/12 md:w-8/12 mb-12">
             <form onSubmit={handleSubmit} id="form">
               <div className="flex justify-center items-center flex-col mt-3 mb-4">
-                <h4 className="">Post your Property </h4>
+                <h3 className="font-heading font-bold">Post your Property </h3>
                 <p className="text-gray-400 text-sm">
                   Enter the details of your property
                 </p>
@@ -100,6 +100,7 @@ const PostRealEstate = () => {
                     type={"text"}
                     value={values.title}
                     handleChange={handleChange}
+                    autoFocus={true}
                   />
                   <TextField
                     label="Description"

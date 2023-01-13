@@ -20,12 +20,16 @@ const AllRealEstate = () => {
 
   return (
     <>
-      <h2 className="text-center m-4">All Properties</h2>
-      <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center">
-        {allRealEstate?.map((item) => {
-          return <RealEstateCard key={item._id} {...item} />;
-        })}
-      </main>
+      <div className="mt-8">
+        <h3 className="text-center m-4 font-heading font-bold">
+          All Properties
+        </h3>
+        <main className="flex flex-wrap gap-5 justify-center mb-12">
+          {allRealEstate?.map((item) => {
+            return <RealEstateCard key={item._id} {...item} />;
+          })}
+        </main>
+      </div>
       <Footer />
     </>
   );

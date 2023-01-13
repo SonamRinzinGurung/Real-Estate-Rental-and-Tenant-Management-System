@@ -14,10 +14,11 @@ import {
 import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
 import { Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+
 const Login = () => {
-  const { user, userType, errorMsg, errorFlag, alertType } = useSelector(
-    (store) => store.auth
-  );
+  const { user, userType, errorMsg, errorFlag, alertType, isLoading } =
+    useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
 
@@ -67,8 +68,8 @@ const Login = () => {
       <header className="flex m-1 shadow-sm">
         <Logo />
         <div className="flex flex-col justify-center ml-2">
-          <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
-          <p className="text-xs md:text-sm">
+          <h5 className="font-display">Rent Manager</h5>
+          <p className="hidden text-xs md:block md:text-sm">
             Find and Manage your rentals in one place
           </p>
         </div>
@@ -92,6 +93,7 @@ const Login = () => {
                   type={"email"}
                   label={"Email"}
                   handleChange={handleChange}
+                  autoFocus={true}
                 />
                 <FormPasswordField
                   value={values.password}
@@ -114,7 +116,16 @@ const Login = () => {
                     },
                   }}
                 >
-                  Login
+                  {isLoading ? (
+                    <CircularProgress
+                      size={22}
+                      sx={{
+                        color: "tertiary.dark",
+                      }}
+                    />
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
                 <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Don't have an account?{" "}

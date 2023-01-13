@@ -20,14 +20,17 @@ const SavedRealEstate = () => {
 
   return (
     <>
-      <main className="mt-7 ml-14">
-        <h2 className="mb-4">Saved Properties</h2>
-        <div className="flex flex-wrap gap-8 mb-12">
+      <main className="flex flex-col mb-12 mt-8 md:items-start md:ml-10">
+        <h3 className="my-4 font-heading font-bold text-center">
+          Saved Properties
+        </h3>
+        <div className="justify-center flex flex-wrap gap-8">
           {allRealEstate?.map((item) => {
             return <RealEstateCard key={item._id} {...item} />;
           })}
         </div>
       </main>
+
       <Footer />
     </>
   );

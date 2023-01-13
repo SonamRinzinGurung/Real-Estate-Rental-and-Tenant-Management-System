@@ -14,6 +14,7 @@ import ImageCarousal from "./ImageCarousal";
 import PageLoading from "./PageLoading";
 import Footer from "./Footer";
 import UserProfileComponent from "./UserProfileComponent";
+import DatePicker from "./DatePicker";
 
 export {
   SharedLayoutOwner,
@@ -34,4 +35,5 @@ export {
   PageLoading,
   Footer,
   UserProfileComponent,
+  DatePicker,
 };

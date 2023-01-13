@@ -24,7 +24,7 @@ const OwnerUserDetailPage = () => {
     <>
       <main className="flex flex-col md:flex-row gap-8 items-center md:items-start">
         <div className="flex flex-col mt-10 mb-5 md:mb-12 md:w-1/4 items-center gap-1 md:ml-10">
-          <h3 className="font-heading font-medium text-4xl">Profile</h3>
+          <h3 className="font-heading font-semibold text-4xl">Profile</h3>
           <div className="w-48 h-48 mt-6">
             <img
               src={user?.profileImage}
@@ -56,7 +56,7 @@ const OwnerUserDetailPage = () => {
             </div>
           ) : (
             <>
-              <h3 className="text-center font-heading font-medium text-4xl">
+              <h3 className="text-center font-heading font-semibold text-4xl">
                 {realEstates?.length > 1 ? "Properties" : "Property"}
               </h3>
               <div className="justify-center flex flex-wrap gap-8 mt-6">

@@ -5,6 +5,7 @@ import {
   FormPasswordField,
   FormSelectField,
   AlertToast,
+  DatePicker,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,8 +17,6 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
-
-import DatePicker from "../components/DatePicker";
 import moment from "moment";
 
 const Register = () => {
@@ -83,8 +82,8 @@ const Register = () => {
       <header className="flex m-1 shadow-sm">
         <Logo />
         <div className="flex flex-col justify-center ml-2">
-          <h1 className="font-display text-xl md:text-2xl">Rent Manager</h1>
-          <p className="text-xs md:text-sm">
+          <h5 className="font-display">Rent Manager</h5>
+          <p className="hidden text-xs md:block md:text-sm">
             Find and Manage your rentals in one place
           </p>
         </div>
@@ -104,6 +103,7 @@ const Register = () => {
                   type={"text"}
                   value={values.firstName}
                   handleChange={handleChange}
+                  autoFocus={true}
                 />
                 <FormTextField
                   label="Last Name"

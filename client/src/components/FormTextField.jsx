@@ -1,7 +1,14 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-const FormTextField = ({ value, name, type, handleChange, label }) => {
+const FormTextField = ({
+  value,
+  name,
+  type,
+  handleChange,
+  label,
+  autoFocus,
+}) => {
   return (
     <TextField
       name={name}
@@ -11,6 +18,7 @@ const FormTextField = ({ value, name, type, handleChange, label }) => {
       label={label ? label : name}
       variant="outlined"
       onChange={handleChange}
+      autoFocus={autoFocus}
     />
   );
 };
