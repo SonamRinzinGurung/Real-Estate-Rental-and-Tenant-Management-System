@@ -1,18 +1,24 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getAllRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, RealEstateCard, Footer } from "../../components";
+import Pagination from "@mui/material/Pagination";
 
 const Homepage = () => {
-  const { allRealEstate, isLoading } = useSelector(
+  const { allRealEstate, isLoading, numberOfPages } = useSelector(
     (store) => store.realEstateTenant
   );
 
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getAllRealEstate());
-  }, [dispatch]);
+    dispatch(getAllRealEstate({ page }));
+  }, [dispatch, page]);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   if (isLoading) return <PageLoading />;
 
@@ -30,6 +36,14 @@ const Homepage = () => {
           })}
         </main>
       </div>
+      <Pagination
+        count={numberOfPages}
+        page={page}
+        onChange={handleChange}
+        color="secondary"
+        className="flex justify-center mb-12"
+      />
+
       <Footer />
     </>
   );

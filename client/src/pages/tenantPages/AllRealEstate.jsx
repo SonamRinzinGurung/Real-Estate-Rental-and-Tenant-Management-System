@@ -1,19 +1,24 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getAllRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, RealEstateCard, Footer } from "../../components";
+import Pagination from "@mui/material/Pagination";
 
 const AllRealEstate = () => {
-  const { allRealEstate, isLoading } = useSelector(
+  const { allRealEstate, isLoading, numberOfPages } = useSelector(
     (store) => store.realEstateTenant
   );
 
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getAllRealEstate());
-  }, [dispatch]);
+    dispatch(getAllRealEstate({ page }));
+  }, [dispatch, page]);
 
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
   if (isLoading) return <PageLoading />;
 
   if (allRealEstate?.length === 0) return <h1>No Real Estate Found</h1>;
@@ -30,6 +35,14 @@ const AllRealEstate = () => {
           })}
         </main>
       </div>
+      <Pagination
+        count={numberOfPages}
+        page={page}
+        onChange={handleChange}
+        color="secondary"
+        className="flex justify-center mb-12"
+      />
+
       <Footer />
     </>
   );

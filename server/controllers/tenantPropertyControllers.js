@@ -7,11 +7,22 @@ import TenantUser from "../models/TenantUser.js";
  * @returns {object} realEstate array
  */
 const getAllProperties = async (req, res) => {
-  const allRealEstate = await RealEstate.find({}).populate({
+  let realEstateResult = RealEstate.find({}).populate({
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
   });
-  res.json({ allRealEstate });
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 2;
+  const skip = (page - 1) * limit;
+
+  realEstateResult = realEstateResult.skip(skip).limit(limit);
+  const allRealEstate = await realEstateResult;
+
+  const totalRealEstates = await RealEstate.countDocuments();
+  const numberOfPages = Math.ceil(totalRealEstates / limit);
+
+  res.json({ allRealEstate, numberOfPages, totalRealEstates });
 };
 
 /**

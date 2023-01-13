@@ -3,9 +3,9 @@ import axiosFetch from "../../utils/axiosCreate";
 
 export const getAllRealEstate = createAsyncThunk(
   "getAllRealEstate",
-  async (arg, thunkAPI) => {
+  async ({ page }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get("/tenant/real-estate");
+      const { data } = await axiosFetch.get(`/tenant/real-estate?page=${page}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -60,6 +60,7 @@ const realEstateTenantSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isSaved: null,
+    numberOfPages: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -76,6 +77,7 @@ const realEstateTenantSlice = createSlice({
       .addCase(getAllRealEstate.fulfilled, (state, action) => {
         state.isLoading = false;
         state.allRealEstate = action.payload.allRealEstate;
+        state.numberOfPages = action.payload.numberOfPages;
         state.alertFlag = false;
       })
       .addCase(getAllRealEstate.rejected, (state, action) => {

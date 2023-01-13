@@ -6,6 +6,7 @@ dotenv.config();
 import "express-async-errors";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 
 import connectDB from "./database/connectDB.js"; //function to connect to the database
 //routes
@@ -21,6 +22,11 @@ import {
   authorizeOwnerUser,
   authorizeTenantUser,
 } from "./middleware/userAuthorization.js";
+
+//using morgan for logging requests
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 
 app.use(express.json()); //to parse json data
 app.use(

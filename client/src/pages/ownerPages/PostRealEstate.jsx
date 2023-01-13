@@ -71,7 +71,7 @@ const PostRealEstate = () => {
   useEffect(() => {
     if (postSuccess) {
       const timer = setTimeout(() => {
-        navigate(`/owner/real-estate/${realEstate?._id}`);
+        navigate(`/owner/real-estate/${realEstate?.slug}`);
       }, 2000);
       return () => clearTimeout(timer);
     }
