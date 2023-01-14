@@ -7,7 +7,24 @@ import TenantUser from "../models/TenantUser.js";
  * @returns {object} realEstate array
  */
 const getAllProperties = async (req, res) => {
-  let realEstateResult = RealEstate.find({}).populate({
+  const { search, category, priceFilter } = req.query;
+
+  const queryObject = {};
+
+  if (search) {
+    queryObject.title = { $regex: search, $options: "i" };
+  }
+
+  if (category !== "all") {
+    queryObject.category = category;
+  }
+
+  if (priceFilter) {
+    const [minPrice, maxPrice] = priceFilter.split("-");
+    queryObject.price = { $gte: minPrice, $lte: maxPrice };
+  }
+
+  let realEstateResult = RealEstate.find(queryObject).populate({
     path: "propertyOwner",
     select: "-password -createdAt -updatedAt -__v",
   });
@@ -19,7 +36,7 @@ const getAllProperties = async (req, res) => {
   realEstateResult = realEstateResult.skip(skip).limit(limit);
   const allRealEstate = await realEstateResult;
 
-  const totalRealEstates = await RealEstate.countDocuments();
+  const totalRealEstates = await RealEstate.countDocuments(queryObject);
   const numberOfPages = Math.ceil(totalRealEstates / limit);
 
   res.json({ allRealEstate, numberOfPages, totalRealEstates });

@@ -3,9 +3,16 @@ import axiosFetch from "../../utils/axiosCreate";
 
 export const getAllRealEstate = createAsyncThunk(
   "getAllRealEstate",
-  async ({ page }, thunkAPI) => {
+  async ({ page, category, search, priceFilter }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/tenant/real-estate?page=${page}`);
+      let url = `/tenant/real-estate?page=${page}&category=${category}`;
+      if (search) {
+        url = url + `&search=${search}`;
+      }
+      if (priceFilter) {
+        url = url + `&priceFilter=${priceFilter}`;
+      }
+      const { data } = await axiosFetch.get(url);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);

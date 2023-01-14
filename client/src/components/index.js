@@ -15,7 +15,7 @@ import PageLoading from "./PageLoading";
 import Footer from "./Footer";
 import UserProfileComponent from "./UserProfileComponent";
 import DatePicker from "./DatePicker";
-
+import SearchAndFilter from "./tenantComponents/SearchAndFilter";
 export {
   SharedLayoutOwner,
   SharedLayoutTenant,
@@ -36,4 +36,5 @@ export {
   Footer,
   UserProfileComponent,
   DatePicker,
+  SearchAndFilter,
 };
