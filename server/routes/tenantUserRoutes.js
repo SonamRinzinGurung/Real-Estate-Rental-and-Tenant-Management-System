@@ -3,6 +3,7 @@ const router = express.Router();
 import {
   getSingleOwnerUser,
   getSelfDetail,
+  updateProfile,
 } from "../controllers/tenantUserControllers.js";
 
 /**
@@ -16,5 +17,11 @@ router.get("/owner-user/:slug", getSingleOwnerUser);
  * @route GET /api/tenant/profile
  */
 router.get("/profile", getSelfDetail);
+
+/**
+ * @description Update the current user's details
+ * @route PATCH /api/tenant/profile
+ */
+router.patch("/profile", updateProfile);
 
 export default router;
