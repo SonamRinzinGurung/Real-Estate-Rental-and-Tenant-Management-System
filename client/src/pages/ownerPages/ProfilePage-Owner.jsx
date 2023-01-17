@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getProfileDetails,
   clearAlert,
+  updateProfile,
 } from "../../features/ownerUser/ownerUserSlice";
 import {
   AlertToast,
@@ -32,7 +33,13 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit");
+
+    const form = document.getElementById("form");
+    const formData = new FormData(form);
+
+    const formValues = Object.fromEntries(formData.entries());
+
+    dispatch(updateProfile({ formValues }));
   };
 
   if (isLoading) return <PageLoading />;
@@ -59,7 +66,7 @@ const ProfilePage = () => {
               View or update profile
             </p>
           </div>
-          <form id="form" onSubmit={handleSubmit} className="">
+          <form id="form" onSubmit={handleSubmit}>
             <UserProfileComponent {...user} />
           </form>
         </div>

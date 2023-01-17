@@ -13,6 +13,18 @@ export const getProfileDetails = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  "updateProfile",
+  async ({ formValues }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch("/owner/profile", formValues);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const ownerUserSlice = createSlice({
   name: "ownerUser",
   initialState: {
@@ -26,7 +38,6 @@ const ownerUserSlice = createSlice({
     clearAlert: (state) => {
       state.alertFlag = false;
       state.alertMsg = "";
-      state.alertType = null;
     },
   },
   extraReducers: (builder) => {
@@ -39,6 +50,22 @@ const ownerUserSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(getProfileDetails.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(updateProfile.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.user;
+        state.alertFlag = true;
+        state.alertMsg = "Profile updated successfully";
+        state.alertType = "success";
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

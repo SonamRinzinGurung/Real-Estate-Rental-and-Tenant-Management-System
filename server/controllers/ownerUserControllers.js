@@ -1,7 +1,7 @@
 import OwnerUser from "../models/OwnerUser.js";
 import TenantUser from "../models/TenantUser.js";
 
-import { NotFoundError } from "../request-errors/index.js";
+import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 
 /**
  * @description Get Single Tenant User
@@ -30,4 +30,32 @@ const getSelfDetail = async (req, res) => {
   res.json({ user });
 };
 
-export { getSingleTenantUser, getSelfDetail };
+/**
+ * @description Update current user's details
+ * @route PATCH /api/owner/profile
+ * @returns {object} 200 - An object containing the user
+ */
+const updateProfile = async (req, res) => {
+  const { phoneNumber, address, gender } = req.body;
+
+  if (!address || !phoneNumber || !gender) {
+    throw new BadRequestError("Please fill in all fields");
+  }
+  const user = await OwnerUser.findByIdAndUpdate(
+    req.user.userId,
+    {
+      gender,
+      address,
+      phoneNumber,
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!user) {
+    throw new NotFoundError("User not found");
+  }
+
+  res.json({ user });
+};
+
+export { getSingleTenantUser, getSelfDetail, updateProfile };

@@ -3,7 +3,9 @@ import { FormTextField } from "../components";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 import { dateFormatter, ageCalculator } from "../utils/valueFormatter";
+
 const UserProfileComponent = ({
   firstName,
   lastName,
@@ -29,12 +31,14 @@ const UserProfileComponent = ({
     },
     [values]
   );
+
+  const options = ["Male", "Female", "Other"];
+
   return (
     <>
       <div className="flex flex-wrap gap-4 justify-center">
         <TextField
           label="First Name"
-          name="firstName"
           type={"text"}
           value={firstName}
           color="tertiary"
@@ -42,7 +46,6 @@ const UserProfileComponent = ({
         />
         <TextField
           label="Last Name"
-          name="lastName"
           type={"text"}
           value={lastName}
           color="tertiary"
@@ -50,24 +53,24 @@ const UserProfileComponent = ({
         />
         <TextField
           label="Email"
-          name="email"
           type={"email"}
           value={email}
           color="tertiary"
           disabled
         />
+
         <FormTextField
           label="Address"
           name="address"
           type={"text"}
-          value={values.address}
+          value={values?.address}
           handleChange={handleChange}
         />
         <FormTextField
           label="Phone Number"
           name="phoneNumber"
           type={"number"}
-          value={values.phoneNumber}
+          value={values?.phoneNumber}
           handleChange={handleChange}
         />
 
@@ -85,12 +88,20 @@ const UserProfileComponent = ({
           color="tertiary"
           disabled
         />
-        <FormTextField
+        <TextField
+          select
           label="Gender"
+          value={values?.gender}
+          onChange={handleChange}
           name="gender"
-          type={"text"}
-          value={gender}
-        />
+          color="tertiary"
+        >
+          {options.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
       </div>
       <div className="text-center mt-2 mb-6">
         <Button

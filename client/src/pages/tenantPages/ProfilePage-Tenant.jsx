@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   getProfileDetails,
   clearAlert,
+  updateTenantProfile,
 } from "../../features/tenantUser/tenantUserSlice";
 import {
   AlertToast,
@@ -32,7 +33,12 @@ const ProfilePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submit");
+    const form = document.getElementById("form");
+    const formData = new FormData(form);
+
+    const formValues = Object.fromEntries(formData.entries());
+
+    dispatch(updateTenantProfile({ formValues }));
   };
 
   if (isLoading) return <PageLoading />;
