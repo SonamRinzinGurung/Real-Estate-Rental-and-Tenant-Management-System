@@ -4,6 +4,7 @@ import {
   postRealEstate,
   getOwnerRealEstates,
   getSingleProperty,
+  updatePropertyDetails,
 } from "../controllers/ownerPropertyController.js";
 import upload from "../middleware/multerImageMiddleware.js";
 import { cloudinaryMultipleUpload } from "../middleware/cloudinaryUpload.js";
@@ -30,5 +31,11 @@ router.get("/", getOwnerRealEstates);
  * @route GET /api/owner/real-estate/:slug
  */
 router.get("/:slug", getSingleProperty);
+
+/**
+ * @description Update Property Details
+ * @route PATCH /api/owner/real-estate/update/:slug
+ */
+router.patch("/update/:slug", updatePropertyDetails);
 
 export default router;

@@ -1,6 +1,10 @@
 import RealEstate from "../models/RealEstate.js";
 import { nanoid } from "nanoid";
-import { NotFoundError } from "../request-errors/index.js";
+import {
+  NotFoundError,
+  ForbiddenRequestError,
+  BadRequestError,
+} from "../request-errors/index.js";
 
 /**
  * @description Post Real Estate
@@ -39,4 +43,68 @@ const getSingleProperty = async (req, res) => {
   res.json({ realEstate });
 };
 
-export { postRealEstate, getOwnerRealEstates, getSingleProperty };
+/**
+ * @description Update Property Details
+ * @returns {object} realEstate
+ */
+const updatePropertyDetails = async (req, res) => {
+  const {
+    price,
+    location,
+    streetName,
+    description,
+    area,
+    floors,
+    facing,
+    category,
+  } = req.body;
+
+  if (
+    !price ||
+    !location ||
+    !streetName ||
+    !description ||
+    !area ||
+    !floors ||
+    !facing ||
+    !category
+  ) {
+    throw new BadRequestError("All fields are required");
+  }
+
+  const { slug } = req.params;
+  const realEstate = await RealEstate.findOne({ slug });
+
+  if (!realEstate) {
+    throw new NotFoundError(`Property not found`);
+  }
+
+  if (realEstate.propertyOwner.toString() !== req.user.userId) {
+    throw new ForbiddenRequestError(
+      "You are not authorized to update this property"
+    );
+  }
+
+  const updatedRealEstate = await RealEstate.findOneAndUpdate(
+    { slug },
+    {
+      price,
+      description,
+      area,
+      floors,
+      facing,
+      category,
+      address: { location, streetName },
+    },
+    { new: true, runValidators: true }
+  );
+
+  res.json({ updatedRealEstate });
+};
+
+export {
+  postRealEstate,
+  getOwnerRealEstates,
+  getSingleProperty,
+  updatePropertyDetails,
+};
