@@ -12,6 +12,7 @@ import SavedRealEstate from "./tenantPages/SavedRealEstate";
 import ProfilePageTenant from "./tenantPages/ProfilePage-Tenant";
 import ProfilePageOwner from "./ownerPages/ProfilePage-Owner";
 import OwnerUserDetailPage from "./tenantPages/OwnerUserDetailPage";
+import UpdateRealEstateDetail from "./ownerPages/UpdateRealEstateDetail";
 
 export {
   Login,
@@ -28,4 +29,5 @@ export {
   ProfilePageTenant,
   ProfilePageOwner,
   OwnerUserDetailPage,
+  UpdateRealEstateDetail,
 };

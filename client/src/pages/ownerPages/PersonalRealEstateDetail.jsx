@@ -26,7 +26,7 @@ const PersonalRealEstateDetail = () => {
     <>
       <main className="mb-12">
         <div className="flex flex-col gap-8 mt-10 mx-auto p-4 lg:mx-14">
-          <RealEstateDetailCard {...realEstate} />
+          <RealEstateDetailCard {...realEstate} fromOwner />
 
           <div className="">
             <h3 className="font-semibold p-3">Description</h3>

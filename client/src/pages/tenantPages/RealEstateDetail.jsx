@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   getSingleRealEstate,
   clearAlert,
@@ -29,6 +29,7 @@ const RealEstateDetail = () => {
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { slug } = useParams();
 
@@ -93,7 +94,9 @@ const RealEstateDetail = () => {
         </div>
         <aside className="mx-auto my-10 p-4 lg:w-1/3 lg:mr-14">
           <CardActionArea
-            href={`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`}
+            onClick={() =>
+              navigate(`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`)
+            }
           >
             <div className="shadow-lg rounded-md p-4">
               <div className="flex gap-2 items-center">

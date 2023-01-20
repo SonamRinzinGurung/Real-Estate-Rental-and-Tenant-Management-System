@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Logo } from "../components";
 import landingImg from "../assets/images/landing1.svg";
@@ -48,7 +48,7 @@ const Landing = () => {
             </p>
             <div className="flex justify-center mt-7">
               <Button
-                href="/login/owner"
+                onClick={() => navigate("/login/owner")}
                 variant="contained"
                 size="medium"
                 color="secondary"
@@ -65,7 +65,7 @@ const Landing = () => {
               <span className="mx-3 sm:text-2xl">|</span>
 
               <Button
-                href="/register/owner"
+                onClick={() => navigate("/register/owner")}
                 variant="contained"
                 size="medium"
                 color="primary"
@@ -103,7 +103,7 @@ const Landing = () => {
             </p>
             <div className="flex justify-center mt-7">
               <Button
-                href="/login/tenant"
+                onClick={() => navigate("/login/tenant")}
                 variant="contained"
                 size="medium"
                 color="secondary"
@@ -119,7 +119,7 @@ const Landing = () => {
               </Button>
               <span className="mx-3 sm:text-2xl">|</span>
               <Button
-                href="/register/tenant"
+                onClick={() => navigate("/register/tenant")}
                 variant="contained"
                 size="medium"
                 color="tertiary"
@@ -152,29 +152,29 @@ const Landing = () => {
           </div>
           <ul className="flex flex-wrap items-center mb-6 text-sm sm:mb-0">
             <li>
-              <a href="#" className="mr-4 hover:underline md:mr-6 ">
+              <Link to="#" className="mr-4 hover:underline md:mr-6 ">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="mr-4 hover:underline md:mr-6">
+              <Link to="#" className="mr-4 hover:underline md:mr-6">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="hover:underline">
+              <Link to="#" className="hover:underline">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
         <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
         <span className="block text-sm  sm:text-center ">
           © 2022{" "}
-          <a href="http://localhost:3000/" className="hover:underline">
+          <Link to="/" className="hover:underline">
             Property Plus™
-          </a>
+          </Link>
           . All Rights Reserved.
         </span>
       </footer>

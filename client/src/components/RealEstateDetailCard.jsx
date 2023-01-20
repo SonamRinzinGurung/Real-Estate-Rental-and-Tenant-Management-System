@@ -4,9 +4,10 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { ImageCarousal } from "../components";
 import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveOrUnSaveRealEstate } from "../features/realEstateTenant/realEstateTenantSlice";
+import { Button } from "@mui/material";
 
 const RealEstateDetailCard = ({
   _id,
@@ -17,9 +18,12 @@ const RealEstateDetailCard = ({
   createdAt,
   category,
   propertyId,
+  slug,
   fromTenant,
+  fromOwner,
   isSaved,
 }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <>
@@ -82,6 +86,20 @@ const RealEstateDetailCard = ({
                     <p className="text-secondary font-robotoNormal">Save</p>
                   </>
                 )}
+              </div>
+            )}
+            {fromOwner && (
+              <div className="mt-2 cursor-pointer text-center">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ color: "#fff" }}
+                  onClick={() => {
+                    navigate(`/owner/real-estate/update/${slug}`);
+                  }}
+                >
+                  Edit
+                </Button>
               </div>
             )}
           </div>

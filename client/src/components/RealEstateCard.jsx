@@ -1,10 +1,11 @@
-import React from "react";
+import { useCallback } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { Button, CardActionArea } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { format } from "../utils/valueFormatter";
+import { useNavigate } from "react-router-dom";
 const RealEstateCard = ({
   title,
   slug,
@@ -16,6 +17,7 @@ const RealEstateCard = ({
   fromOwnerUser,
   fromUserProfile,
 }) => {
+  const navigate = useNavigate();
   return (
     <>
       <Card
@@ -31,11 +33,13 @@ const RealEstateCard = ({
         }}
       >
         <CardActionArea
-          href={
-            fromOwnerUser
-              ? `/owner/real-estate/${slug}`
-              : `/tenant/real-estate/${slug}`
-          }
+          onClick={useCallback(() => {
+            navigate(
+              fromOwnerUser
+                ? `/owner/real-estate/${slug}`
+                : `/tenant/real-estate/${slug}`
+            );
+          }, [navigate, slug, fromOwnerUser])}
         >
           <CardMedia
             component="img"
@@ -75,7 +79,9 @@ const RealEstateCard = ({
               </span>
             </div>
             <Button
-              href={`/tenant/owner-user/${propertyOwner?.slug}`}
+              onClick={() =>
+                navigate(`/tenant/owner-user/${propertyOwner?.slug}`)
+              }
               size="small"
               color="tertiary"
               variant="outlined"

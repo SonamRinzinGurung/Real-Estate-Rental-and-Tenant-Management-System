@@ -16,6 +16,8 @@ import Footer from "./Footer";
 import UserProfileComponent from "./UserProfileComponent";
 import DatePicker from "./DatePicker";
 import SearchAndFilter from "./tenantComponents/SearchAndFilter";
+import UpdatePropertyForm from "./ownerComponents/UpdatePropertyForm";
+
 export {
   SharedLayoutOwner,
   SharedLayoutTenant,
@@ -37,4 +39,5 @@ export {
   UserProfileComponent,
   DatePicker,
   SearchAndFilter,
+  UpdatePropertyForm,
 };

@@ -1,12 +1,13 @@
 import React from "react";
 import { Button } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 const NavBarLinksOwner = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Button
         type="text"
-        href="/owner"
+        onClick={() => navigate("/owner")}
         sx={{
           color: "black",
           "&:hover": {
@@ -18,7 +19,7 @@ const NavBarLinksOwner = () => {
       </Button>
       <Button
         type="text"
-        href="/owner/property/post"
+        onClick={() => navigate("/owner/property/post")}
         sx={{
           color: "black",
           "&:hover": {
@@ -30,7 +31,7 @@ const NavBarLinksOwner = () => {
       </Button>
       <Button
         type="text"
-        href="#"
+        onClick={() => navigate("#")}
         sx={{
           color: "black",
           "&:hover": {
@@ -45,11 +46,12 @@ const NavBarLinksOwner = () => {
 };
 
 const NavBarLinksTenant = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Button
         type="text"
-        href="/tenant"
+        onClick={() => navigate("/tenant")}
         sx={{
           color: "black",
           "&:hover": {
@@ -61,7 +63,7 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        href="/tenant/real-estate/all"
+        onClick={() => navigate("/tenant/real-estate/all")}
         sx={{
           color: "black",
           "&:hover": {
@@ -73,7 +75,7 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        href="/tenant/real-estate/saved/all"
+        onClick={() => navigate("/tenant/real-estate/saved/all")}
         sx={{
           color: "black",
           "&:hover": {
