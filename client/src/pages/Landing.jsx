@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Logo } from "../components";
@@ -25,17 +25,17 @@ const Landing = () => {
           </p>
         </div>
       </header>
-      <main>
-        <section className="flex justify-evenly shadow-sm">
+      <main className="">
+        <section className="flex gap-8 md:ml-6 shadow-sm">
           <img
-            className="hidden w-4/12 rounded-2xl md:block"
+            className="hidden w-80 rounded-2xl md:block"
             src={landingImg2}
             alt=""
           />
-          <div className="flex flex-col self-center p-4 s max-w-2xl">
-            <h3 className="font-display">
+          <div className="flex flex-col self-center mx-auto p-4 w-full md:ml-16">
+            <h4 className="font-display">
               Are you looking to rent your property?
-            </h3>
+            </h4>
             <p className="tracking-wide leading-snug">
               This website allows you to post your property online for potential
               tenants to view
@@ -46,9 +46,12 @@ const Landing = () => {
             <p className="tracking-wide">
               Keep track of your tenant's payments
             </p>
-            <div className="flex justify-center mt-7">
+            <div className="flex justify-start mt-7">
               <Button
-                onClick={() => navigate("/login/owner")}
+                onClick={useCallback(
+                  () => navigate("/login/owner"),
+                  [navigate]
+                )}
                 variant="contained"
                 size="medium"
                 color="secondary"
@@ -65,7 +68,10 @@ const Landing = () => {
               <span className="mx-3 sm:text-2xl">|</span>
 
               <Button
-                onClick={() => navigate("/register/owner")}
+                onClick={useCallback(
+                  () => navigate("/register/owner"),
+                  [navigate]
+                )}
                 variant="contained"
                 size="medium"
                 color="primary"
@@ -82,16 +88,16 @@ const Landing = () => {
             </div>
           </div>
         </section>
-        <section className="flex justify-evenly shadow-sm mt-5">
+        <section className="flex  gap-8 md:ml-6 shadow-sm mt-5">
           <img
-            className="hidden w-4/12 rounded-2xl md:block"
+            className="hidden w-80 rounded-2xl md:block"
             src={landingImg}
             alt=""
           />
-          <div className="flex flex-col self-center p-4 s max-w-2xl">
-            <h3 className=" font-display">
+          <div className="flex flex-col self-center mx-auto p-4 w-full md:ml-16">
+            <h4 className=" font-display">
               Are you looking for property to rent?
-            </h3>
+            </h4>
             <p className=" tracking-wide leading-snug">
               Browse through all kinds of properties for rent
             </p>
@@ -101,9 +107,12 @@ const Landing = () => {
             <p className=" tracking-wide">
               Manges your rental payments and billing information
             </p>
-            <div className="flex justify-center mt-7">
+            <div className="flex justify-start mt-7">
               <Button
-                onClick={() => navigate("/login/tenant")}
+                onClick={useCallback(
+                  () => navigate("/login/tenant"),
+                  [navigate]
+                )}
                 variant="contained"
                 size="medium"
                 color="secondary"
@@ -119,7 +128,10 @@ const Landing = () => {
               </Button>
               <span className="mx-3 sm:text-2xl">|</span>
               <Button
-                onClick={() => navigate("/register/tenant")}
+                onClick={useCallback(
+                  () => navigate("/register/tenant"),
+                  [navigate]
+                )}
                 variant="contained"
                 size="medium"
                 color="tertiary"

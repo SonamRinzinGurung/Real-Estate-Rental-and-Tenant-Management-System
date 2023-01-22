@@ -52,7 +52,7 @@ const RealEstateDetail = () => {
   return (
     <>
       <main className="flex gap-2 flex-col mb-12 lg:flex-row">
-        <div className="flex flex-col gap-8 mt-10 mx-auto p-4 lg:ml-14">
+        <div className="flex flex-col gap-8 mt-10 mx-auto p-4 lg:w-8/12 lg:ml-14">
           <RealEstateDetailCard {...realEstate} fromTenant isSaved={isSaved} />
 
           <div className="">
