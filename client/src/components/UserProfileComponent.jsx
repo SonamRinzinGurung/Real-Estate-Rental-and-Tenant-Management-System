@@ -14,7 +14,7 @@ const UserProfileComponent = ({
   phoneNumber,
   dateOfBirth,
   gender,
-  isLoading,
+  isProcessing,
 }) => {
   const [values, setFormValues] = useState({
     firstName: firstName,
@@ -118,11 +118,11 @@ const UserProfileComponent = ({
             width: "25%",
           }}
         >
-          {isLoading ? (
+          {isProcessing ? (
             <CircularProgress
-              size={22}
+              size={26}
               sx={{
-                color: "tertiary.dark",
+                color: "#fff",
               }}
             />
           ) : (

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   getSingleRealEstate,
   clearAlert,
+  sendEmailToOwner,
 } from "../../features/realEstateTenant/realEstateTenantSlice";
 import {
   RealEstateDetailCard,
@@ -21,10 +22,18 @@ import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RealEstateDetail = () => {
-  const { realEstate, isLoading, alertFlag, alertMsg, alertType, isSaved } =
-    useSelector((state) => state.realEstateTenant);
+  const {
+    realEstate,
+    isLoading,
+    alertFlag,
+    alertMsg,
+    alertType,
+    isSaved,
+    isProcessing,
+  } = useSelector((state) => state.realEstateTenant);
 
   const { user } = useSelector((state) => state.auth);
 
@@ -46,6 +55,22 @@ const RealEstateDetail = () => {
     },
     [dispatch]
   );
+
+  const handleEmailSend = (e) => {
+    e.preventDefault();
+
+    const formValues = {
+      to: realEstate?.propertyOwner?.email,
+      replyTo: user?.email,
+      subject: `Rental of Property with ID: ${realEstate?.propertyId}`,
+      body: `<p>Hi ${realEstate?.propertyOwner?.firstName} ${realEstate?.propertyOwner?.lastName},</p>
+      <p>I am interested in renting your property with ID: ${realEstate?.propertyId}.</p>
+      <p>Kindly contact me at ${user?.email} or +977 ${user?.phoneNumber}.</p>
+      <p>Thank you,</p> <p>${user?.firstName} ${user?.lastName}</p>`,
+    };
+
+    dispatch(sendEmailToOwner({ formValues }));
+  };
 
   if (isLoading) return <PageLoading />;
 
@@ -121,43 +146,71 @@ const RealEstateDetail = () => {
             </div>
           </CardActionArea>
 
-          <div className="mt-8 shadow-lg rounded-md p-4">
-            <div className="flex gap-2 items-center">
-              <h4 className="font-medium">Send Email</h4>
-              <ForwardToInboxRoundedIcon color="tertiary" />
-            </div>
-            <div className="flex mt-4 gap-2 items-center">
-              <span className="font-semibold"> To: </span>
-              <p className="">{realEstate?.propertyOwner?.email}</p>
-            </div>
-            <div className="flex mt-2 gap-2 items-center">
-              <span className="font-semibold"> From: </span>
-              <p className="">{user?.email}</p>
-            </div>
-            <div className="flex mt-2 gap-2 items-center">
-              <span className="font-semibold"> Subject: </span>
-              <p>
-                Rental of Property{" "}
-                <span className="text-sm">{realEstate?.propertyId}</span>
-              </p>
-            </div>
-            <div className="flex mt-2 gap-2 items-start">
-              <span className="font-semibold"> Body: </span>
-              <p className="text-sm">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum
-                sed consequatur consectetur praesentium cumque quam nobis illo
-                quod molestias enim?
-              </p>
-            </div>
-            <div className="flex mt-2 gap-2 justify-end py-2">
-              <Button
-                variant="contained"
-                color="tertiary"
-                sx={{ color: "#fff" }}
-              >
-                Send Email
-              </Button>
-            </div>
+          <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-scroll">
+            <form onSubmit={handleEmailSend}>
+              <div className="flex gap-2 items-center">
+                <h4 className="font-medium">Send Email</h4>
+                <ForwardToInboxRoundedIcon color="tertiary" />
+              </div>
+              <div className="flex mt-4 gap-2 items-center">
+                <span className="font-semibold"> To: </span>
+                <p className="">{realEstate?.propertyOwner?.email}</p>
+              </div>
+              <div className="flex mt-2 gap-2 items-center">
+                <span className="font-semibold"> From: </span>
+                <p className="">{user?.email}</p>
+              </div>
+              <div className="flex mt-2 gap-2 items-center">
+                <span className="font-semibold"> Subject: </span>
+                <p>
+                  Rental of Property with ID:{" "}
+                  <span className="text-sm">{realEstate?.propertyId}</span>
+                </p>
+              </div>
+              <div className="flex mt-2 gap-2 items-start">
+                <span className="font-semibold"> Body: </span>
+                <div className="text-sm mt-1">
+                  <p>
+                    Hi {realEstate?.propertyOwner?.firstName}{" "}
+                    {realEstate?.propertyOwner?.lastName},
+                  </p>
+                  <br />
+                  <p>
+                    I am interested in renting your property with ID:{" "}
+                    {realEstate?.propertyId}.
+                  </p>
+                  <p>
+                    Kindly contact me at {user?.email} or +977{" "}
+                    {user?.phoneNumber}.
+                  </p>
+                  <br />
+                  <p>Thank you,</p>
+                  <p>
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                </div>
+              </div>
+              <div className="flex mt-2 gap-2 justify-end py-2">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="tertiary"
+                  sx={{ color: "#fff" }}
+                >
+                  {isProcessing ? (
+                    <CircularProgress
+                      size={26}
+                      sx={{
+                        color: "#fff",
+                        width: "25%",
+                      }}
+                    />
+                  ) : (
+                    "Send Email"
+                  )}
+                </Button>
+              </div>
+            </form>
           </div>
         </aside>
         <AlertToast

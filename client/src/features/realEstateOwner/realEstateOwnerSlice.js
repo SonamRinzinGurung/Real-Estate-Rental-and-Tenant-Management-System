@@ -62,6 +62,7 @@ const realEstateOwnerSlice = createSlice({
     alertMsg: "",
     alertType: null,
     postSuccess: false,
+    isProcessing: false,
   },
   reducers: {
     clearAlert: (state) => {
@@ -118,17 +119,17 @@ const realEstateOwnerSlice = createSlice({
         state.alertType = "error";
       })
       .addCase(updateRealEstateDetail.pending, (state) => {
-        state.isLoading = true;
+        state.isProcessing = true;
       })
       .addCase(updateRealEstateDetail.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isProcessing = false;
         state.realEstate = action.payload.updatedRealEstate;
         state.alertFlag = true;
         state.alertMsg = "Property details updated successfully";
         state.alertType = "success";
       })
       .addCase(updateRealEstateDetail.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

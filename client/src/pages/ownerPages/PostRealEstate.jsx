@@ -265,9 +265,9 @@ const PostRealEstate = () => {
                 >
                   {isLoading ? (
                     <CircularProgress
-                      size={22}
+                      size={26}
                       sx={{
-                        color: "tertiary.dark",
+                        color: "#fff",
                       }}
                     />
                   ) : (

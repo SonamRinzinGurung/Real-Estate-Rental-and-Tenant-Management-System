@@ -7,6 +7,7 @@ import { locationNames } from "../../utils/locationNames";
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const UpdatePropertyForm = ({
   title,
@@ -17,6 +18,7 @@ const UpdatePropertyForm = ({
   floors,
   facing,
   address,
+  isProcessing,
 }) => {
   const initialFormValues = {
     price,
@@ -169,7 +171,16 @@ const UpdatePropertyForm = ({
             width: "25%",
           }}
         >
-          Update
+          {isProcessing ? (
+            <CircularProgress
+              size={26}
+              sx={{
+                color: "#fff",
+              }}
+            />
+          ) : (
+            "Update"
+          )}
         </Button>
       </div>
     </>

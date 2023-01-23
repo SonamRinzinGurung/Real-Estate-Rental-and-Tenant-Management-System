@@ -5,16 +5,21 @@ import { useParams } from "react-router-dom";
 import {
   clearAlert,
   updateRealEstateDetail,
+  getRealEstateDetail,
 } from "../../features/realEstateOwner/realEstateOwnerSlice";
-import { getRealEstateDetail } from "../../features/realEstateOwner/realEstateOwnerSlice";
 import postRealEstateImg from "../../assets/images/postRealEstateImg.svg";
 import postRealEstateImg2 from "../../assets/images/postRealEstateImg2.svg";
 import postRealEstateImg3 from "../../assets/images/postRealEstateImg3.svg";
 
 const UpdateRealEstateDetail = () => {
-  const { alertFlag, alertMsg, alertType, isLoading, realEstate } = useSelector(
-    (store) => store.realEstateOwner
-  );
+  const {
+    alertFlag,
+    alertMsg,
+    alertType,
+    isLoading,
+    realEstate,
+    isProcessing,
+  } = useSelector((store) => store.realEstateOwner);
   const dispatch = useDispatch();
 
   const { slug } = useParams();
@@ -59,7 +64,7 @@ const UpdateRealEstateDetail = () => {
                   Enter the updated details of your property
                 </p>
               </div>
-              <UpdatePropertyForm {...realEstate} />
+              <UpdatePropertyForm {...realEstate} isProcessing={isProcessing} />
             </form>
           </div>
           <div className="hidden grow-0 shrink-1 md:shrink-0 basis-auto w-5/12 mb-12 lg:block">

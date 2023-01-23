@@ -13,9 +13,8 @@ import {
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
-  const { user, isLoading, alertFlag, alertType, alertMsg } = useSelector(
-    (store) => store.ownerUser
-  );
+  const { user, isLoading, alertFlag, alertType, alertMsg, isProcessing } =
+    useSelector((store) => store.ownerUser);
 
   useEffect(() => {
     dispatch(getProfileDetails());
@@ -67,7 +66,7 @@ const ProfilePage = () => {
             </p>
           </div>
           <form id="form" onSubmit={handleSubmit}>
-            <UserProfileComponent {...user} />
+            <UserProfileComponent {...user} isProcessing={isProcessing} />
           </form>
         </div>
       </main>

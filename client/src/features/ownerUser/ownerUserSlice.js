@@ -33,6 +33,7 @@ const ownerUserSlice = createSlice({
     alertFlag: false,
     alertMsg: "",
     alertType: null,
+    isProcessing: false,
   },
   reducers: {
     clearAlert: (state) => {
@@ -56,17 +57,17 @@ const ownerUserSlice = createSlice({
         state.alertType = "error";
       })
       .addCase(updateProfile.pending, (state, action) => {
-        state.isLoading = true;
+        state.isProcessing = true;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isProcessing = false;
         state.user = action.payload.user;
         state.alertFlag = true;
         state.alertMsg = "Profile updated successfully";
         state.alertType = "success";
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
