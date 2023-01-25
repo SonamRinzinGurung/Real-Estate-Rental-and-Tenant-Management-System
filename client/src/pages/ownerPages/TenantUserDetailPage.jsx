@@ -1,22 +1,25 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOwnerUserDetails } from "../../features/tenantUser/tenantUserSlice";
+import { getTenantUserDetails } from "../../features/ownerUser/ownerUserSlice";
 import { useParams } from "react-router-dom";
-import { RealEstateCard, Footer, PageLoading } from "../../components";
+import { Footer, PageLoading } from "../../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import { Button } from "@mui/material";
+import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const OwnerUserDetailPage = () => {
+const TenantUserDetailPage = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
 
-  const { user, realEstates, isLoading } = useSelector(
-    (state) => state.tenantUser
+  const { user, isLoading, isProcessing } = useSelector(
+    (state) => state.ownerUser
   );
 
   useEffect(() => {
-    dispatch(getOwnerUserDetails({ slug }));
+    dispatch(getTenantUserDetails({ slug }));
   }, [dispatch, slug]);
 
   if (isLoading) return <PageLoading />;
@@ -30,19 +33,41 @@ const OwnerUserDetailPage = () => {
 
   return (
     <>
-      <main className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-        <div className="flex flex-col mt-10 mb-5 md:mb-12 md:w-1/4 items-center gap-1 md:ml-10">
+      <main className="mx-auto mb-12">
+        <div className="flex flex-col mt-10 mb-5  items-start gap-1 ">
           <h3 className="font-heading font-semibold text-4xl">Profile</h3>
           <div className="w-48 h-48 mt-6">
             <img
               src={user?.profileImage}
               alt="profile"
-              className="rounded-full w-full h-full object-cover"
+              className="rounded-md w-full h-full object-cover"
             />
           </div>
-          <p className="mt-2 text-lg">
-            {user?.firstName} {user?.lastName}
-          </p>
+          <div className="flex gap-4 items-center mt-4">
+            <p className="mt-2 text-xl font-robotoNormal">
+              {user?.firstName} {user?.lastName}
+            </p>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<ContactPageRoundedIcon />}
+              size="small"
+              sx={{
+                color: "white",
+              }}
+            >
+              {isProcessing ? (
+                <CircularProgress
+                  size={26}
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              ) : (
+                "Add"
+              )}
+            </Button>
+          </div>
 
           <div className="flex mt-2 gap-2 items-center">
             <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
@@ -57,30 +82,10 @@ const OwnerUserDetailPage = () => {
             <p className="">{user?.email}</p>
           </div>
         </div>
-        <div className="mb-12 md:w-3/4 md:mt-10">
-          {realEstates?.length === 0 ? (
-            <div>
-              <h4 className="text-center">No Real Estate Properties</h4>
-            </div>
-          ) : (
-            <>
-              <h3 className="text-center font-heading font-semibold text-4xl">
-                {realEstates?.length > 1 ? "Properties" : "Property"}
-              </h3>
-              <div className="justify-center flex flex-wrap gap-8 mt-6">
-                {realEstates?.map((item) => {
-                  return (
-                    <RealEstateCard key={item._id} {...item} fromUserProfile />
-                  );
-                })}
-              </div>
-            </>
-          )}
-        </div>
       </main>
       <Footer />
     </>
   );
 };
 
-export default OwnerUserDetailPage;
+export default TenantUserDetailPage;

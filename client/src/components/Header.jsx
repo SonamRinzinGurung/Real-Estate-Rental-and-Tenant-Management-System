@@ -17,9 +17,15 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 
-const Header = ({ toggleMenu, menuOpen }) => {
+const Header = () => {
   const { userType, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  const [menuOpen, setOpen] = useState(false);
+
+  const toggleMenu = useCallback(() => {
+    setOpen((prev) => !prev);
+  }, []);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -65,9 +71,9 @@ const Header = ({ toggleMenu, menuOpen }) => {
               </div>
               <div className="modal-body relative p-4 flex flex-col h-3/4 gap-5">
                 {userType === "owner" ? (
-                  <NavBarLinksOwner />
+                  <NavBarLinksOwner toggleMenu={toggleMenu} />
                 ) : (
-                  <NavBarLinksTenant />
+                  <NavBarLinksTenant toggleMenu={toggleMenu} />
                 )}
               </div>
             </div>

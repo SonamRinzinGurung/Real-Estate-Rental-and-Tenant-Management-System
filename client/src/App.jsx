@@ -14,6 +14,7 @@ import {
   ProfilePageTenant,
   ProfilePageOwner,
   OwnerUserDetailPage,
+  TenantUserDetailPage,
   UpdateRealEstateDetail,
 } from "./pages";
 import {
@@ -66,6 +67,10 @@ function App() {
               element={<UpdateRealEstateDetail />}
             />
             <Route path="/owner/profile" element={<ProfilePageOwner />} />
+            <Route
+              path="/owner/tenant-user/:slug"
+              element={<TenantUserDetailPage />}
+            />
           </Route>
           <Route
             path="/tenant"

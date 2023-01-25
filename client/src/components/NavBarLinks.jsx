@@ -1,13 +1,16 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const NavBarLinksOwner = () => {
+const NavBarLinksOwner = ({ toggleMenu }) => {
   const navigate = useNavigate();
   return (
     <>
       <Button
         type="text"
-        onClick={() => navigate("/owner")}
+        onClick={() => {
+          navigate("/owner");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
@@ -19,7 +22,10 @@ const NavBarLinksOwner = () => {
       </Button>
       <Button
         type="text"
-        onClick={() => navigate("/owner/property/post")}
+        onClick={() => {
+          navigate("/owner/property/post");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
@@ -31,7 +37,10 @@ const NavBarLinksOwner = () => {
       </Button>
       <Button
         type="text"
-        onClick={() => navigate("#")}
+        onClick={() => {
+          navigate("#");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
@@ -45,13 +54,16 @@ const NavBarLinksOwner = () => {
   );
 };
 
-const NavBarLinksTenant = () => {
+const NavBarLinksTenant = ({ toggleMenu }) => {
   const navigate = useNavigate();
   return (
     <>
       <Button
         type="text"
-        onClick={() => navigate("/tenant")}
+        onClick={() => {
+          navigate("/tenant");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
@@ -63,7 +75,10 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        onClick={() => navigate("/tenant/real-estate/all")}
+        onClick={() => {
+          navigate("/tenant/real-estate/all");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
@@ -75,7 +90,10 @@ const NavBarLinksTenant = () => {
       </Button>
       <Button
         type="text"
-        onClick={() => navigate("/tenant/real-estate/saved/all")}
+        onClick={() => {
+          navigate("/tenant/real-estate/saved/all");
+          toggleMenu();
+        }}
         sx={{
           color: "black",
           "&:hover": {
