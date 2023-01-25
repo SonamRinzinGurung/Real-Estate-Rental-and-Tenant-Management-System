@@ -37,6 +37,19 @@ export const getTenantUserDetails = createAsyncThunk(
   }
 );
 
+export const addOrRemoveContact = createAsyncThunk(
+  "addOrRemoveContact",
+  async ({ id }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch(`/owner/addContact/${id}`);
+      localStorage.setItem("user", JSON.stringify(data.updatedUser));
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const ownerUserSlice = createSlice({
   name: "ownerUser",
   initialState: {
@@ -46,6 +59,7 @@ const ownerUserSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isProcessing: false,
+    isContact: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -90,9 +104,26 @@ const ownerUserSlice = createSlice({
       .addCase(getTenantUserDetails.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
+        state.isContact = action.payload.isContact;
       })
       .addCase(getTenantUserDetails.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(addOrRemoveContact.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(addOrRemoveContact.fulfilled, (state, action) => {
+        state.alertFlag = true;
+        state.isContact = action.payload.isContact;
+        state.alertMsg = action.payload.message;
+        state.alertType = "success";
+        state.isProcessing = false;
+      })
+      .addCase(addOrRemoveContact.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

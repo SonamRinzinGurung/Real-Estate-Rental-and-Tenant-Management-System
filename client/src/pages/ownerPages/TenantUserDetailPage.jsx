@@ -1,26 +1,47 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTenantUserDetails } from "../../features/ownerUser/ownerUserSlice";
+import {
+  getTenantUserDetails,
+  addOrRemoveContact,
+  clearAlert,
+} from "../../features/ownerUser/ownerUserSlice";
 import { useParams } from "react-router-dom";
-import { Footer, PageLoading } from "../../components";
+import { Footer, PageLoading, AlertToast } from "../../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { Button } from "@mui/material";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
+import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const TenantUserDetailPage = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
 
-  const { user, isLoading, isProcessing } = useSelector(
-    (state) => state.ownerUser
-  );
+  const {
+    user,
+    isLoading,
+    isProcessing,
+    alertFlag,
+    alertMsg,
+    alertType,
+    isContact,
+  } = useSelector((state) => state.ownerUser);
 
   useEffect(() => {
     dispatch(getTenantUserDetails({ slug }));
   }, [dispatch, slug]);
+
+  const handleClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
 
   if (isLoading) return <PageLoading />;
 
@@ -33,55 +54,88 @@ const TenantUserDetailPage = () => {
 
   return (
     <>
-      <main className="mx-auto mb-12">
-        <div className="flex flex-col mt-10 mb-5  items-start gap-1 ">
-          <h3 className="font-heading font-semibold text-4xl">Profile</h3>
-          <div className="w-48 h-48 mt-6">
+      <main className="flex flex-col mx-auto mb-12 mt-10 md:flex md:ml-10">
+        <h3 className="font-heading font-semibold text-4xl">Profile</h3>
+        <div className="flex flex-col mt-6 gap-4 md:flex-row">
+          <div className="w-48 h-48 md:w-96 md:h-96">
             <img
               src={user?.profileImage}
               alt="profile"
               className="rounded-md w-full h-full object-cover"
             />
           </div>
-          <div className="flex gap-4 items-center mt-4">
-            <p className="mt-2 text-xl font-robotoNormal">
+          <div className="md:ml-4">
+            <p className="mt-2 text-2xl font-robotoNormal">
               {user?.firstName} {user?.lastName}
             </p>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<ContactPageRoundedIcon />}
-              size="small"
-              sx={{
-                color: "white",
-              }}
-            >
-              {isProcessing ? (
-                <CircularProgress
-                  size={26}
-                  sx={{
-                    color: "#fff",
-                  }}
-                />
-              ) : (
-                "Add"
-              )}
-            </Button>
-          </div>
 
-          <div className="flex mt-2 gap-2 items-center">
-            <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
-            <p>{user?.address}</p>
-          </div>
-          <div className="flex mt-2 gap-2 items-center">
-            <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
-            <p className="ml-3">+977 {user?.phoneNumber}</p>
-          </div>
-          <div className="flex mt-2 gap-2 items-center">
-            <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-            <p className="">{user?.email}</p>
+            <div className="flex mt-2 gap-2 items-center">
+              <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
+              <p>{user?.address}</p>
+            </div>
+            <div className="flex mt-2 gap-2 items-center">
+              <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
+              <p className="ml-3">+977 {user?.phoneNumber}</p>
+            </div>
+            <div className="flex mt-2 gap-2 items-center">
+              <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
+              <p className="">{user?.email}</p>
+            </div>
+            {isContact ? (
+              <Button
+                onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
+                variant="contained"
+                color="error"
+                startIcon={<PersonRemoveAlt1RoundedIcon />}
+                size="medium"
+                sx={{
+                  color: "white",
+                  marginTop: "12px",
+                }}
+              >
+                {isProcessing ? (
+                  <CircularProgress
+                    size={26}
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
+                ) : (
+                  "Remove"
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
+                variant="contained"
+                color="secondary"
+                startIcon={<ContactPageRoundedIcon />}
+                size="medium"
+                sx={{
+                  color: "white",
+                  marginTop: "12px",
+                }}
+              >
+                {isProcessing ? (
+                  <CircularProgress
+                    size={26}
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
+                ) : (
+                  "Add"
+                )}
+              </Button>
+            )}
           </div>
         </div>
+        <AlertToast
+          alertFlag={alertFlag}
+          alertMsg={alertMsg}
+          alertType={alertType}
+          handleClose={handleClose}
+        />
       </main>
       <Footer />
     </>

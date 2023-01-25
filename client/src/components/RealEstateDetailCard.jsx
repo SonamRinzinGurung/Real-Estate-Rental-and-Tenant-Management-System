@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { saveOrUnSaveRealEstate } from "../features/realEstateTenant/realEstateTenantSlice";
 import { Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const RealEstateDetailCard = ({
   _id,
@@ -22,6 +23,7 @@ const RealEstateDetailCard = ({
   fromTenant,
   fromOwner,
   isSaved,
+  isProcessing,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,33 +60,51 @@ const RealEstateDetailCard = ({
             </div>
             {fromTenant && (
               <div
-                className="mt-2 flex cursor-pointer items-center justify-center"
+                className="mt-2 cursor-pointer"
                 onClick={() => dispatch(saveOrUnSaveRealEstate({ id: _id }))} // dispatching the action to save or un-save the real estate
               >
                 {isSaved ? (
-                  <>
-                    <BookmarkRoundedIcon
-                      color="secondary"
-                      sx={{
-                        "&:hover": {
-                          color: "secondary.dark",
-                        },
-                      }}
-                    />
-                    <p className="text-secondary font-robotoNormal">UnSave</p>
-                  </>
+                  <Button
+                    variant="text"
+                    color="secondary"
+                    startIcon={<BookmarkRoundedIcon />}
+                    size="large"
+                    sx={{
+                      "&:hover": {
+                        color: "error.main",
+                        opacity: [0.9, 0.8, 0.7],
+                      },
+                    }}
+                  >
+                    {isProcessing ? (
+                      <CircularProgress
+                        size={26}
+                        sx={{
+                          color: "#EE9B01",
+                        }}
+                      />
+                    ) : (
+                      "UnSave"
+                    )}
+                  </Button>
                 ) : (
-                  <>
-                    <BookmarkBorderRoundedIcon
-                      color="secondary"
-                      sx={{
-                        "&:hover": {
-                          color: "secondary.dark",
-                        },
-                      }}
-                    />
-                    <p className="text-secondary font-robotoNormal">Save</p>
-                  </>
+                  <Button
+                    variant="text"
+                    color="secondary"
+                    startIcon={<BookmarkBorderRoundedIcon />}
+                    size="large"
+                  >
+                    {isProcessing ? (
+                      <CircularProgress
+                        size={26}
+                        sx={{
+                          color: "#EE9B01",
+                        }}
+                      />
+                    ) : (
+                      "Save"
+                    )}
+                  </Button>
                 )}
               </div>
             )}

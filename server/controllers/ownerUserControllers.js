@@ -10,13 +10,21 @@ import { NotFoundError, BadRequestError } from "../request-errors/index.js";
  */
 const getSingleTenantUser = async (req, res) => {
   const { slug } = req.params;
+  const { userId } = req.user;
 
   const user = await TenantUser.findOne({ slug });
 
   if (!user) {
     throw new NotFoundError("User not found");
   }
-  res.json({ user });
+
+  const { _id: tenantId } = user;
+
+  // Check if the tenant user is in the current owner user's contact list
+  const currentOwnerUser = await OwnerUser.findById(userId);
+  const isContact = currentOwnerUser.contacts.includes(tenantId.toString());
+
+  res.json({ user, isContact });
 };
 
 /**

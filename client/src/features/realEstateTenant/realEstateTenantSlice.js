@@ -121,16 +121,18 @@ const realEstateTenantSlice = createSlice({
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(saveOrUnSaveRealEstate.pending, (state) => {})
+      .addCase(saveOrUnSaveRealEstate.pending, (state) => {
+        state.isProcessing = true;
+      })
       .addCase(saveOrUnSaveRealEstate.fulfilled, (state, action) => {
-        state.alertFlag = false;
+        state.isProcessing = false;
         state.alertFlag = true;
         state.isSaved = action.payload.isSaved;
         state.alertMsg = action.payload.message;
         state.alertType = "success";
       })
       .addCase(saveOrUnSaveRealEstate.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
