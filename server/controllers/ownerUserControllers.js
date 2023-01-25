@@ -58,4 +58,42 @@ const updateProfile = async (req, res) => {
   res.json({ user });
 };
 
-export { getSingleTenantUser, getSelfDetail, updateProfile };
+/**
+ * @description Toggle Add Contact (Add or Remove Contact)
+ * @route PATCH /api/owner/addContact/:id
+ * @returns {object} 200 - An object containing the user
+ */
+const addContactToggle = async (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.user;
+
+  const tenantUser = await TenantUser.findById(id);
+
+  if (!tenantUser) {
+    throw new NotFoundError("Tenant User not found");
+  }
+
+  const currentOwnerUser = await OwnerUser.findById(userId);
+
+  if (currentOwnerUser.contacts.includes(id)) {
+    currentOwnerUser.contacts = currentOwnerUser.contacts.filter(
+      (contactId) => contactId.toString() !== id
+    );
+    const updatedUser = await OwnerUser.findOneAndUpdate(
+      { _id: userId },
+      { contacts: currentOwnerUser.contacts },
+      { new: true, runValidators: true }
+    );
+    res.json({ updatedUser, message: "Contact removed", isContact: false });
+  } else {
+    const updatedUser = await OwnerUser.findOneAndUpdate(
+      { _id: userId },
+      {
+        $push: { contacts: id },
+      },
+      { new: true, runValidators: true }
+    );
+    res.json({ updatedUser, message: "Contact added", isContact: true });
+  }
+};
+export { getSingleTenantUser, getSelfDetail, updateProfile, addContactToggle };
