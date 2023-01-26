@@ -12,7 +12,7 @@ const getSingleTenantUser = async (req, res) => {
   const { slug } = req.params;
   const { userId } = req.user;
 
-  const user = await TenantUser.findOne({ slug });
+  const user = await TenantUser.findOne({ slug }).select("-savedProperties");
 
   if (!user) {
     throw new NotFoundError("User not found");
@@ -83,6 +83,7 @@ const addContactToggle = async (req, res) => {
 
   const currentOwnerUser = await OwnerUser.findById(userId);
 
+  // Check if the tenant user is in the current owner user's contact list and remove them if they are
   if (currentOwnerUser.contacts.includes(id)) {
     currentOwnerUser.contacts = currentOwnerUser.contacts.filter(
       (contactId) => contactId.toString() !== id
@@ -94,6 +95,7 @@ const addContactToggle = async (req, res) => {
     );
     res.json({ updatedUser, message: "Contact removed", isContact: false });
   } else {
+    // Add the tenant user to the current owner user's contact list
     const updatedUser = await OwnerUser.findOneAndUpdate(
       { _id: userId },
       {
@@ -104,4 +106,26 @@ const addContactToggle = async (req, res) => {
     res.json({ updatedUser, message: "Contact added", isContact: true });
   }
 };
-export { getSingleTenantUser, getSelfDetail, updateProfile, addContactToggle };
+
+/**
+ * @description Get All Contacts
+ * @route PATCH /api/owner/contacts/all
+ * @returns {object} 200 - An array containing the contact users
+ */
+const getAllContacts = async (req, res) => {
+  const { userId } = req.user;
+  const currentOwnerUser = await OwnerUser.findById(userId).populate({
+    path: "contacts",
+    select: "-savedProperties -createdAt -updatedAt -__v",
+  });
+  if (!currentOwnerUser) throw new NotFoundError("User not found");
+  res.json({ contacts: currentOwnerUser.contacts });
+};
+
+export {
+  getSingleTenantUser,
+  getSelfDetail,
+  updateProfile,
+  addContactToggle,
+  getAllContacts,
+};

@@ -11,7 +11,7 @@ import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 const getSingleOwnerUser = async (req, res) => {
   const { slug } = req.params;
 
-  const user = await OwnerUser.findOne({ slug });
+  const user = await OwnerUser.findOne({ slug }).select("-contacts");
 
   if (!user) {
     throw new NotFoundError("User not found");

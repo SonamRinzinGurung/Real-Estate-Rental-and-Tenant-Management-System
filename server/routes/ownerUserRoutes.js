@@ -5,6 +5,7 @@ import {
   getSelfDetail,
   updateProfile,
   addContactToggle,
+  getAllContacts,
 } from "../controllers/ownerUserControllers.js";
 
 /**
@@ -30,5 +31,11 @@ router.patch("/profile", updateProfile);
  * @route PATCH /api/owner/addContact/:id
  */
 router.patch("/addContact/:id", addContactToggle);
+
+/**
+ * @description Get All Contacts
+ * @route PATCH /api/owner/contacts/all
+ */
+router.get("/contacts/all", getAllContacts);
 
 export default router;

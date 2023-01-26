@@ -26,7 +26,7 @@ const getAllProperties = async (req, res) => {
 
   let realEstateResult = RealEstate.find(queryObject).populate({
     path: "propertyOwner",
-    select: "-password -createdAt -updatedAt -__v",
+    select: "-password -createdAt -updatedAt -__v -contacts",
   });
 
   const page = Number(req.query.page) || 1;
@@ -52,7 +52,7 @@ const getSingleProperty = async (req, res) => {
 
   const realEstate = await RealEstate.findOne({ slug }).populate({
     path: "propertyOwner",
-    select: "-password -createdAt -updatedAt -__v",
+    select: "-password -createdAt -updatedAt -__v -contacts",
   });
 
   if (!realEstate) {
@@ -128,9 +128,12 @@ const getAllSavedProperties = async (req, res) => {
 
   const currentTenantUser = await TenantUser.findById(userId).populate({
     path: "savedProperties",
+    select: "-createdAt -updatedAt -__v",
+
     populate: {
       path: "propertyOwner",
       model: "OwnerUser",
+      select: "-createdAt -updatedAt -__v -contacts",
     },
   });
 
