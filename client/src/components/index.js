@@ -17,6 +17,7 @@ import UserProfileComponent from "./UserProfileComponent";
 import DatePicker from "./DatePicker";
 import SearchAndFilter from "./tenantComponents/SearchAndFilter";
 import UpdatePropertyForm from "./ownerComponents/UpdatePropertyForm";
+import ContactsCard from "./ownerComponents/ContactsCard";
 
 export {
   SharedLayoutOwner,
@@ -40,4 +41,5 @@ export {
   DatePicker,
   SearchAndFilter,
   UpdatePropertyForm,
+  ContactsCard,
 };

@@ -14,6 +14,7 @@ import ProfilePageOwner from "./ownerPages/ProfilePage-Owner";
 import OwnerUserDetailPage from "./tenantPages/OwnerUserDetailPage";
 import TenantUserDetailPage from "./ownerPages/TenantUserDetailPage";
 import UpdateRealEstateDetail from "./ownerPages/UpdateRealEstateDetail";
+import AllContacts from "./ownerPages/AllContacts";
 
 export {
   Login,
@@ -32,4 +33,5 @@ export {
   OwnerUserDetailPage,
   TenantUserDetailPage,
   UpdateRealEstateDetail,
+  AllContacts,
 };

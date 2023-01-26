@@ -1,16 +1,17 @@
-import React from "react";
+import { useCallback } from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 const NavBarLinksOwner = ({ toggleMenu }) => {
   const navigate = useNavigate();
   return (
     <>
       <Button
         type="text"
-        onClick={() => {
+        onClick={useCallback(() => {
           navigate("/owner");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -22,10 +23,10 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
       </Button>
       <Button
         type="text"
-        onClick={() => {
+        onClick={useCallback(() => {
           navigate("/owner/property/post");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -37,10 +38,10 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
       </Button>
       <Button
         type="text"
-        onClick={() => {
-          navigate("#");
+        onClick={useCallback(() => {
+          navigate("/owner/contacts/all");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -48,7 +49,7 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
           },
         }}
       >
-        Contact
+        Contacts
       </Button>
     </>
   );
@@ -60,10 +61,10 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
     <>
       <Button
         type="text"
-        onClick={() => {
+        onClick={useCallback(() => {
           navigate("/tenant");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -75,10 +76,10 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
       </Button>
       <Button
         type="text"
-        onClick={() => {
+        onClick={useCallback(() => {
           navigate("/tenant/real-estate/all");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -90,10 +91,10 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
       </Button>
       <Button
         type="text"
-        onClick={() => {
+        onClick={useCallback(() => {
           navigate("/tenant/real-estate/saved/all");
           toggleMenu();
-        }}
+        }, [navigate, toggleMenu])}
         sx={{
           color: "black",
           "&:hover": {
@@ -106,4 +107,5 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
     </>
   );
 };
+
 export { NavBarLinksOwner, NavBarLinksTenant };

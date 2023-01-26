@@ -50,6 +50,18 @@ export const addOrRemoveContact = createAsyncThunk(
   }
 );
 
+export const getAllContacts = createAsyncThunk(
+  "getAllContacts",
+  async (arg, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get("/owner/contacts/all");
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const ownerUserSlice = createSlice({
   name: "ownerUser",
   initialState: {
@@ -60,6 +72,7 @@ const ownerUserSlice = createSlice({
     alertType: null,
     isProcessing: false,
     isContact: null,
+    contacts: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -124,6 +137,19 @@ const ownerUserSlice = createSlice({
       })
       .addCase(addOrRemoveContact.rejected, (state, action) => {
         state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getAllContacts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllContacts.fulfilled, (state, action) => {
+        state.contacts = action.payload.contacts;
+        state.isLoading = false;
+      })
+      .addCase(getAllContacts.rejected, (state, action) => {
+        state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

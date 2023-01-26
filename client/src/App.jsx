@@ -16,6 +16,7 @@ import {
   OwnerUserDetailPage,
   TenantUserDetailPage,
   UpdateRealEstateDetail,
+  AllContacts,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -71,6 +72,7 @@ function App() {
               path="/owner/tenant-user/:slug"
               element={<TenantUserDetailPage />}
             />
+            <Route path="/owner/contacts/all" element={<AllContacts />} />
           </Route>
           <Route
             path="/tenant"
