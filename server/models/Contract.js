@@ -21,15 +21,26 @@ const ContractSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a start date"],
     },
-    endDate: {
-      type: String,
-      required: [true, "Please provide an end date"],
-    },
-    rent: {
+
+    rentAmount: {
       type: Number,
       required: [true, "Please provide a rent amount"],
     },
-
+    paymentPlan: {
+      type: String,
+      enum: {
+        values: [
+          "Monthly",
+          "Two Months",
+          "Three Months",
+          "Six Months",
+          "Yearly",
+        ],
+        message: "{VALUE} is not supported",
+      },
+      required: [true, "Please provide a plan"],
+      default: "Monthly",
+    },
     status: {
       type: String,
       enum: {

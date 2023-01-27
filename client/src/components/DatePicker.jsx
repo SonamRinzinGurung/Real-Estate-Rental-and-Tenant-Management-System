@@ -4,11 +4,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useCallback } from "react";
 
-const DatePickerMUI = ({ value, handleChange }) => {
+const DatePickerMUI = ({ value, handleChange, label }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <DatePicker
-        label="Date of Birth"
+        label={label}
         value={value}
         onChange={handleChange}
         renderInput={useCallback(

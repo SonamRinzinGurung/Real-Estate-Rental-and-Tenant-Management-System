@@ -9,7 +9,7 @@ import { sendEmail } from "../utils/emailSender.js";
 /**
  * @description Create Contract
  * @route PATCH /api/owner/contract
- * @returns {object} 200
+ * @returns {object} Contract object
  */
 const createContract = async (req, res) => {
   const { tenant, realEstate } = req.body;
@@ -36,8 +36,6 @@ const createContract = async (req, res) => {
   if (!realEstateUser) {
     throw new NotFoundError("Real estate not found");
   }
-
-  req.body.rent = realEstateUser.price;
 
   const contract = await Contract.create(req.body);
   const to = tenantUser.email;

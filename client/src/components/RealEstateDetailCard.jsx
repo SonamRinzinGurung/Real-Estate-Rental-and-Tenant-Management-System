@@ -1,14 +1,12 @@
-import React from "react";
 import { format, dateFormatter } from "../utils/valueFormatter";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { ImageCarousal } from "../components";
+import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { saveOrUnSaveRealEstate } from "../features/realEstateTenant/realEstateTenantSlice";
-import { Button } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Button, CircularProgress } from "@mui/material";
 
 const RealEstateDetailCard = ({
   _id,
@@ -109,7 +107,7 @@ const RealEstateDetailCard = ({
               </div>
             )}
             {fromOwner && (
-              <div className="mt-2 cursor-pointer text-center">
+              <div className="flex flex-wrap  gap-2 mt-2 cursor-pointer text-center">
                 <Button
                   variant="contained"
                   color="secondary"
@@ -120,6 +118,19 @@ const RealEstateDetailCard = ({
                 >
                   Edit
                 </Button>
+                <Link
+                  to={`/owner/contract/create`}
+                  state={{
+                    realEstateId: _id,
+                    title: title,
+                    price: price,
+                    slug: slug,
+                  }}
+                >
+                  <Button variant="contained" sx={{ color: "#fff" }}>
+                    Create Contract
+                  </Button>
+                </Link>
               </div>
             )}
           </div>

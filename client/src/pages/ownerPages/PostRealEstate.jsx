@@ -6,14 +6,17 @@ import {
   postRealEstate,
   clearAlert,
 } from "../../features/realEstateOwner/realEstateOwnerSlice";
+
 import postRealEstateImg from "../../assets/images/postRealEstateImg.svg";
 import postRealEstateImg2 from "../../assets/images/postRealEstateImg2.svg";
 import postRealEstateImg3 from "../../assets/images/postRealEstateImg3.svg";
 
-import CircularProgress from "@mui/material/CircularProgress";
-import { Button } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
+import {
+  Button,
+  CircularProgress,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import { locationNames } from "../../utils/locationNames";
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
@@ -104,6 +107,7 @@ const PostRealEstate = () => {
                   />
                   <TextField
                     label="Description"
+                    required
                     multiline
                     rows={4}
                     color="tertiary"
@@ -122,6 +126,7 @@ const PostRealEstate = () => {
                     name="price"
                     type="number"
                     placeholder="Price"
+                    required
                     value={values.price}
                     color="tertiary"
                     onChange={handleChange}
@@ -150,6 +155,7 @@ const PostRealEstate = () => {
                     name="area"
                     type="number"
                     placeholder="Area of the property"
+                    required
                     value={values.area}
                     color="tertiary"
                     onChange={handleChange}
@@ -164,6 +170,7 @@ const PostRealEstate = () => {
                     name="floors"
                     type="number"
                     placeholder="Number of floors"
+                    required
                     value={values.floors}
                     color="tertiary"
                     onChange={handleChange}

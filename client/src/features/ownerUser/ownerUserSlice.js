@@ -62,6 +62,18 @@ export const getAllContacts = createAsyncThunk(
   }
 );
 
+export const createContract = createAsyncThunk(
+  "createContract",
+  async ({ formData }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.post("/contract", formData);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const ownerUserSlice = createSlice({
   name: "ownerUser",
   initialState: {
@@ -73,6 +85,7 @@ const ownerUserSlice = createSlice({
     isProcessing: false,
     isContact: null,
     contacts: null,
+    contractDetail: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -150,6 +163,22 @@ const ownerUserSlice = createSlice({
       })
       .addCase(getAllContacts.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(createContract.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(createContract.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.contractDetail = action.payload.contract;
+        state.alertFlag = true;
+        state.alertMsg = "Contract created and sent to tenant";
+        state.alertType = "success";
+      })
+      .addCase(createContract.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

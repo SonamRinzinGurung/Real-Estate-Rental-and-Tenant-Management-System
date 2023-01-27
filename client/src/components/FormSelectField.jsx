@@ -5,6 +5,7 @@ const FormSelectField = ({ label, value, name, options, handleChange }) => {
   return (
     <TextField
       select
+      required
       label={label}
       value={value}
       onChange={handleChange}

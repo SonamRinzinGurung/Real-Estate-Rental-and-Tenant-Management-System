@@ -15,8 +15,7 @@ import {
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import moment from "moment";
 
 const Register = () => {
@@ -135,6 +134,7 @@ const Register = () => {
                 />
                 <DatePicker
                   value={date}
+                  label="Date of Birth"
                   handleChange={useCallback(
                     (date) => {
                       setDate(date);

@@ -11,6 +11,7 @@ const FormTextField = ({
 }) => {
   return (
     <TextField
+      required
       name={name}
       type={type}
       value={value}
