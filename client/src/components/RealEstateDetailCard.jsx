@@ -22,6 +22,7 @@ const RealEstateDetailCard = ({
   fromOwner,
   isSaved,
   isProcessing,
+  status,
 }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -106,33 +107,38 @@ const RealEstateDetailCard = ({
                 )}
               </div>
             )}
-            {fromOwner && (
-              <div className="flex flex-wrap  gap-2 mt-2 cursor-pointer text-center">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  sx={{ color: "#fff" }}
-                  onClick={() => {
-                    navigate(`/owner/real-estate/update/${slug}`);
-                  }}
-                >
-                  Edit
-                </Button>
-                <Link
-                  to={`/owner/contract/create`}
-                  state={{
-                    realEstateId: _id,
-                    title: title,
-                    price: price,
-                    slug: slug,
-                  }}
-                >
-                  <Button variant="contained" sx={{ color: "#fff" }}>
-                    Create Contract
+            {fromOwner &&
+              (status ? (
+                <div className="flex flex-wrap  gap-2 mt-2 cursor-pointer text-center">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ color: "#fff" }}
+                    onClick={() => {
+                      navigate(`/owner/real-estate/update/${slug}`);
+                    }}
+                  >
+                    Edit
                   </Button>
-                </Link>
-              </div>
-            )}
+                  <Link
+                    to={`/owner/contract/create`}
+                    state={{
+                      realEstateId: _id,
+                      title: title,
+                      price: price,
+                      slug: slug,
+                    }}
+                  >
+                    <Button variant="contained" sx={{ color: "#fff" }}>
+                      Create Contract
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="p-2">
+                  <p className="font-roboto text-secondary">Rented</p>
+                </div>
+              ))}
           </div>
         </div>
         <ImageCarousal realEstateImages={realEstateImages} />

@@ -15,14 +15,22 @@ const createContract = async (req, res) => {
   const { tenant, realEstate } = req.body;
   req.body.owner = req.user.userId;
 
+  //check if contract already exists for this tenant and real estate
   const contractExists = await Contract.findOne({
     owner: req.user.userId,
     tenant,
     realEstate,
   });
-
   if (contractExists) {
     throw new BadRequestError("Contract already exists");
+  }
+
+  //check if contract already exists for this real estate
+  const contractForRealEstate = await Contract.findOne({
+    realEstate,
+  });
+  if (contractForRealEstate) {
+    throw new BadRequestError("Contract already exists for this real estate");
   }
 
   const ownerUser = await OwnerUser.findById(req.user.userId);
@@ -37,17 +45,26 @@ const createContract = async (req, res) => {
     throw new NotFoundError("Real estate not found");
   }
 
+  //change the status of the real estate to false
+  realEstateUser.status = false;
+  await realEstateUser.save();
+
   const contract = await Contract.create(req.body);
   const to = tenantUser.email;
   const replyTo = ownerUser.email;
   const subject = "Contract created";
   const body = `
-    <h1>Contract created</h1>
-    <p>Contract created for ${realEstateUser.title} <span>(${realEstateUser.propertyId})</span></p>
+    <h3>Contract created</h3>
+    <p>Contract created for <strong>${realEstateUser.title}</strong> <span>(${realEstateUser.propertyId})</span></p>
     <p>Please follow the link to view and approve this contract</p>
-    <a href="http://localhost:3000/tenant/contract/${contract._id}">View contract</a>
+    <a href="http://localhost:3000/tenant/contract/${contract._id}"><strong>View contract</strong></a>
+   <br><br>
+    <p>Sincerely,</p>
+    <p>${ownerUser.firstName} ${ownerUser.lastName},</p>
+    <p>${ownerUser.address}</p>
     `;
 
+  //send email to tenant user to approve the contract
   await sendEmail(to, replyTo, subject, body);
 
   res.json({ contract });

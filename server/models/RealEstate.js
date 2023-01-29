@@ -83,6 +83,11 @@ const RealEstateSchema = new mongoose.Schema(
       },
     },
 
+    status: {
+      type: Boolean,
+      default: true,
+    },
+
     realEstateImages: [Object],
 
     propertyOwner: {

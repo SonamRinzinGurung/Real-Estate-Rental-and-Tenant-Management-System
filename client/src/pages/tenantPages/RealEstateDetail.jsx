@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -11,18 +11,22 @@ import {
   PageLoading,
   Footer,
   AlertToast,
+  ConfirmModal,
 } from "../../components";
 import { format } from "../../utils/valueFormatter";
-import { Button, CardActionArea } from "@mui/material";
+import {
+  Button,
+  CardActionArea,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import Avatar from "@mui/material/Avatar";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
-import CircularProgress from "@mui/material/CircularProgress";
 
 const RealEstateDetail = () => {
   const {
@@ -46,7 +50,7 @@ const RealEstateDetail = () => {
     dispatch(getSingleRealEstate({ slug }));
   }, [slug, dispatch]);
 
-  const handleClose = useCallback(
+  const handleAlertClose = useCallback(
     (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -56,21 +60,38 @@ const RealEstateDetail = () => {
     [dispatch]
   );
 
-  const handleEmailSend = (e) => {
+  //modal
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = useCallback(() => setOpen(true), []);
+  const handleModalClose = useCallback(() => setOpen(false), []);
+
+  const [formValues, setFormData] = useState({});
+
+  const handleSendConfirmation = (e) => {
     e.preventDefault();
 
-    const formValues = {
+    const emailTemplate = {
       to: realEstate?.propertyOwner?.email,
       replyTo: user?.email,
       subject: `Rental of Property with ID: ${realEstate?.propertyId}`,
       body: `<p>Hi ${realEstate?.propertyOwner?.firstName} ${realEstate?.propertyOwner?.lastName},</p>
-      <p>I am interested in renting your property with ID: ${realEstate?.propertyId}.</p>
+      <p>I am interested in renting your property titled <strong>${realEstate?.title}</strong> with ID: ${realEstate?.propertyId}.</p>
       <p>Kindly contact me at ${user?.email} or +977 ${user?.phoneNumber}.</p>
-      <p>Thank you,</p> <p>${user?.firstName} ${user?.lastName}</p>`,
+      <p>Visit my profile <a href="http://localhost:3000/owner/tenant-user/${user?.slug}"><strong>${user?.firstName} ${user?.lastName}</strong></a>.</p>
+      <br><br>
+      <p>Thank you,</p>
+      <p>${user?.firstName} ${user?.lastName},</p>
+      <p>${user.address}</p>`,
     };
 
-    dispatch(sendEmailToOwner({ formValues }));
+    setFormData(emailTemplate);
+    handleModalOpen();
   };
+
+  const handleEmailSend = useCallback(() => {
+    dispatch(sendEmailToOwner({ formValues }));
+    handleModalClose();
+  }, [dispatch, formValues, handleModalClose]);
 
   if (isLoading) return <PageLoading />;
 
@@ -152,7 +173,7 @@ const RealEstateDetail = () => {
           </CardActionArea>
 
           <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-scroll">
-            <form onSubmit={handleEmailSend}>
+            <form onSubmit={handleSendConfirmation}>
               <div className="flex gap-2 items-center">
                 <h4 className="font-medium">Send Email</h4>
                 <ForwardToInboxRoundedIcon color="tertiary" />
@@ -181,13 +202,22 @@ const RealEstateDetail = () => {
                   </p>
                   <br />
                   <p>
-                    I am interested in renting your property with ID:{" "}
+                    I am interested in renting your property titled{" "}
+                    <strong>{realEstate?.title}</strong> with ID:{" "}
                     {realEstate?.propertyId}.
                   </p>
                   <p>
                     Kindly contact me at {user?.email} or +977{" "}
                     {user?.phoneNumber}.
                   </p>
+                  <p>
+                    Visit my profile at{" "}
+                    <strong>
+                      {user?.firstName} {user?.lastName}
+                    </strong>
+                    .
+                  </p>
+
                   <br />
                   <p>Thank you,</p>
                   <p>
@@ -218,11 +248,30 @@ const RealEstateDetail = () => {
             </form>
           </div>
         </aside>
+        <ConfirmModal open={open} handleModalClose={handleModalClose}>
+          <h3 className="text-center">Send Email</h3>
+          <p className="text-center my-4">
+            Are you sure you want to send this email?
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button
+              onClick={handleEmailSend}
+              color="success"
+              variant="contained"
+            >
+              Confirm
+            </Button>
+
+            <Button onClick={handleModalClose} color="error">
+              Close
+            </Button>
+          </div>
+        </ConfirmModal>
         <AlertToast
           alertFlag={alertFlag}
           alertMsg={alertMsg}
           alertType={alertType}
-          handleClose={handleClose}
+          handleClose={handleAlertClose}
         />
       </main>
       <Footer />

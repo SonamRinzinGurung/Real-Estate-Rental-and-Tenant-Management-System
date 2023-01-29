@@ -6,7 +6,7 @@ import {
   clearAlert,
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { DatePicker, AlertToast } from "../../components";
+import { DatePicker, AlertToast, ConfirmModal } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import moment from "moment";
 
@@ -32,7 +32,6 @@ const CreateContractPage = () => {
   const [contractForm, setContractFrom] = useState({
     tenant: "",
     realEstate: realEstateId,
-    startDate: "",
     rentAmount: price,
     paymentPlan: "",
   });
@@ -54,19 +53,6 @@ const CreateContractPage = () => {
     "Yearly",
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { tenant, realEstate, rentAmount, paymentPlan } = contractForm;
-    const formData = {
-      tenant,
-      realEstate,
-      rentAmount,
-      paymentPlan,
-      startDate: moment(date).format("YYYY-MM-DD"),
-    };
-    dispatch(createContract({ formData }));
-  };
-
   // Redirect to detail page of the property after successful contract creation
   useEffect(() => {
     if (contractDetail) {
@@ -77,7 +63,7 @@ const CreateContractPage = () => {
     }
   }, [contractDetail, navigate, slug]);
 
-  const handleClose = useCallback(
+  const handleAlertClose = useCallback(
     (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -86,6 +72,31 @@ const CreateContractPage = () => {
     },
     [dispatch]
   );
+
+  //modal
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = useCallback(() => setOpen(true), []);
+  const handleModalClose = useCallback(() => setOpen(false), []);
+
+  const [formData, setFormData] = useState({});
+  const handleConfirmation = (e) => {
+    e.preventDefault();
+    const { tenant, realEstate, rentAmount, paymentPlan } = contractForm;
+    setFormData({
+      tenant,
+      realEstate,
+      rentAmount,
+      paymentPlan,
+      startDate: moment(date).format("YYYY-MM-DD"),
+    });
+
+    handleModalOpen();
+  };
+
+  const handleCreateContract = useCallback(() => {
+    dispatch(createContract({ formData }));
+    handleModalClose();
+  }, [dispatch, formData, handleModalClose]);
 
   return (
     <main className="mt-10 flex flex-col items-center md:ml-10 md:items-start">
@@ -100,7 +111,7 @@ const CreateContractPage = () => {
         <p className="-mt-2">{title}</p>
       </div>
       <div className="w-3/5">
-        <form id="form" onSubmit={handleSubmit}>
+        <form id="form" onSubmit={handleConfirmation}>
           <div className="flex flex-wrap gap-4 justify-center md:justify-start">
             <TextField
               select
@@ -184,11 +195,34 @@ const CreateContractPage = () => {
           </div>
         </form>
       </div>
+
+      <div>
+        <ConfirmModal open={open} handleModalClose={handleModalClose}>
+          <h3 className="text-center">Confirm Contract</h3>
+          <p className="text-center my-4">
+            Are you sure you want to create this contract?
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button
+              onClick={handleCreateContract}
+              color="success"
+              variant="contained"
+            >
+              Confirm
+            </Button>
+
+            <Button onClick={handleModalClose} color="error">
+              Close
+            </Button>
+          </div>
+        </ConfirmModal>
+      </div>
+
       <AlertToast
         alertFlag={alertFlag}
         alertMsg={alertMsg}
         alertType={alertType}
-        handleClose={handleClose}
+        handleClose={handleAlertClose}
       />
     </main>
   );

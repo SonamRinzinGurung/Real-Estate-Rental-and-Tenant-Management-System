@@ -9,7 +9,9 @@ import TenantUser from "../models/TenantUser.js";
 const getAllProperties = async (req, res) => {
   const { search, category, priceFilter } = req.query;
 
-  const queryObject = {};
+  const queryObject = {
+    status: true, //only show properties that are available
+  };
 
   if (search) {
     queryObject.title = { $regex: search, $options: "i" };
