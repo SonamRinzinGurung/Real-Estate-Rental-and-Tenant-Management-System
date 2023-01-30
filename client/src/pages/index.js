@@ -16,6 +16,7 @@ import TenantUserDetailPage from "./ownerPages/TenantUserDetailPage";
 import UpdateRealEstateDetail from "./ownerPages/UpdateRealEstateDetail";
 import AllContacts from "./ownerPages/AllContacts";
 import CreateContractPage from "./ownerPages/CreateContractPage";
+import ContractAgreementPage from "./tenantPages/ContractAgreementPage";
 
 export {
   Login,
@@ -36,4 +37,5 @@ export {
   UpdateRealEstateDetail,
   AllContacts,
   CreateContractPage,
+  ContractAgreementPage,
 };

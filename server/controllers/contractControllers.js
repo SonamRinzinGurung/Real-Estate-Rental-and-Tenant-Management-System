@@ -57,7 +57,7 @@ const createContract = async (req, res) => {
     <h3>Contract created</h3>
     <p>Contract created for <strong>${realEstateUser.title}</strong> <span>(${realEstateUser.propertyId})</span></p>
     <p>Please follow the link to view and approve this contract</p>
-    <a href="http://localhost:3000/tenant/contract/${contract._id}"><strong>View contract</strong></a>
+    <a href="http://localhost:3000/tenant/contract-agreement/${contract._id}"><strong>View contract</strong></a>
    <br><br>
     <p>Sincerely,</p>
     <p>${ownerUser.firstName} ${ownerUser.lastName},</p>

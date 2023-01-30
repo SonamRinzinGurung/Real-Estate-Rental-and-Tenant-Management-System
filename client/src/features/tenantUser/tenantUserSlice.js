@@ -37,11 +37,26 @@ export const updateTenantProfile = createAsyncThunk(
   }
 );
 
+export const getContractWithID = createAsyncThunk(
+  "getContractWithID",
+  async ({ contractId }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(
+        `/contract/tenantView/${contractId}`
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const tenantUserSlice = createSlice({
   name: "tenantUser",
   initialState: {
     user: null,
     realEstates: null,
+    contractDetail: null,
     isLoading: false,
     alertFlag: false,
     alertMsg: "",
@@ -95,6 +110,19 @@ const tenantUserSlice = createSlice({
       })
       .addCase(updateTenantProfile.rejected, (state, action) => {
         state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getContractWithID.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getContractWithID.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.contractDetail = action.payload.contractDetail;
+      })
+      .addCase(getContractWithID.rejected, (state, action) => {
+        state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
