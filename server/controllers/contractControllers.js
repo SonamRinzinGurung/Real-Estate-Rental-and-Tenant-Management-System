@@ -171,9 +171,37 @@ const getContractDetailOwnerView = async (req, res) => {
   res.json({ contractDetail });
 };
 
+/**
+ * @description Delete contract
+ * @route GET /api/contract/ownerView/:realEstateId
+ * @returns
+ */
+const deleteContract = async (req, res) => {
+  const contract = await Contract.findOneAndRemove({
+    _id: req.params.contractId,
+    owner: req.user.userId,
+  });
+
+  if (!contract) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  if (contract.status === "Active") {
+    throw new BadRequestError("Contract is active. You cannot delete it");
+  }
+
+  //change the status of the real estate to true
+  const realEstate = await RealEstate.findById(contract.realEstate);
+  realEstate.status = true;
+  await realEstate.save();
+
+  res.json({ message: "Contract deleted successfully", success: true });
+};
+
 export {
   createContract,
   getContractDetailTenantView,
   approveContract,
   getContractDetailOwnerView,
+  deleteContract,
 };

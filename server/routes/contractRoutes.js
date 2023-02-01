@@ -5,6 +5,7 @@ import {
   getContractDetailTenantView,
   approveContract,
   getContractDetailOwnerView,
+  deleteContract,
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -41,5 +42,11 @@ router.get(
   authorizeOwnerUser,
   getContractDetailOwnerView
 );
+
+/**
+ * @description Delete a contract
+ * @route GET /api/contract/delete/:contractId
+ */
+router.delete("/delete/:contractId", authorizeOwnerUser, deleteContract);
 
 export default router;
