@@ -10,6 +10,7 @@ import { PageLoading, AlertToast, ConfirmModal } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { dateFormatter, format } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
 import contractApprovedImg from "../../assets/images/contractApproved.svg";
@@ -62,8 +63,8 @@ const ContractAgreementPage = () => {
     );
 
   return (
-    <main>
-      {contractDetail?.status === "Pending" ? (
+    <main className="mb-12">
+      {contractDetail?.status === "Pending" && (
         <>
           <h3 className="my-4 font-heading font-bold text-center">
             Contract Agreement Page
@@ -140,6 +141,7 @@ const ContractAgreementPage = () => {
               size="large"
               color="tertiary"
               sx={{ color: "#fff" }}
+              startIcon={<CheckCircleRoundedIcon />}
             >
               {isProcessing ? (
                 <CircularProgress
@@ -154,7 +156,9 @@ const ContractAgreementPage = () => {
             </Button>
           </div>
         </>
-      ) : (
+      )}
+
+      {contractDetail?.status === "Active" && (
         <div className="flex flex-col items-center mt-10 gap-2">
           <h1 className="text-center">Contract is active</h1>
           <Button

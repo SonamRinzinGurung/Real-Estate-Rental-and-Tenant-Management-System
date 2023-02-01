@@ -4,6 +4,7 @@ import {
   createContract,
   getContractDetailTenantView,
   approveContract,
+  getContractDetailOwnerView,
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -30,4 +31,15 @@ router.get(
  * @route PATCH /api/contract/approve/:contractId
  */
 router.patch("/approve/:contractId", authorizeTenantUser, approveContract);
+
+/**
+ * @description Get the contract details for the owner user
+ * @route GET /api/contract/ownerView/:realEstateId
+ */
+router.get(
+  "/ownerView/:realEstateId",
+  authorizeOwnerUser,
+  getContractDetailOwnerView
+);
+
 export default router;

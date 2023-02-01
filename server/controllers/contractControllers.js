@@ -145,4 +145,35 @@ const approveContract = async (req, res) => {
   res.json({ contractDetail });
 };
 
-export { createContract, getContractDetailTenantView, approveContract };
+/**
+ * @description Get contract details for owner user
+ * @route GET /api/contract/ownerView/:realEstateId
+ * @returns {object} 200 - An object containing the contract details
+ */
+const getContractDetailOwnerView = async (req, res) => {
+  const contractDetail = await Contract.findOne({
+    owner: req.user.userId,
+    realEstate: req.params.realEstateId,
+  })
+    .populate({
+      path: "realEstate",
+      select: "title address category slug",
+    })
+    .populate({
+      path: "tenant",
+      select: "slug firstName lastName email address phoneNumber",
+    });
+
+  if (!contractDetail) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  res.json({ contractDetail });
+};
+
+export {
+  createContract,
+  getContractDetailTenantView,
+  approveContract,
+  getContractDetailOwnerView,
+};

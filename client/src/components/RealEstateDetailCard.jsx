@@ -46,7 +46,7 @@ const RealEstateDetailCard = ({
             </div>
           </div>
           <div className="">
-            <div className="rounded-md p-2 hover:shadow-inner ease-out duration-500">
+            <div className="rounded-md p-2">
               <p className="font-roboto text-primaryDark leading-4 ">
                 RENT per month
               </p>
@@ -54,7 +54,7 @@ const RealEstateDetailCard = ({
                 NPR. {format(price)}
               </span>
               <div>
-                <p className="font-roboto text-primaryDark">{category}</p>
+                <p className="font-roboto text-gray-500">{category}</p>
               </div>
             </div>
             {fromTenant && (
@@ -136,7 +136,19 @@ const RealEstateDetailCard = ({
                 </div>
               ) : (
                 <div className="p-2">
-                  <p className="font-roboto text-secondary">Rented</p>
+                  <Link
+                    to={`/owner/contract/${slug}`}
+                    state={{ realEstateId: _id }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="small"
+                      sx={{ color: "#fff" }}
+                    >
+                      View Contract
+                    </Button>
+                  </Link>
                 </div>
               ))}
           </div>
