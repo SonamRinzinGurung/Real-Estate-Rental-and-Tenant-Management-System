@@ -3,6 +3,7 @@ const router = express.Router();
 import {
   createContract,
   getContractDetailTenantView,
+  approveContract,
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -24,4 +25,9 @@ router.get(
   getContractDetailTenantView
 );
 
+/**
+ * @description Approve the contract
+ * @route PATCH /api/contract/approve/:contractId
+ */
+router.patch("/approve/:contractId", authorizeTenantUser, approveContract);
 export default router;

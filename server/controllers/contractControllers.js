@@ -96,4 +96,53 @@ const getContractDetailTenantView = async (req, res) => {
   res.json({ contractDetail });
 };
 
-export { createContract, getContractDetailTenantView };
+/**
+ * @description Approve contract
+ * @route PATCH /api/contract/approve/:contractId
+ * @returns {object} 200 - An object containing the contract details
+ */
+const approveContract = async (req, res) => {
+  const contractDetail = await Contract.findOne({
+    _id: req.params.contractId,
+    tenant: req.user.userId,
+  })
+    .populate({
+      path: "realEstate",
+      select: "title",
+    })
+    .populate({
+      path: "owner",
+      select: "firstName lastName email",
+    })
+    .populate({
+      path: "tenant",
+      select: "firstName lastName email address",
+    });
+
+  if (!contractDetail) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  //change the status of the contract to true
+  contractDetail.status = "Active";
+  await contractDetail.save();
+
+  const to = contractDetail.owner.email;
+  const replyTo = contractDetail.tenant.email;
+  const subject = "Contract approved";
+  const body = `
+    <h3>Contract approved</h3>
+    <p>Contract for <strong>${contractDetail.realEstate.title}</strong> has been approved and accepted.</p>
+    <br><br>
+    <p>Sincerely,</p>
+    <p>${contractDetail.tenant.firstName} ${contractDetail.tenant.lastName},</p>
+    <p>${contractDetail.tenant.address}</p>
+    `;
+
+  //send email to owner user to approve the contract
+  await sendEmail(to, replyTo, subject, body);
+
+  res.json({ contractDetail });
+};
+
+export { createContract, getContractDetailTenantView, approveContract };
