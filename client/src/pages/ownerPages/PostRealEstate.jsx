@@ -83,10 +83,10 @@ const PostRealEstate = () => {
   return (
     <div>
       <main className="px-6 h-full mt-7">
-        <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
+        <div className="flex lg:justify-between justify-center flex-wrap h-full g-6">
           <div className="lg:w-5/12 md:w-8/12 mb-12">
             <form onSubmit={handleSubmit} id="form">
-              <div className="flex justify-center items-center flex-col mt-3 mb-4">
+              <div className="flex flex-col justify-center items-center mt-3 mb-4">
                 <h3 className="font-heading font-bold">Post your Property </h3>
                 <p className="text-gray-400 text-sm">
                   Enter the details of your property

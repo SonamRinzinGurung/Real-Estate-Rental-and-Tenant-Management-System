@@ -88,14 +88,14 @@ const Register = () => {
         </div>
       </header>
 
-      <main className="px-6 h-full mt-7">
+      <main className="px-6 h-full mt-7 mb-12">
         <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
-          <div className="lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+          <div className="lg:w-5/12 md:w-8/12">
             <form onSubmit={handleSubmit} id="form">
               <div className="flex justify-center mt-3 mb-4">
                 <h4 className="">Register for your new account</h4>
               </div>
-              <div className="flex flex-wrap gap-2 ml-16">
+              <div className="flex flex-wrap gap-2 justify-center md:ml-16">
                 <FormTextField
                   label="First Name"
                   name="firstName"
@@ -180,7 +180,7 @@ const Register = () => {
                 />
               </div>
 
-              <div className="text-center mt-2">
+              <div className="text-center mt-4">
                 <Button
                   type="submit"
                   variant="contained"
@@ -192,7 +192,6 @@ const Register = () => {
                       backgroundColor: "primary.dark",
                       opacity: [0.9, 0.8, 0.7],
                     },
-                    width: "25%",
                   }}
                 >
                   {isLoading ? (

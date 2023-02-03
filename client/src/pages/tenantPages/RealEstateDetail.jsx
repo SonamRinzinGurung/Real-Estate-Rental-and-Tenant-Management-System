@@ -27,6 +27,7 @@ import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 const RealEstateDetail = () => {
   const {
@@ -94,6 +95,9 @@ const RealEstateDetail = () => {
   }, [dispatch, formValues, handleModalClose]);
 
   if (isLoading) return <PageLoading />;
+
+  if (!realEstate)
+    return <h1 className="mt-6 text-center">No real estate found</h1>;
 
   return (
     <>
@@ -231,6 +235,8 @@ const RealEstateDetail = () => {
                   variant="contained"
                   color="tertiary"
                   sx={{ color: "#fff" }}
+                  size="small"
+                  startIcon={<SendRoundedIcon />}
                 >
                   {isProcessing ? (
                     <CircularProgress
@@ -254,16 +260,16 @@ const RealEstateDetail = () => {
             Are you sure you want to send this email?
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button onClick={handleModalClose} color="error">
+              Close
+            </Button>
+
             <Button
               onClick={handleEmailSend}
               color="success"
               variant="contained"
             >
               Confirm
-            </Button>
-
-            <Button onClick={handleModalClose} color="error">
-              Close
             </Button>
           </div>
         </ConfirmModal>

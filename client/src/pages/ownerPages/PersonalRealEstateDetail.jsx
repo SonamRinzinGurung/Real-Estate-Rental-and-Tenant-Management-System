@@ -22,6 +22,9 @@ const PersonalRealEstateDetail = () => {
 
   if (isLoading) return <PageLoading />;
 
+  if (!realEstate)
+    return <h1 className="mt-6 text-center">No real estate found</h1>;
+
   return (
     <>
       <main className="mb-12">

@@ -130,6 +130,7 @@ const ownerUserSlice = createSlice({
       .addCase(getProfileDetails.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
+        state.alertFlag = false;
       })
       .addCase(getProfileDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -160,6 +161,7 @@ const ownerUserSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.isContact = action.payload.isContact;
+        state.alertFlag = false;
       })
       .addCase(getTenantUserDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -189,6 +191,7 @@ const ownerUserSlice = createSlice({
       .addCase(getAllContacts.fulfilled, (state, action) => {
         state.contacts = action.payload.contacts;
         state.isLoading = false;
+        state.alertFlag = false;
       })
       .addCase(getAllContacts.rejected, (state, action) => {
         state.isLoading = false;
@@ -201,7 +204,7 @@ const ownerUserSlice = createSlice({
       })
       .addCase(createContract.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.contractDetail = action.payload.contract;
+        state.success = true;
         state.alertFlag = true;
         state.alertMsg = "Contract created and sent to tenant";
         state.alertType = "success";
@@ -218,6 +221,7 @@ const ownerUserSlice = createSlice({
       .addCase(getContractOwnerView.fulfilled, (state, action) => {
         state.isLoading = false;
         state.contractDetail = action.payload.contractDetail;
+        state.alertFlag = false;
       })
       .addCase(getContractOwnerView.rejected, (state, action) => {
         state.isLoading = false;

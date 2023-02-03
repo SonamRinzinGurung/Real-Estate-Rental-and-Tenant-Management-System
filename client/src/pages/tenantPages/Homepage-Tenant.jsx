@@ -10,12 +10,13 @@ import {
 import Pagination from "@mui/material/Pagination";
 
 const Homepage = () => {
+  const dispatch = useDispatch();
+
   const { allRealEstate, isLoading, numberOfPages } = useSelector(
     (store) => store.realEstateTenant
   );
 
-  const dispatch = useDispatch();
-
+  // initial query for search and filter
   const initialQuery = {
     page: 1,
     search: "",
@@ -24,18 +25,22 @@ const Homepage = () => {
     upperLimit: "",
     priceFilter: "",
   };
+
   const [query, setQuery] = useState(initialQuery);
 
+  // get all real estate on page load and when page number changes
   useEffect(() => {
     dispatch(getAllRealEstate({ ...query }));
   }, [query.page]);
 
+  // update price filter when lower and upper limit changes
   useEffect(() => {
     if (query.lowerLimit && query.upperLimit) {
       query.priceFilter = query.lowerLimit + "-" + query.upperLimit;
     }
   }, [query.lowerLimit, query.upperLimit]);
 
+  // function to handle page number change
   const handlePageChange = useCallback(
     (event, value) => {
       setQuery({ ...query, page: value });
@@ -43,6 +48,7 @@ const Homepage = () => {
     [query]
   );
 
+  // function to handle search and filter query value change
   const handleValueChange = useCallback(
     (event) => {
       setQuery({ ...query, [event.target.name]: event.target.value });
@@ -50,6 +56,7 @@ const Homepage = () => {
     [query]
   );
 
+  // function to handle search and filter submission and reset page number to 1
   const handleSearchSubmit = useCallback(
     (event) => {
       event.preventDefault();
@@ -58,12 +65,11 @@ const Homepage = () => {
     [query, dispatch]
   );
 
+  // function to clear search and filter
   const clearFilter = useCallback(() => {
     setQuery(initialQuery);
     dispatch(getAllRealEstate({ ...initialQuery }));
   }, [dispatch]);
-
-  if (isLoading) return <PageLoading />;
 
   return (
     <>
@@ -74,6 +80,7 @@ const Homepage = () => {
           clearFilter={clearFilter}
           {...query}
         />
+
         {allRealEstate?.length === 0 ? (
           <h2 className="text-center mt-8 mb-6 font-heading font-bold">
             No Real Estate Found
@@ -83,14 +90,20 @@ const Homepage = () => {
             <h3 className="text-center mt-8 mb-6 font-heading font-bold">
               All Properties
             </h3>
-            <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center">
-              {allRealEstate?.map((item) => {
-                return <RealEstateCard key={item._id} {...item} />;
-              })}
-            </main>
+
+            {isLoading ? (
+              <PageLoading />
+            ) : (
+              <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center">
+                {allRealEstate?.map((item) => {
+                  return <RealEstateCard key={item._id} {...item} />;
+                })}
+              </main>
+            )}
           </>
         )}
       </div>
+
       <Pagination
         count={numberOfPages || 1}
         page={query?.page}
@@ -98,7 +111,6 @@ const Homepage = () => {
         color="secondary"
         className="flex justify-center mb-12"
       />
-
       <Footer />
     </>
   );

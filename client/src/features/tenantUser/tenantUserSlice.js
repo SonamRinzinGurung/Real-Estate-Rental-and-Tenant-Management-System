@@ -91,6 +91,7 @@ const tenantUserSlice = createSlice({
       .addCase(getProfileDetails.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
+        state.alertFlag = false;
       })
       .addCase(getProfileDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -105,6 +106,7 @@ const tenantUserSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.realEstates = action.payload.realEstates;
+        state.alertFlag = false;
       })
       .addCase(getOwnerUserDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -134,6 +136,7 @@ const tenantUserSlice = createSlice({
       .addCase(getContractWithID.fulfilled, (state, action) => {
         state.isLoading = false;
         state.contractDetail = action.payload.contractDetail;
+        state.alertFlag = false;
       })
       .addCase(getContractWithID.rejected, (state, action) => {
         state.isLoading = false;

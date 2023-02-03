@@ -68,7 +68,7 @@ const SearchAndFilter = ({
             <input
               type="number"
               name="lowerLimit"
-              className="w-20 text-sm h-8 rounded-lg"
+              className="w-20 text-sm h-8 rounded-lg text-center"
               value={lowerLimit}
               onChange={handleValueChange}
             />
@@ -76,7 +76,7 @@ const SearchAndFilter = ({
             <input
               type="number"
               name="upperLimit"
-              className="w-20 text-sm h-8 rounded-lg"
+              className="w-20 text-sm h-8 rounded-lg text-center"
               value={upperLimit}
               onChange={handleValueChange}
             />

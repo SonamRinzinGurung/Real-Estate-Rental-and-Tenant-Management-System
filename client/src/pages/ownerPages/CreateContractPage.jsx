@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, AlertToast, ConfirmModal } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import moment from "moment";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
 const CreateContractPage = () => {
   const dispatch = useDispatch();
@@ -16,14 +17,8 @@ const CreateContractPage = () => {
   const location = useLocation();
   const { realEstateId, title, price, slug } = location?.state; // state is passed from the previous page
 
-  const {
-    contacts,
-    isProcessing,
-    contractDetail,
-    alertFlag,
-    alertMsg,
-    alertType,
-  } = useSelector((state) => state.ownerUser);
+  const { contacts, isProcessing, success, alertFlag, alertMsg, alertType } =
+    useSelector((state) => state.ownerUser);
 
   useEffect(() => {
     dispatch(getAllContacts());
@@ -55,13 +50,13 @@ const CreateContractPage = () => {
 
   // Redirect to detail page of the property after successful contract creation
   useEffect(() => {
-    if (contractDetail) {
+    if (success) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${slug}`);
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [contractDetail, navigate, slug]);
+  }, [success, navigate, slug]);
 
   const handleAlertClose = useCallback(
     (event, reason) => {
@@ -178,8 +173,8 @@ const CreateContractPage = () => {
                   backgroundColor: "primary.dark",
                   opacity: [0.9, 0.8, 0.7],
                 },
-                width: "25%",
               }}
+              startIcon={<BorderColorRoundedIcon />}
             >
               {isProcessing ? (
                 <CircularProgress
@@ -203,16 +198,16 @@ const CreateContractPage = () => {
             Are you sure you want to create this contract?
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button onClick={handleModalClose} color="error">
+              Close
+            </Button>
+
             <Button
               onClick={handleCreateContract}
               color="success"
               variant="contained"
             >
               Confirm
-            </Button>
-
-            <Button onClick={handleModalClose} color="error">
-              Close
             </Button>
           </div>
         </ConfirmModal>

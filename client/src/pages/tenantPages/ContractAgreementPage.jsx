@@ -186,16 +186,16 @@ const ContractAgreementPage = () => {
             Are you sure you want to approve this contract?
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button onClick={handleModalClose} color="error">
+              Close
+            </Button>
+
             <Button
               onClick={handleApproveContract}
               color="success"
               variant="contained"
             >
               Confirm
-            </Button>
-
-            <Button onClick={handleModalClose} color="error">
-              Close
             </Button>
           </div>
         </ConfirmModal>
