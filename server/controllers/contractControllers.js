@@ -87,6 +87,10 @@ const getContractDetailTenantView = async (req, res) => {
     .populate({
       path: "owner",
       select: "slug firstName lastName email address phoneNumber",
+    })
+    .populate({
+      path: "tenant",
+      select: "firstName lastName",
     });
 
   if (!contractDetail) {
@@ -162,6 +166,10 @@ const getContractDetailOwnerView = async (req, res) => {
     .populate({
       path: "tenant",
       select: "slug firstName lastName email address phoneNumber",
+    })
+    .populate({
+      path: "owner",
+      select: "firstName lastName",
     });
 
   if (!contractDetail) {

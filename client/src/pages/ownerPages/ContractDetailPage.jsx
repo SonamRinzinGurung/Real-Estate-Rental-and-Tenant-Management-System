@@ -65,6 +65,26 @@ const ContractDetailPage = () => {
     handleModalClose();
   }, [dispatch, contractDetail?._id, handleModalClose]);
 
+  // calculate the total rent amount according to payment plan
+  const calculateTotalRent = useCallback(() => {
+    const { paymentPlan, rentAmount } = contractDetail;
+    if (paymentPlan === "Monthly") return rentAmount;
+    if (paymentPlan === "Two Months") return rentAmount * 2;
+    if (paymentPlan === "Three Months") return rentAmount * 3;
+    if (paymentPlan === "Six Months") return rentAmount * 6;
+    if (paymentPlan === "Yearly") return rentAmount * 12;
+  }, [contractDetail]);
+
+  // calculate the payment plan duration
+  const calculatePaymentPlanDuration = useCallback(() => {
+    const { paymentPlan } = contractDetail;
+    if (paymentPlan === "Monthly") return "1 Month";
+    if (paymentPlan === "Two Months") return "2 Months";
+    if (paymentPlan === "Three Months") return "3 Months";
+    if (paymentPlan === "Six Months") return "6 Months";
+    if (paymentPlan === "Yearly") return "12 Months";
+  }, [contractDetail]);
+
   if (isLoading) return <PageLoading />;
 
   if (!contractDetail)
@@ -142,29 +162,80 @@ const ContractDetailPage = () => {
           </h5>
         </div>
       </div>
-      {contractDetail?.status === "Pending" && (
-        <div className="flex justify-center mt-6">
-          <Button
-            onClick={handleModalOpen}
-            variant="contained"
-            size="medium"
-            color="error"
-            sx={{ color: "#fff" }}
-            startIcon={<RemoveCircleRoundedIcon />}
-          >
-            {isProcessing ? (
-              <CircularProgress
-                size={26}
-                sx={{
-                  color: "#fff",
-                }}
-              />
-            ) : (
-              "Delete Contract"
-            )}
-          </Button>
-        </div>
-      )}
+
+      <div className="w-11/12 mx-auto text-justify mt-6">
+        <h4>Rental Agreement Contract</h4>
+        <p>
+          This Rental Agreement Contract is applicable from{" "}
+          <strong>{dateFormatter(contractDetail?.startDate)}</strong>, created
+          by the property owner{" "}
+          <strong>
+            {contractDetail?.owner?.firstName} {contractDetail?.owner?.lastName}
+          </strong>
+          , for the rental of the property located at{" "}
+          <strong>
+            {contractDetail?.realEstate?.address?.location},{" "}
+            {contractDetail?.realEstate?.address?.streetName}
+          </strong>{" "}
+          with the tenant{" "}
+          <strong>
+            {contractDetail?.tenant?.firstName}{" "}
+            {contractDetail?.tenant?.lastName}
+          </strong>
+          .
+        </p>
+        <br />
+        <h5>1. Payment of Rent</h5>
+        <p>
+          Tenant shall pay rent in the amount of NPR{" "}
+          {format(contractDetail?.rentAmount)} per month. Total Rent amount of
+          NPR {format(calculateTotalRent())} shall be due and payable every{" "}
+          {calculatePaymentPlanDuration()} on the first day of the calendar
+          month and shall be considered late if not received by the Landlord on
+          or before the 7th day of the month.
+        </p>
+        <br />
+        <h5>2. Late Fees</h5>
+        <p>
+          If rent is not received by the 7th day of the month, a late fee of 5%
+          shall be added to the total amount due.
+        </p>
+        <br />
+        <h5>3. Termination of Agreement</h5>
+        <p>
+          The Landlord may terminate this Agreement if rent is more than 30 days
+          late. In such event, Tenant shall vacate the Property immediately.
+        </p>
+        <br />
+        <h5>4. Entire Agreement</h5>
+        <p>
+          This Agreement constitutes the entire agreement between the parties
+          and supersedes all prior negotiations, understandings, and agreements
+          between the parties, whether written or oral.
+        </p>
+        <br />
+        <h5>5. Amendments</h5>
+        <p>
+          This Agreement may only be amended by written instrument executed by
+          both parties.
+        </p>
+        <br />
+        <h5>6. Governing Law</h5>
+        <p>
+          This Agreement shall be governed by and construed in accordance with
+          the laws of the state in which the Property is located.
+        </p>
+        <br />
+        <h5>7. Assignment and Binding Effect</h5>
+        <p>
+          Tenant shall not assign this Agreement or sublease the Property
+          without the prior written consent of the Landlord. This Agreement
+          shall be binding upon and inure to the benefit of both parties, their
+          heirs, legal representatives, successors, and assigns.
+        </p>
+        <br />
+      </div>
+
       {contractDetail?.status === "Active" && (
         <div className="flex justify-center items-center mt-6 gap-2">
           <CheckCircleRoundedIcon color="success" />
@@ -172,11 +243,34 @@ const ContractDetailPage = () => {
         </div>
       )}
 
+      <div className="flex justify-center mt-6">
+        <Button
+          onClick={handleModalOpen}
+          variant="contained"
+          size="medium"
+          color="error"
+          sx={{ color: "#fff" }}
+          startIcon={<RemoveCircleRoundedIcon />}
+        >
+          {isProcessing ? (
+            <CircularProgress
+              size={26}
+              sx={{
+                color: "#fff",
+              }}
+            />
+          ) : (
+            "Terminate Contract"
+          )}
+        </Button>
+      </div>
+
       <div>
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
-          <h3 className="text-center">Delete Contract</h3>
+          <h3 className="text-center">Terminate Contract</h3>
           <p className="text-center my-4">
-            Are you sure you want to delete this contract?
+            Are you sure you want to terminate this contract? This will delete
+            the contract and all the data associated with it.
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <Button onClick={handleModalClose} color="warning">
