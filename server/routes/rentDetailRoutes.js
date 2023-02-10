@@ -10,6 +10,6 @@ import {
  * @description Create rent payment detail
  * @route POST /api/rentPayment
  */
-router.post("/", authorizeOwnerUser, createRentDetail);
+router.post("/createDetail", authorizeOwnerUser, createRentDetail);
 
 export default router;

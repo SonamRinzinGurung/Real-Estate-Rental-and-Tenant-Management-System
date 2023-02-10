@@ -18,6 +18,8 @@ import AllContacts from "./ownerPages/AllContacts";
 import CreateContractPage from "./ownerPages/CreateContractPage";
 import ContractAgreementPage from "./tenantPages/ContractAgreementPage";
 import ContractDetailPage from "./ownerPages/ContractDetailPage";
+import AllRentDetailPage from "./ownerPages/AllRentDetailPage";
+import CreateRentDetail from "./ownerPages/CreateRentDetail";
 
 export {
   Login,
@@ -40,4 +42,6 @@ export {
   CreateContractPage,
   ContractAgreementPage,
   ContractDetailPage,
+  AllRentDetailPage,
+  CreateRentDetail,
 };

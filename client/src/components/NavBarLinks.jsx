@@ -51,6 +51,22 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
       >
         Contacts
       </Button>
+
+      <Button
+        type="text"
+        onClick={useCallback(() => {
+          navigate("/owner/rentDetail");
+          toggleMenu();
+        }, [navigate, toggleMenu])}
+        sx={{
+          color: "black",
+          "&:hover": {
+            color: "primary.dark",
+          },
+        }}
+      >
+        Rent
+      </Button>
     </>
   );
 };

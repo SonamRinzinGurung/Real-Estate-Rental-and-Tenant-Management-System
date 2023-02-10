@@ -20,6 +20,8 @@ import {
   CreateContractPage,
   ContractAgreementPage,
   ContractDetailPage,
+  AllRentDetailPage,
+  CreateRentDetail,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -83,6 +85,11 @@ function App() {
             <Route
               path="/owner/contract/:slug"
               element={<ContractDetailPage />}
+            />
+            <Route path="/owner/rentDetail" element={<AllRentDetailPage />} />
+            <Route
+              path="/owner/rentDetail/create"
+              element={<CreateRentDetail />}
             />
           </Route>
           <Route

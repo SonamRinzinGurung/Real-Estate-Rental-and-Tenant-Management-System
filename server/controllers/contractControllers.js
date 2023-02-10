@@ -206,10 +206,30 @@ const deleteContract = async (req, res) => {
   res.json({ message: "Contract deleted successfully", success: true });
 };
 
+/**
+ * @description Get All Owner's Contracts
+ * @route GET /api/contract/owner/allContracts
+ * @returns
+ */
+const getOwnerAllContracts = async (req, res) => {
+  const allContracts = await Contract.find({ owner: req.user.userId })
+    .populate({
+      path: "realEstate",
+      select: "title _id",
+    })
+    .populate({
+      path: "tenant",
+      select: "_id firstName lastName",
+    });
+
+  res.json({ allContracts });
+};
+
 export {
   createContract,
   getContractDetailTenantView,
   approveContract,
   getContractDetailOwnerView,
   deleteContract,
+  getOwnerAllContracts,
 };

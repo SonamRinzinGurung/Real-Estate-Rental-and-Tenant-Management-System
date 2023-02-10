@@ -1,11 +1,8 @@
 import TenantUser from "../models/TenantUser.js";
-import OwnerUser from "../models/OwnerUser.js";
 import RealEstate from "../models/RealEstate.js";
-import Contract from "../models/Contract.js";
 import RentDetail from "../models/RentDetail.js";
 
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
-import { sendEmail } from "../utils/emailSender.js";
 
 /**
  * @description Create Contract
@@ -26,6 +23,16 @@ const createRentDetail = async (req, res) => {
     throw new BadRequestError("Rent detail already exists");
   }
 
+  // check if rent detail already exists for this real estate
+  const rentDetailExistsForRealEstate = await RentDetail.findOne({
+    realEstate,
+  });
+  if (rentDetailExistsForRealEstate) {
+    throw new BadRequestError(
+      "Rent Detail already exists for this real estate"
+    );
+  }
+
   const tenantUser = await TenantUser.findById(tenant);
   if (!tenantUser) {
     throw new NotFoundError("Tenant user not found");
@@ -38,7 +45,9 @@ const createRentDetail = async (req, res) => {
 
   const rentDetail = await RentDetail.create(req.body);
 
-  res.status(201).json({ rentDetail });
+  res
+    .status(201)
+    .json({ rentDetail, msg: "Rent detail created", success: true });
 };
 
 export { createRentDetail };
