@@ -6,8 +6,8 @@ import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 
 /**
  * @description Create Contract
- * @route PATCH /api/rentPayment
- * @returns {object}
+ * @route PATCH /api/rentDetail/createDetail
+ * @returns {object} rent detail object
  */
 const createRentDetail = async (req, res) => {
   const { tenant, realEstate } = req.body;
@@ -50,4 +50,27 @@ const createRentDetail = async (req, res) => {
     .json({ rentDetail, msg: "Rent detail created", success: true });
 };
 
-export { createRentDetail };
+/**
+ * @description Get all the Rent Details for owner user
+ * @route GET /api/rentDetail/allRentDetails
+ * @returns {object} Rent Details Array
+ */
+const getAllRentDetailsOwnerView = async (req, res) => {
+  const rentDetails = await RentDetail.find({ owner: req.user.userId })
+    .populate({
+      path: "realEstate",
+      select: "_id title price address category realEstateImages slug",
+    })
+    .populate({
+      path: "tenant",
+      select: "_id firstName lastName address profileImage slug email",
+    })
+    .populate({
+      path: "owner",
+      select: "_id firstName lastName address profileImage slug email",
+    });
+
+  res.json({ rentDetails, count: rentDetails.length });
+};
+
+export { createRentDetail, getAllRentDetailsOwnerView };
