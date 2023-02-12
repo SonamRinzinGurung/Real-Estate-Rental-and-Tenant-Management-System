@@ -19,6 +19,7 @@ import SearchAndFilter from "./tenantComponents/SearchAndFilter";
 import UpdatePropertyForm from "./ownerComponents/UpdatePropertyForm";
 import ContactsCard from "./ownerComponents/ContactsCard";
 import ConfirmModal from "./ConfirmModal";
+import RentDetailComponent from "./RentDetailComponent";
 
 export {
   SharedLayoutOwner,
@@ -44,4 +45,5 @@ export {
   UpdatePropertyForm,
   ContactsCard,
   ConfirmModal,
+  RentDetailComponent,
 };

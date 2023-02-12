@@ -5,12 +5,7 @@ import {
   clearAlert,
 } from "../../features/rentDetail/rentDetailSlice";
 import { getOwnerAllContracts } from "../../features/ownerUser/ownerUserSlice";
-import {
-  DatePicker,
-  AlertToast,
-  ConfirmModal,
-  PageLoading,
-} from "../../components";
+import { AlertToast, ConfirmModal, PageLoading } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
@@ -37,14 +32,9 @@ const CreateRentDetail = () => {
     realEstate: "",
     rentAmount: "",
     paymentPlan: "",
+    startDate: "",
     tenantName: "",
   });
-
-  const [date, setDate] = useState(null);
-
-  const changeDate = (date) => {
-    setDate(date);
-  };
 
   // handle change in the form
   const handleChange = useCallback(
@@ -65,6 +55,9 @@ const CreateRentDetail = () => {
         rentAmount: allContracts?.find(
           (contract) => contract.realEstate._id === contractForm.realEstate
         ).rentAmount,
+        startDate: allContracts?.find(
+          (contract) => contract.realEstate._id === contractForm.realEstate
+        ).startDate,
         paymentPlan: allContracts?.find(
           (contract) => contract.realEstate._id === contractForm.realEstate
         ).paymentPlan,
@@ -110,12 +103,12 @@ const CreateRentDetail = () => {
   const [formData, setFormData] = useState({});
   const handleConfirmation = (e) => {
     e.preventDefault();
-    const { tenant, realEstate, paymentPlan } = contractForm;
+    const { tenant, realEstate, paymentPlan, startDate } = contractForm;
     setFormData({
       tenant,
       realEstate,
       paymentPlan,
-      startDate: moment(date).format("YYYY-MM-DD"),
+      startDate,
     });
 
     handleModalOpen();
@@ -169,10 +162,12 @@ const CreateRentDetail = () => {
                 sx={{ width: "300px" }}
               />
 
-              <DatePicker
+              <TextField
                 label="Contract Start Date"
-                value={date}
-                handleChange={changeDate}
+                value={contractForm.startDate}
+                name="startDate"
+                color="tertiary"
+                sx={{ width: "300px" }}
               />
 
               <TextField
