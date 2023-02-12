@@ -36,6 +36,19 @@ const RentDetailSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a start date"],
     },
+    paymentStatus: {
+      type: String,
+      enum: {
+        values: ["Paid", "Unpaid"],
+        message: "{VALUE} is not supported",
+      },
+      required: [true, "Please provide a payment status"],
+      default: "Unpaid",
+    },
+    currentRentDate: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

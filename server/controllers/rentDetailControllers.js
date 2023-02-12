@@ -73,4 +73,35 @@ const getAllRentDetailsOwnerView = async (req, res) => {
   res.json({ rentDetails, count: rentDetails.length });
 };
 
-export { createRentDetail, getAllRentDetailsOwnerView };
+/**
+ * @description Get all the Rent Details for owner user
+ * @route GET /api/rentDetail/allRentDetails
+ * @returns {object} Rent Details Array
+ */
+const getSingleRentDetailsOwnerView = async (req, res) => {
+  const rentDetail = await RentDetail.findById(req.params.rentDetailId)
+    .populate({
+      path: "realEstate",
+      select: "_id title price address category realEstateImages slug",
+    })
+    .populate({
+      path: "tenant",
+      select: "_id firstName lastName address profileImage slug email",
+    })
+    .populate({
+      path: "owner",
+      select: "_id firstName lastName address profileImage slug email",
+    });
+
+  if (!rentDetail) {
+    throw new NotFoundError("Rent detail not found");
+  }
+
+  res.json({ rentDetail });
+};
+
+export {
+  createRentDetail,
+  getAllRentDetailsOwnerView,
+  getSingleRentDetailsOwnerView,
+};
