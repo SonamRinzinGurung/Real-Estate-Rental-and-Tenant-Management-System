@@ -20,6 +20,7 @@ import ContractAgreementPage from "./tenantPages/ContractAgreementPage";
 import ContractDetailPage from "./ownerPages/ContractDetailPage";
 import AllRentDetailPage from "./ownerPages/AllRentDetailPage";
 import CreateRentDetail from "./ownerPages/CreateRentDetail";
+import SingleRentDetail from "./ownerPages/SingleRentDetail";
 
 export {
   Login,
@@ -44,4 +45,5 @@ export {
   ContractDetailPage,
   AllRentDetailPage,
   CreateRentDetail,
+  SingleRentDetail,
 };

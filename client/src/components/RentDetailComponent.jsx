@@ -11,6 +11,7 @@ import { format, dateFormatter } from "../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
 const RentDetailComponent = ({
+  _id,
   owner,
   tenant,
   realEstate,
@@ -32,8 +33,8 @@ const RentDetailComponent = ({
     >
       <CardActionArea
         onClick={useCallback(() => {
-          navigate("");
-        }, [navigate])}
+          navigate(`/owner/rentDetail/${_id}`);
+        }, [navigate, _id])}
       >
         <CardMedia
           component="img"

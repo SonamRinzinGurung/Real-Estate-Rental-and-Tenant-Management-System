@@ -9,7 +9,9 @@ const AllRentDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { rentDetails, isLoading } = useSelector((state) => state.rentDetail);
+  const { allRentDetails, isLoading } = useSelector(
+    (state) => state.rentDetail
+  );
 
   useEffect(() => {
     dispatch(getAllRentDetailsOwnerView());
@@ -17,7 +19,7 @@ const AllRentDetailPage = () => {
 
   if (isLoading) return <PageLoading />;
 
-  if (rentDetails?.length === 0)
+  if (allRentDetails?.length === 0)
     return (
       <div className="flex flex-col items-center h-screen mt-12 gap-4">
         <h1 className="text-center">No rent details found</h1>
@@ -34,11 +36,21 @@ const AllRentDetailPage = () => {
   return (
     <>
       <main className="flex flex-col mb-12 mt-6 md:items-start md:ml-10">
+        <div className="ml-4 md:ml-0">
+          <Button
+            variant="contained"
+            onClick={() => navigate("/owner/rentDetail/create")}
+            sx={{ color: "#fff" }}
+            size="small"
+          >
+            Create Rent Detail
+          </Button>
+        </div>
         <h3 className="my-4 font-heading font-bold text-center">
           Rent Details
         </h3>
         <div className="flex flex-wrap gap-8 justify-center">
-          {rentDetails?.map((rentDetail) => (
+          {allRentDetails?.map((rentDetail) => (
             <RentDetailComponent key={rentDetail._id} {...rentDetail} />
           ))}
         </div>

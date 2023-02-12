@@ -28,10 +28,23 @@ export const getAllRentDetailsOwnerView = createAsyncThunk(
   }
 );
 
+export const getSingleRentDetailOwnerView = createAsyncThunk(
+  "getSingleRentDetailOwnerView",
+  async ({ rentDetailId }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(`/rentDetail/${rentDetailId}`);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const rentDetailSlice = createSlice({
   name: "rentDetail",
   initialState: {
-    rentDetails: null,
+    allRentDetails: null,
+    rentDetail: null,
     success: null,
     isLoading: false,
     alertFlag: false,
@@ -67,11 +80,25 @@ const rentDetailSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getAllRentDetailsOwnerView.fulfilled, (state, action) => {
-        state.rentDetails = action.payload.rentDetails;
+        state.allRentDetails = action.payload.rentDetails;
         state.isLoading = false;
         state.alertFlag = false;
       })
       .addCase(getAllRentDetailsOwnerView.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getSingleRentDetailOwnerView.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleRentDetailOwnerView.fulfilled, (state, action) => {
+        state.rentDetail = action.payload.rentDetail;
+        state.isLoading = false;
+        state.alertFlag = false;
+      })
+      .addCase(getSingleRentDetailOwnerView.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

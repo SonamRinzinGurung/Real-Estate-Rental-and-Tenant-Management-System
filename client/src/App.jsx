@@ -22,6 +22,7 @@ import {
   ContractDetailPage,
   AllRentDetailPage,
   CreateRentDetail,
+  SingleRentDetail,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -90,6 +91,10 @@ function App() {
             <Route
               path="/owner/rentDetail/create"
               element={<CreateRentDetail />}
+            />
+            <Route
+              path="/owner/rentDetail/:rentDetailId"
+              element={<SingleRentDetail />}
             />
           </Route>
           <Route
