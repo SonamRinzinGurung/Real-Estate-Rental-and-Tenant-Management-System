@@ -1,20 +1,22 @@
 import { useCallback, useState } from "react";
-import { Button } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
 import { Logo, NavBarLinksOwner, NavBarLinksTenant } from "../components";
 import { logOut } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  Box,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import Logout from "@mui/icons-material/Logout";
 
 const Header = () => {
@@ -90,7 +92,11 @@ const Header = () => {
         </div>
 
         <nav className="hidden justify-evenly items-center w-1/3 lg:flex">
-          {userType === "owner" ? <NavBarLinksOwner /> : <NavBarLinksTenant />}
+          {userType === "owner" ? (
+            <NavBarLinksOwner toggleMenu={toggleMenu} />
+          ) : (
+            <NavBarLinksTenant toggleMenu={toggleMenu} />
+          )}
         </nav>
         <Tooltip title="Menu">
           <div className="mr-1 lg:hidden">

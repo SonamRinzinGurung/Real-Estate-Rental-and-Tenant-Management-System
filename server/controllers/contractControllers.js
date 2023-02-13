@@ -236,7 +236,12 @@ const getAllTenantRentalProperties = async (req, res) => {
     status: "Active",
   }).populate({
     path: "realEstate",
-    select: "title address category slug realEstateImages",
+    select: "title address category slug realEstateImages price",
+    populate: {
+      path: "propertyOwner",
+      model: "OwnerUser",
+      select: "-createdAt -updatedAt -__v -contacts",
+    },
   });
 
   res.json({ allRentalProperties, count: allRentalProperties.length });

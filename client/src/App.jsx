@@ -7,7 +7,6 @@ import {
   Landing,
   NotFound,
   PostRealEstate,
-  AllRealEstate,
   RealEstateDetail,
   PersonalRealEstateDetail,
   SavedRealEstate,
@@ -23,6 +22,7 @@ import {
   AllRentDetailPage,
   CreateRentDetail,
   SingleRentDetail,
+  AllRentalProperties,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -106,7 +106,6 @@ function App() {
             }
           >
             <Route index element={<HomepageTenant />} />
-            <Route path="/tenant/real-estate/all" element={<AllRealEstate />} />
             <Route
               path="/tenant/real-estate/:slug"
               element={<RealEstateDetail />}
@@ -123,6 +122,10 @@ function App() {
             <Route
               path="/tenant/contract-agreement/:contractId"
               element={<ContractAgreementPage />}
+            />
+            <Route
+              path="/tenant/rental-properties/all"
+              element={<AllRentalProperties />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />

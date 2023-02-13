@@ -69,6 +69,20 @@ export const sendEmailToOwner = createAsyncThunk(
   }
 );
 
+export const getAllTenantRentalProperties = createAsyncThunk(
+  "getAllTenantRentalProperties",
+  async (arg, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(
+        "/contract/tenantUser/allRentalProperties"
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const realEstateTenantSlice = createSlice({
   name: "realEstateTenant",
   initialState: {
@@ -81,6 +95,7 @@ const realEstateTenantSlice = createSlice({
     isSaved: null,
     numberOfPages: null,
     isProcessing: false,
+    allRentalProperties: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -162,6 +177,20 @@ const realEstateTenantSlice = createSlice({
       })
       .addCase(sendEmailToOwner.rejected, (state, action) => {
         state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getAllTenantRentalProperties.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllTenantRentalProperties.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.allRentalProperties = action.payload.allRentalProperties;
+        state.alertFlag = false;
+      })
+      .addCase(getAllTenantRentalProperties.rejected, (state, action) => {
+        state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

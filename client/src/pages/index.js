@@ -5,7 +5,6 @@ import HomepageTenant from "./tenantPages/Homepage-Tenant";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
 import PostRealEstate from "./ownerPages/PostRealEstate";
-import AllRealEstate from "./tenantPages/AllRealEstate";
 import RealEstateDetail from "./tenantPages/RealEstateDetail";
 import PersonalRealEstateDetail from "./ownerPages/PersonalRealEstateDetail";
 import SavedRealEstate from "./tenantPages/SavedRealEstate";
@@ -21,6 +20,7 @@ import ContractDetailPage from "./ownerPages/ContractDetailPage";
 import AllRentDetailPage from "./ownerPages/AllRentDetailPage";
 import CreateRentDetail from "./ownerPages/CreateRentDetail";
 import SingleRentDetail from "./ownerPages/SingleRentDetail";
+import AllRentalProperties from "./tenantPages/AllRentalProperties";
 
 export {
   Login,
@@ -30,7 +30,6 @@ export {
   Landing,
   NotFound,
   PostRealEstate,
-  AllRealEstate,
   RealEstateDetail,
   PersonalRealEstateDetail,
   SavedRealEstate,
@@ -46,4 +45,5 @@ export {
   AllRentDetailPage,
   CreateRentDetail,
   SingleRentDetail,
+  AllRentalProperties,
 };

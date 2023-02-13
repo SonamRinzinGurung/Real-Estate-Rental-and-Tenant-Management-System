@@ -93,7 +93,7 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
       <Button
         type="text"
         onClick={useCallback(() => {
-          navigate("/tenant/real-estate/all");
+          navigate("/tenant/rental-properties/all");
           toggleMenu();
         }, [navigate, toggleMenu])}
         sx={{
@@ -103,7 +103,7 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
           },
         }}
       >
-        Browse Property
+        Rental Properties
       </Button>
       <Button
         type="text"
