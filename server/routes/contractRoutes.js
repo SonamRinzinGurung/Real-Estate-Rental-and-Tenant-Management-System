@@ -7,6 +7,7 @@ import {
   getContractDetailOwnerView,
   deleteContract,
   getOwnerAllContracts,
+  getAllTenantRentalProperties,
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -55,5 +56,15 @@ router.delete("/delete/:contractId", authorizeOwnerUser, deleteContract);
  * @route GET /api/contract/owner/allContracts
  */
 router.get("/owner/allContracts", authorizeOwnerUser, getOwnerAllContracts);
+
+/**
+ * @description Get the active rental properties of the tenant user
+ * @route GET /api/contract/tenantUser/allRentalProperties
+ */
+router.get(
+  "/tenantUser/allRentalProperties",
+  authorizeTenantUser,
+  getAllTenantRentalProperties
+);
 
 export default router;

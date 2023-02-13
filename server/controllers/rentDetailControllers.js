@@ -86,11 +86,12 @@ const getSingleRentDetailsOwnerView = async (req, res) => {
     })
     .populate({
       path: "tenant",
-      select: "_id firstName lastName address profileImage slug email",
+      select:
+        "_id firstName lastName address profileImage slug email phoneNumber",
     })
     .populate({
       path: "owner",
-      select: "_id firstName lastName address profileImage slug email",
+      select: "_id slug",
     });
 
   if (!rentDetail) {

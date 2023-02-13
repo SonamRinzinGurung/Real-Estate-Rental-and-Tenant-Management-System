@@ -225,6 +225,23 @@ const getOwnerAllContracts = async (req, res) => {
   res.json({ allContracts });
 };
 
+/**
+ * @description Get the active rental properties of the tenant user
+ * @route GET /api/contract/tenantUser/allRentalProperties
+ * @returns property details
+ */
+const getAllTenantRentalProperties = async (req, res) => {
+  const allRentalProperties = await Contract.find({
+    tenant: req.user.userId,
+    status: "Active",
+  }).populate({
+    path: "realEstate",
+    select: "title address category slug realEstateImages",
+  });
+
+  res.json({ allRentalProperties, count: allRentalProperties.length });
+};
+
 export {
   createContract,
   getContractDetailTenantView,
@@ -232,4 +249,5 @@ export {
   getContractDetailOwnerView,
   deleteContract,
   getOwnerAllContracts,
+  getAllTenantRentalProperties,
 };
