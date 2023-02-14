@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTenantRentalProperties } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { PageLoading, Footer } from "../../components";
@@ -59,6 +59,7 @@ const AllRentalProperties = () => {
                   address,
                   realEstateImages,
                   propertyOwner,
+                  slug,
                 } = item?.realEstate;
                 return (
                   <div key={item._id}>
@@ -74,32 +75,33 @@ const AllRentalProperties = () => {
                         color: "#102a43",
                       }}
                     >
-                      <CardActionArea onClick={() => navigate("")}>
-                        <CardMedia
-                          component="img"
-                          sx={{ maxHeight: 150 }}
-                          image={realEstateImages[0]}
-                          alt={title}
-                        />
-                        <CardContent>
-                          <h4
-                            className="mb-1 overflow-hidden overflow-ellipsis whitespace-nowrap hover:text-primaryDark duration-300 ease-in-out"
-                            style={{ maxWidth: "31ch" }}
-                          >
-                            {title}
-                          </h4>
-                          <p className="text-sm text-gray-400">{category}</p>
-                          <p className="font-semibold">
-                            NPR. <span className="">{format(price)}</span> /
-                            month
-                          </p>
-                          <p className="text-base">
-                            <LocationOnOutlinedIcon color="secondary" />{" "}
-                            {address?.location}, {address?.streetName}
-                          </p>
-                        </CardContent>
-                      </CardActionArea>
-
+                      <Link to={`/tenant/rental-properties/${slug}`}>
+                        <CardActionArea>
+                          <CardMedia
+                            component="img"
+                            sx={{ maxHeight: 150 }}
+                            image={realEstateImages[0]}
+                            alt={title}
+                          />
+                          <CardContent>
+                            <h4
+                              className="mb-1 overflow-hidden overflow-ellipsis whitespace-nowrap hover:text-primaryDark duration-300 ease-in-out"
+                              style={{ maxWidth: "31ch" }}
+                            >
+                              {title}
+                            </h4>
+                            <p className="text-sm text-gray-400">{category}</p>
+                            <p className="font-semibold">
+                              NPR. <span className="">{format(price)}</span> /
+                              month
+                            </p>
+                            <p className="text-base">
+                              <LocationOnOutlinedIcon color="secondary" />{" "}
+                              {address?.location}, {address?.streetName}
+                            </p>
+                          </CardContent>
+                        </CardActionArea>
+                      </Link>
                       <div className="flex p-2">
                         <div className="flex items-center gap-1">
                           <img
@@ -111,23 +113,21 @@ const AllRentalProperties = () => {
                             {propertyOwner?.firstName} {propertyOwner?.lastName}
                           </span>
                         </div>
-                        <Button
-                          onClick={() =>
-                            navigate(
-                              `/tenant/owner-user/${propertyOwner?.slug}`
-                            )
-                          }
-                          size="small"
-                          color="tertiary"
-                          variant="outlined"
-                          sx={{
-                            color: "#0496b4",
-                            marginLeft: "auto",
-                            marginRight: "0.25rem",
-                          }}
+                        <Link
+                          to={`/tenant/owner-user/${propertyOwner?.slug}`}
+                          className="ml-auto"
                         >
-                          More Details
-                        </Button>
+                          <Button
+                            size="small"
+                            color="tertiary"
+                            variant="outlined"
+                            sx={{
+                              color: "#0496b4",
+                            }}
+                          >
+                            More Details
+                          </Button>
+                        </Link>
                       </div>
                     </Card>
                   </div>

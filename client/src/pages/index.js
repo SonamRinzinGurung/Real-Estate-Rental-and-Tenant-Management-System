@@ -21,6 +21,7 @@ import AllRentDetailPage from "./ownerPages/AllRentDetailPage";
 import CreateRentDetail from "./ownerPages/CreateRentDetail";
 import SingleRentDetail from "./ownerPages/SingleRentDetail";
 import AllRentalProperties from "./tenantPages/AllRentalProperties";
+import RentalPropertyDetail from "./tenantPages/RentalPropertyDetail";
 
 export {
   Login,
@@ -46,4 +47,5 @@ export {
   CreateRentDetail,
   SingleRentDetail,
   AllRentalProperties,
+  RentalPropertyDetail,
 };

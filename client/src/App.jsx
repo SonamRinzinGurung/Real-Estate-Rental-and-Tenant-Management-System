@@ -23,6 +23,7 @@ import {
   CreateRentDetail,
   SingleRentDetail,
   AllRentalProperties,
+  RentalPropertyDetail,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -126,6 +127,10 @@ function App() {
             <Route
               path="/tenant/rental-properties/all"
               element={<AllRentalProperties />}
+            />
+            <Route
+              path="/tenant/rental-properties/:slug"
+              element={<RentalPropertyDetail />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />
