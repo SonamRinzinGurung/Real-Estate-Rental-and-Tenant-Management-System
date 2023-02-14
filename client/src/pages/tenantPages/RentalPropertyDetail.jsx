@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { getSingleRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { PageLoading, Footer, ImageCarousal } from "../../components";
 import { format, dateFormatter } from "../../utils/valueFormatter";
-import { CardActionArea, Avatar } from "@mui/material";
+import { CardActionArea, Avatar, Button } from "@mui/material";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
@@ -71,6 +71,21 @@ const RentalPropertyDetail = () => {
                     NPR. {format(realEstate?.price)}
                   </span>
                 </div>
+              </div>
+              <div className="">
+                <Link
+                  to={`/tenant/contract/${slug}`}
+                  state={{ realEstateId: realEstate?._id }}
+                >
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    sx={{ color: "#fff" }}
+                  >
+                    View Contract
+                  </Button>
+                </Link>
               </div>
             </div>
           </section>

@@ -8,6 +8,7 @@ import {
   deleteContract,
   getOwnerAllContracts,
   getAllTenantRentalProperties,
+  getTenantContractDetail,
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -65,6 +66,16 @@ router.get(
   "/tenantUser/allRentalProperties",
   authorizeTenantUser,
   getAllTenantRentalProperties
+);
+
+/**
+ * @description Get the contract details for the tenant user using the real estate id
+ * @route GET /api/contract/tenant/:realEstateId
+ */
+router.get(
+  "/tenant/:realEstateId",
+  authorizeTenantUser,
+  getTenantContractDetail
 );
 
 export default router;

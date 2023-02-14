@@ -247,6 +247,37 @@ const getAllTenantRentalProperties = async (req, res) => {
   res.json({ allRentalProperties, count: allRentalProperties.length });
 };
 
+/**
+ * @description Get the contract details for the tenant user using the real estate id
+ * @route GET /api/contract/tenant/:realEstateId
+ * @returns {object} 200 - An object containing the contract details
+ */
+const getTenantContractDetail = async (req, res) => {
+  const contractDetail = await Contract.findOne({
+    realEstate: req.params.realEstateId,
+    tenant: req.user.userId,
+    status: "Active",
+  })
+    .populate({
+      path: "realEstate",
+      select: "title address category slug",
+    })
+    .populate({
+      path: "owner",
+      select: "slug firstName lastName email address phoneNumber",
+    })
+    .populate({
+      path: "tenant",
+      select: "firstName lastName",
+    });
+
+  if (!contractDetail) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  res.json({ contractDetail });
+};
+
 export {
   createContract,
   getContractDetailTenantView,
@@ -255,4 +286,5 @@ export {
   deleteContract,
   getOwnerAllContracts,
   getAllTenantRentalProperties,
+  getTenantContractDetail,
 };

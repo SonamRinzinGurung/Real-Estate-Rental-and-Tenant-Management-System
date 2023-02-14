@@ -65,6 +65,18 @@ export const approveContract = createAsyncThunk(
   }
 );
 
+export const getContractWithRealEstateID = createAsyncThunk(
+  "getContractWithRealEstateID",
+  async ({ realEstateId }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get(`/contract/tenant/${realEstateId}`);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const tenantUserSlice = createSlice({
   name: "tenantUser",
   initialState: {
@@ -156,6 +168,20 @@ const tenantUserSlice = createSlice({
       })
       .addCase(approveContract.rejected, (state, action) => {
         state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getContractWithRealEstateID.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(getContractWithRealEstateID.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.contractDetail = action.payload.contractDetail;
+        state.alertFlag = false;
+      })
+      .addCase(getContractWithRealEstateID.rejected, (state, action) => {
+        state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
