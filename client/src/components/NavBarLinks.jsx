@@ -1,125 +1,130 @@
-import { useCallback } from "react";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavBarLinksOwner = ({ toggleMenu }) => {
-  const navigate = useNavigate();
   return (
     <>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/owner");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
+      <Link to="/owner" onClick={toggleMenu} className="text-center">
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Home
+        </Button>
+      </Link>
+      <Link
+        to="/owner/property/post"
+        onClick={toggleMenu}
+        className="text-center"
       >
-        Home
-      </Button>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/owner/property/post");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Post Property
+        </Button>
+      </Link>
+      <Link
+        to="/owner/contacts/all"
+        onClick={toggleMenu}
+        className="text-center"
       >
-        Post Property
-      </Button>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/owner/contacts/all");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
-      >
-        Contacts
-      </Button>
-
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/owner/rentDetail");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
-      >
-        Rent
-      </Button>
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Contacts
+        </Button>
+      </Link>
+      <Link to="/owner/rentDetail" onClick={toggleMenu} className="text-center">
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Rent
+        </Button>
+      </Link>
     </>
   );
 };
 
 const NavBarLinksTenant = ({ toggleMenu }) => {
-  const navigate = useNavigate();
   return (
     <>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/tenant");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
+      <Link to="/tenant" onClick={toggleMenu} className="text-center">
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Home
+        </Button>
+      </Link>
+      <Link
+        to="/tenant/rental-properties/all"
+        onClick={toggleMenu}
+        className="text-center"
       >
-        Home
-      </Button>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/tenant/rental-properties/all");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Rental Properties
+        </Button>
+      </Link>
+      <Link
+        to="/tenant/real-estate/saved/all"
+        onClick={toggleMenu}
+        className="text-center"
       >
-        Rental Properties
-      </Button>
-      <Button
-        type="text"
-        onClick={useCallback(() => {
-          navigate("/tenant/real-estate/saved/all");
-          toggleMenu();
-        }, [navigate, toggleMenu])}
-        sx={{
-          color: "black",
-          "&:hover": {
-            color: "primary.dark",
-          },
-        }}
-      >
-        Saved
-      </Button>
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Saved
+        </Button>
+      </Link>
     </>
   );
 };

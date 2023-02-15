@@ -9,6 +9,7 @@ import {
   CardMedia,
   CardContent,
   CardActionArea,
+  Avatar,
 } from "@mui/material";
 import { format } from "../../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -104,10 +105,10 @@ const AllRentalProperties = () => {
                       </Link>
                       <div className="flex p-2">
                         <div className="flex items-center gap-1">
-                          <img
-                            className="w-6 h-6 rounded-full ml-1 object-cover"
+                          <Avatar
                             src={propertyOwner?.profileImage}
                             alt={propertyOwner?.firstName}
+                            sx={{ width: 36, height: 36 }}
                           />
                           <span className="font-semibold text-xs text-gray-600">
                             {propertyOwner?.firstName} {propertyOwner?.lastName}

@@ -98,7 +98,10 @@ const RentalPropertyDetail = () => {
                     <ContactsRoundedIcon color="secondary" />
                   </div>
                   <div className="flex mt-4 gap-2 items-center">
-                    <Avatar src={realEstate?.propertyOwner?.profileImage} />
+                    <Avatar
+                      src={realEstate?.propertyOwner?.profileImage}
+                      alt={(realEstate?.propertyOwner?.firstName).toUpperCase()}
+                    />
                     <p className="leading-4">
                       {realEstate?.propertyOwner?.firstName}{" "}
                       {realEstate?.propertyOwner?.lastName}

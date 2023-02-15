@@ -1,18 +1,17 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getSingleRentDetailOwnerView } from "../../features/rentDetail/rentDetailSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, Footer, ImageCarousal } from "../../components";
-import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import { CardActionArea, Avatar } from "@mui/material";
 import { dateFormatter, format } from "../../utils/valueFormatter";
+import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 
 const SingleRentDetail = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { rentDetailId } = useParams();
 
   const { isLoading, rentDetail } = useSelector((state) => state.rentDetail);
@@ -27,9 +26,9 @@ const SingleRentDetail = () => {
 
   return (
     <>
-      <main className="mb-12 mt-10">
+      <main className="mb-12 mt-10 mx-12">
         <h3 className="mb-4 font-heading font-bold ml-12">Rent Detail</h3>
-        <section className="flex flex-col gap-4 rounded-md mx-12 md:flex-row">
+        <section className="flex flex-col gap-12 rounded-md md:flex-row">
           <div className="w-full md:w-2/3">
             <ImageCarousal
               realEstateImages={rentDetail?.realEstate?.realEstateImages}
@@ -37,14 +36,11 @@ const SingleRentDetail = () => {
           </div>
           <div className="">
             <div className="flex flex-col gap-2">
-              <h3
-                className="font-semibold hover:text-primaryDark duration-300 ease-in-out cursor-pointer"
-                onClick={() =>
-                  navigate(`/owner/real-estate/${rentDetail?.realEstate?.slug}`)
-                }
-              >
-                {rentDetail?.realEstate?.title}
-              </h3>
+              <Link to={`/owner/real-estate/${rentDetail?.realEstate?.slug}`}>
+                <h3 className="font-semibold hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
+                  {rentDetail?.realEstate?.title}
+                </h3>
+              </Link>
               <p className="font-roboto text-gray-500">
                 {rentDetail?.realEstate?.category}
               </p>
@@ -77,34 +73,35 @@ const SingleRentDetail = () => {
             </div>
           </div>
         </section>
-        <div className="mx-12 mt-4">
-          <CardActionArea
-            onClick={() =>
-              navigate(`/owner/tenant-user/${rentDetail?.tenant?.slug}`)
-            }
-            sx={{ borderRadius: "0.375rem" }}
-          >
-            <div className="p-4">
-              <div className="flex gap-2 items-center">
-                <h4 className="font-medium">Tenant Info</h4>
-                <ContactsRoundedIcon color="secondary" />
+        <div className="mt-6">
+          <Link to={`/owner/tenant-user/${rentDetail?.tenant?.slug}`}>
+            <CardActionArea sx={{ borderRadius: "0.375rem" }}>
+              <div className="p-4 shadow-lg rounded-md">
+                <div className="flex gap-2 items-center">
+                  <h4 className="font-medium">Tenant Info</h4>
+                  <ContactsRoundedIcon color="secondary" />
+                </div>
+                <div className="flex mt-4 gap-2 items-center">
+                  <Avatar
+                    src={rentDetail?.tenant?.profileImage}
+                    alt={(rentDetail?.tenant?.firstName).toUpperCase()}
+                  />
+                  <h5 className="leading-4 font-serif">
+                    {rentDetail?.tenant?.firstName}{" "}
+                    {rentDetail?.tenant?.lastName}
+                  </h5>
+                </div>
+                <div className="flex mt-2 ml-1 gap-2 items-center">
+                  <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
+                  <p className="ml-3">{rentDetail?.tenant?.phoneNumber}</p>
+                </div>
+                <div className="flex mt-2 ml-1 gap-2 items-center">
+                  <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
+                  <p className="">{rentDetail?.tenant?.email}</p>
+                </div>
               </div>
-              <div className="flex mt-4 gap-2 items-center">
-                <Avatar src={rentDetail?.tenant?.profileImage} />
-                <h5 className="leading-4 font-serif">
-                  {rentDetail?.tenant?.firstName} {rentDetail?.tenant?.lastName}
-                </h5>
-              </div>
-              <div className="flex mt-2 ml-1 gap-2 items-center">
-                <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
-                <p className="ml-3">{rentDetail?.tenant?.phoneNumber}</p>
-              </div>
-              <div className="flex mt-2 ml-1 gap-2 items-center">
-                <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-                <p className="">{rentDetail?.tenant?.email}</p>
-              </div>
-            </div>
-          </CardActionArea>
+            </CardActionArea>
+          </Link>
         </div>
       </main>
 

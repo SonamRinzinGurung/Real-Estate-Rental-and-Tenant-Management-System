@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   getContractWithID,
   clearAlert,
@@ -57,20 +57,10 @@ const ContractAgreementPage = () => {
   const calculateTotalRent = useCallback(() => {
     const { paymentPlan, rentAmount } = contractDetail;
     if (paymentPlan === "Monthly") return rentAmount;
-    if (paymentPlan === "Two Months") return rentAmount * 2;
-    if (paymentPlan === "Three Months") return rentAmount * 3;
-    if (paymentPlan === "Six Months") return rentAmount * 6;
-    if (paymentPlan === "Yearly") return rentAmount * 12;
-  }, [contractDetail]);
-
-  // calculate the payment plan duration
-  const calculatePaymentPlanDuration = useCallback(() => {
-    const { paymentPlan } = contractDetail;
-    if (paymentPlan === "Monthly") return "1 Month";
-    if (paymentPlan === "Two Months") return "2 Months";
-    if (paymentPlan === "Three Months") return "3 Months";
-    if (paymentPlan === "Six Months") return "6 Months";
-    if (paymentPlan === "Yearly") return "12 Months";
+    if (paymentPlan === "Every 2 Months") return rentAmount * 2;
+    if (paymentPlan === "Every 3 Months") return rentAmount * 3;
+    if (paymentPlan === "Every 6 Months") return rentAmount * 6;
+    if (paymentPlan === "Every 12 Months") return rentAmount * 12;
   }, [contractDetail]);
 
   if (isLoading) return <PageLoading />;
@@ -92,16 +82,13 @@ const ContractAgreementPage = () => {
           <div className="flex flex-col w-11/12 mx-auto items-center gap-4 sm:flex-row sm:justify-center sm:items-start">
             <div className="flex flex-col gap-2 w-3/5  p-4 items-center text-center">
               <h4 className="font-bold">Real Estate</h4>
-              <h5
-                className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer"
-                onClick={() =>
-                  navigate(
-                    `/tenant/real-estate/${contractDetail?.realEstate?.slug}`
-                  )
-                }
+              <Link
+                to={`/tenant/real-estate/${contractDetail?.realEstate?.slug}`}
               >
-                {contractDetail?.realEstate?.title}
-              </h5>
+                <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
+                  {contractDetail?.realEstate?.title}
+                </h5>
+              </Link>
               <p>{contractDetail?.realEstate?.category}</p>
               <p className="">
                 <LocationOnOutlinedIcon color="success" />{" "}
@@ -112,15 +99,12 @@ const ContractAgreementPage = () => {
 
             <div className="flex flex-col gap-2 w-3/5  p-4 items-center text-center">
               <h4 className="font-bold">Property Owner</h4>
-              <h5
-                className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer"
-                onClick={() =>
-                  navigate(`/tenant/owner-user/${contractDetail?.owner?.slug}`)
-                }
-              >
-                {contractDetail?.owner?.firstName}{" "}
-                {contractDetail?.owner?.lastName}
-              </h5>
+              <Link to={`/tenant/owner-user/${contractDetail?.owner?.slug}`}>
+                <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
+                  {contractDetail?.owner?.firstName}{" "}
+                  {contractDetail?.owner?.lastName}
+                </h5>
+              </Link>
               <div className="flex gap-2 items-center">
                 <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
                 <p className="">{contractDetail?.owner?.phoneNumber}</p>
@@ -179,12 +163,14 @@ const ContractAgreementPage = () => {
             <br />
             <h5>1. Payment of Rent</h5>
             <p>
-              Tenant shall pay rent in the amount of NPR{" "}
-              {format(contractDetail?.rentAmount)} per month. Total Rent amount
-              of NPR {format(calculateTotalRent())} shall be due and payable
-              every {calculatePaymentPlanDuration()} on the first day of the
-              calendar month and shall be considered late if not received by the
-              Landlord on or before the 7th day of the month.
+              Tenant shall pay rent in the amount of{" "}
+              <strong>NPR {format(contractDetail?.rentAmount)}</strong> per
+              month. Total Rent amount of{" "}
+              <strong>NPR {format(calculateTotalRent())}</strong> shall be due
+              and payable <strong>{contractDetail?.paymentPlan}</strong> on the
+              first day of the calendar month and shall be considered late if
+              not received by the Landlord on or before the 7th day of the
+              month.
             </p>
             <br />
             <h5>2. Late Fees</h5>

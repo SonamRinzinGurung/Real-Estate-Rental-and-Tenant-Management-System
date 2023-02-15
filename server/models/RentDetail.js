@@ -22,10 +22,10 @@ const RentDetailSchema = new mongoose.Schema(
       enum: {
         values: [
           "Monthly",
-          "Two Months",
-          "Three Months",
-          "Six Months",
-          "Yearly",
+          "Every 2 Months",
+          "Every 3 Months",
+          "Every 6 Months",
+          "Every 12 Months",
         ],
         message: "{VALUE} is not supported",
       },

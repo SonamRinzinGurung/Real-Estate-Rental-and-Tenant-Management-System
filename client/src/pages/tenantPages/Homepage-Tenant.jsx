@@ -1,13 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { getAllRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  PageLoading,
-  RealEstateCard,
-  Footer,
-  SearchAndFilter,
-} from "../../components";
-import Pagination from "@mui/material/Pagination";
+import { RealEstateCard, Footer, SearchAndFilter } from "../../components";
+import { Pagination, CircularProgress } from "@mui/material";
 
 const Homepage = () => {
   const dispatch = useDispatch();
@@ -92,7 +87,9 @@ const Homepage = () => {
             </h3>
 
             {isLoading ? (
-              <PageLoading />
+              <div className="flex justify-center mt-12 h-screen">
+                <CircularProgress size={"6rem"} />
+              </div>
             ) : (
               <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center">
                 {allRealEstate?.map((item) => {

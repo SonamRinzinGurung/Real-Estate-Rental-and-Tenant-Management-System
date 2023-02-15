@@ -43,10 +43,10 @@ const CreateContractPage = () => {
 
   const paymentPlans = [
     "Monthly",
-    "Two Months",
-    "Three Months",
-    "Six Months",
-    "Yearly",
+    "Every 2 Months",
+    "Every 3 Months",
+    "Every 6 Months",
+    "Every 12 Months",
   ];
 
   // Redirect to detail page of the property after successful contract creation
@@ -83,7 +83,7 @@ const CreateContractPage = () => {
       realEstate,
       rentAmount,
       paymentPlan,
-      startDate: moment(date).format("YYYY-MM-DD"),
+      startDate: moment(date).format("YYYY-MM").concat("-01"),
     });
 
     handleModalOpen();
@@ -129,6 +129,7 @@ const CreateContractPage = () => {
               <DatePicker
                 label="Contract Start Date"
                 value={date}
+                views={["year", "month"]}
                 handleChange={useCallback(
                   (date) => {
                     setDate(date);

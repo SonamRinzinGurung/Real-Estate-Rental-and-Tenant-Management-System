@@ -21,7 +21,7 @@ const Homepage = () => {
       <main className="flex flex-col mb-12 mt-8 md:items-start md:ml-10">
         {allRealEstate?.length === 0 ? (
           <>
-            <div>
+            <div className="mx-auto text-center">
               <h4 className="mb-4">You have not posted any properties</h4>
               <Button
                 href="/owner/property/post"

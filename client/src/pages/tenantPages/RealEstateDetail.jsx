@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   getSingleRealEstate,
   clearAlert,
@@ -43,7 +43,6 @@ const RealEstateDetail = () => {
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { slug } = useParams();
 
@@ -148,34 +147,36 @@ const RealEstateDetail = () => {
           </div>
         </div>
         <aside className="mx-auto my-10 p-4 lg:w-1/3 lg:mr-14">
-          <CardActionArea
-            onClick={() =>
-              navigate(`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`)
-            }
-          >
-            <div className="shadow-lg rounded-md p-4">
-              <div className="flex gap-2 items-center">
-                <h4 className="font-medium">Contact Info</h4>
-                <ContactsRoundedIcon color="secondary" />
+          <Link to={`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`}>
+            <CardActionArea sx={{ borderRadius: "0.375rem" }}>
+              <div className="shadow-lg rounded-md p-4">
+                <div className="flex gap-2 items-center">
+                  <h4 className="font-medium">Contact Info</h4>
+                  <ContactsRoundedIcon color="secondary" />
+                </div>
+                <div className="flex mt-4 gap-2 items-center">
+                  <Avatar
+                    src={realEstate?.propertyOwner?.profileImage}
+                    alt={(realEstate?.propertyOwner?.firstName).toUpperCase()}
+                  />
+                  <p className="leading-4">
+                    {realEstate?.propertyOwner?.firstName}{" "}
+                    {realEstate?.propertyOwner?.lastName}
+                  </p>
+                </div>
+                <div className="flex mt-2 ml-1 gap-2 items-center">
+                  <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
+                  <p className="ml-3">
+                    {realEstate?.propertyOwner?.phoneNumber}
+                  </p>
+                </div>
+                <div className="flex mt-2 ml-1 gap-2 items-center">
+                  <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
+                  <p className="">{realEstate?.propertyOwner?.email}</p>
+                </div>
               </div>
-              <div className="flex mt-4 gap-2 items-center">
-                <Avatar src={realEstate?.propertyOwner?.profileImage} />
-                <p className="leading-4">
-                  {realEstate?.propertyOwner?.firstName}{" "}
-                  {realEstate?.propertyOwner?.lastName}
-                </p>
-              </div>
-              <div className="flex mt-2 ml-1 gap-2 items-center">
-                <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
-                <p className="ml-3">{realEstate?.propertyOwner?.phoneNumber}</p>
-              </div>
-              <div className="flex mt-2 ml-1 gap-2 items-center">
-                <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-                <p className="">{realEstate?.propertyOwner?.email}</p>
-              </div>
-            </div>
-          </CardActionArea>
-
+            </CardActionArea>
+          </Link>
           <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-scroll">
             <form onSubmit={handleSendConfirmation}>
               <div className="flex gap-2 items-center">

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Logo, NavBarLinksOwner, NavBarLinksTenant } from "../components";
 import { logOut } from "../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Button,
   Box,
@@ -43,11 +43,6 @@ const Header = () => {
   const logOutUser = useCallback(() => {
     dispatch(logOut());
   }, [dispatch]);
-
-  const navigate = useNavigate();
-  const navigateToProfile = useCallback(() => {
-    navigate(`/${userType}/profile`);
-  }, [userType, navigate]);
 
   return (
     <>
@@ -173,13 +168,15 @@ const Header = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={navigateToProfile}>
-            <Avatar
-              alt={(user?.firstName).toUpperCase()}
-              src={user?.profileImage}
-            />
-            Profile
-          </MenuItem>
+          <Link to={`/${userType}/profile`}>
+            <MenuItem>
+              <Avatar
+                alt={(user?.firstName).toUpperCase()}
+                src={user?.profileImage}
+              />
+              Profile
+            </MenuItem>
+          </Link>
 
           <Divider />
 
