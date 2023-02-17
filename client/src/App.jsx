@@ -25,6 +25,7 @@ import {
   AllRentalProperties,
   RentalPropertyDetail,
   ContractDetailPageTenant,
+  SendPaymentEmailPage,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -97,6 +98,10 @@ function App() {
             <Route
               path="/owner/rentDetail/:rentDetailId"
               element={<SingleRentDetail />}
+            />
+            <Route
+              path="/owner/rentDetail/send-payment-email/:rentDetailId"
+              element={<SendPaymentEmailPage />}
             />
           </Route>
           <Route

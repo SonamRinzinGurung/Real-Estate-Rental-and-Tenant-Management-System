@@ -23,6 +23,7 @@ import SingleRentDetail from "./ownerPages/SingleRentDetail";
 import AllRentalProperties from "./tenantPages/AllRentalProperties";
 import RentalPropertyDetail from "./tenantPages/RentalPropertyDetail";
 import ContractDetailPageTenant from "./tenantPages/ContractDetailPageTenant";
+import SendPaymentEmailPage from "./ownerPages/SendPaymentEmailPage";
 
 export {
   Login,
@@ -50,4 +51,5 @@ export {
   AllRentalProperties,
   RentalPropertyDetail,
   ContractDetailPageTenant,
+  SendPaymentEmailPage,
 };

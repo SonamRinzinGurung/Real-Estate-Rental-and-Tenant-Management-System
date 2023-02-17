@@ -72,7 +72,7 @@ const RealEstateDetail = () => {
 
     const emailTemplate = {
       to: realEstate?.propertyOwner?.email,
-      replyTo: user?.email,
+      from: user?.email,
       subject: `Rental of Property with ID: ${realEstate?.propertyId}`,
       body: `<p>Hi ${realEstate?.propertyOwner?.firstName} ${realEstate?.propertyOwner?.lastName},</p>
       <p>I am interested in renting your property titled <strong>${realEstate?.title}</strong> with ID: ${realEstate?.propertyId}.</p>
@@ -177,7 +177,7 @@ const RealEstateDetail = () => {
               </div>
             </CardActionArea>
           </Link>
-          <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-scroll">
+          <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-auto">
             <form onSubmit={handleSendConfirmation}>
               <div className="flex gap-2 items-center">
                 <h4 className="font-medium">Send Email</h4>

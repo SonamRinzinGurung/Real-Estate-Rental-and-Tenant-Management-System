@@ -212,7 +212,10 @@ const deleteContract = async (req, res) => {
  * @returns
  */
 const getOwnerAllContracts = async (req, res) => {
-  const allContracts = await Contract.find({ owner: req.user.userId })
+  const allContracts = await Contract.find({
+    owner: req.user.userId,
+    status: "Active",
+  })
     .populate({
       path: "realEstate",
       select: "title _id",

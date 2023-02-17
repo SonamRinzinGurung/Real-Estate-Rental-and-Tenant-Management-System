@@ -40,6 +40,18 @@ export const getSingleRentDetailOwnerView = createAsyncThunk(
   }
 );
 
+export const sendPaymentEmailToTenant = createAsyncThunk(
+  "sendPaymentEmailToTenant",
+  async ({ formValues }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.post("/sendEmail", formValues);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const rentDetailSlice = createSlice({
   name: "rentDetail",
   initialState: {
@@ -51,6 +63,7 @@ const rentDetailSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isProcessing: false,
+    success: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -92,6 +105,7 @@ const rentDetailSlice = createSlice({
       })
       .addCase(getSingleRentDetailOwnerView.pending, (state, action) => {
         state.isLoading = true;
+        state.success = null;
       })
       .addCase(getSingleRentDetailOwnerView.fulfilled, (state, action) => {
         state.rentDetail = action.payload.rentDetail;
@@ -100,6 +114,22 @@ const rentDetailSlice = createSlice({
       })
       .addCase(getSingleRentDetailOwnerView.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(sendPaymentEmailToTenant.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(sendPaymentEmailToTenant.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = "Email sent successfully!";
+        state.alertType = "success";
+        state.success = true;
+      })
+      .addCase(sendPaymentEmailToTenant.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

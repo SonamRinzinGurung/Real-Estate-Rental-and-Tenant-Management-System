@@ -110,6 +110,7 @@ const CreateRentDetail = () => {
       realEstate,
       paymentPlan,
       startDate,
+      currentRentDate: startDate,
     });
 
     handleModalOpen();

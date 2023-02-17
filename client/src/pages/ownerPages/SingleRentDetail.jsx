@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getSingleRentDetailOwnerView } from "../../features/rentDetail/rentDetailSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, Footer, ImageCarousal } from "../../components";
-import { CardActionArea, Avatar } from "@mui/material";
+import { CardActionArea, Avatar, Button } from "@mui/material";
 import { dateFormatter, format } from "../../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
@@ -27,7 +27,7 @@ const SingleRentDetail = () => {
   return (
     <>
       <main className="mb-12 mt-10 mx-12">
-        <h3 className="mb-4 font-heading font-bold ml-12">Rent Detail</h3>
+        <h3 className="mb-4 font-heading font-bold">Rent Detail</h3>
         <section className="flex flex-col gap-12 rounded-md md:flex-row">
           <div className="w-full md:w-2/3">
             <ImageCarousal
@@ -70,6 +70,34 @@ const SingleRentDetail = () => {
                 <span className="font-medium">Start Date:</span>{" "}
                 {dateFormatter(rentDetail?.startDate)}
               </p>
+              <p className="font-robotoNormal">
+                <span className="font-medium">Current Rent Date:</span>{" "}
+                {dateFormatter(rentDetail?.currentRentDate)}
+              </p>
+              <div className="flex flex-row gap-10 mt-4">
+                <Link
+                  to={`/owner/rentDetail/send-payment-email/${rentDetail?._id}`}
+                >
+                  <Button
+                    variant="contained"
+                    color="tertiary"
+                    size="small"
+                    sx={{ color: "#fff" }}
+                  >
+                    Send Email
+                  </Button>
+                </Link>
+                <div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    size="small"
+                    sx={{ color: "#fff" }}
+                  >
+                    Rent Paid
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
