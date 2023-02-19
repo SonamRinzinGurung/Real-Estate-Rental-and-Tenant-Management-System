@@ -2,6 +2,7 @@ import TenantUser from "../models/TenantUser.js";
 import OwnerUser from "../models/OwnerUser.js";
 import RealEstate from "../models/RealEstate.js";
 import Contract from "../models/Contract.js";
+import RentDetail from "../models/RentDetail.js";
 
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 import { sendEmail } from "../utils/emailSender.js";
@@ -185,23 +186,27 @@ const getContractDetailOwnerView = async (req, res) => {
  * @returns
  */
 const deleteContract = async (req, res) => {
-  const contract = await Contract.findOneAndRemove({
+  const contract = await Contract.findOneAndDelete({
     _id: req.params.contractId,
     owner: req.user.userId,
+    status: "Pending",
   });
 
   if (!contract) {
     throw new NotFoundError("Contract not found");
   }
 
-  if (contract.status === "Active") {
-    throw new BadRequestError("Contract is active. You cannot delete it");
-  }
-
   //change the status of the real estate to true
   const realEstate = await RealEstate.findById(contract.realEstate);
   realEstate.status = true;
   await realEstate.save();
+
+  //delete the rent detail of the contract from the rent detail collection
+  const rentDetail = await RentDetail.findOneAndDelete({
+    realEstate: contract.realEstate,
+    tenant: contract.tenant,
+    owner: contract.owner,
+  });
 
   res.json({ message: "Contract deleted successfully", success: true });
 };

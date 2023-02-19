@@ -1,7 +1,7 @@
 import TenantUser from "../models/TenantUser.js";
 import RealEstate from "../models/RealEstate.js";
 import RentDetail from "../models/RentDetail.js";
-
+import PaymentHistory from "../models/PaymentHistory.js";
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 
 /**
@@ -100,8 +100,28 @@ const getSingleRentDetailsOwnerView = async (req, res) => {
   res.json({ rentDetail });
 };
 
+/**
+ * @description Create rent payment history
+ * @route POST /api/rentDetail/createPaymentHistory
+ * @returns {object} Rent Details Array
+ */
+const createPaymentHistory = async (req, res) => {
+  const { rentDetail } = req.body;
+
+  // check if rent detail exists
+  const checkRentDetail = await RentDetail.findById(rentDetail);
+  if (!checkRentDetail) {
+    throw new NotFoundError("Rent detail not found");
+  }
+
+  const paymentDetail = await PaymentHistory.create(req.body);
+
+  res.status(201).json({ paymentDetail, msg: "Payment detail created" });
+};
+
 export {
   createRentDetail,
   getAllRentDetailsOwnerView,
   getSingleRentDetailsOwnerView,
+  createPaymentHistory,
 };

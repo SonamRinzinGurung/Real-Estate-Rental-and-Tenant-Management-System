@@ -4,28 +4,31 @@ import {
   createRentDetail,
   getAllRentDetailsOwnerView,
   getSingleRentDetailsOwnerView,
-} from "../controllers/rentDetailControllers.js";
-import {
-  authorizeOwnerUser,
-  authorizeTenantUser,
-} from "../middleware/userAuthorization.js";
+  createPaymentHistory,
+} from "../controllers/rentDetailOwnerControllers.js";
 
 /**
  * @description Create rent payment detail
  * @route POST /api/rentDetail/createDetail
  */
-router.post("/createDetail", authorizeOwnerUser, createRentDetail);
+router.post("/createDetail", createRentDetail);
 
 /**
  * @description Get all the Rent Details for owner user
  * @route GET /api/rentDetail/allRentDetails
  */
-router.get("/allRentDetails", authorizeOwnerUser, getAllRentDetailsOwnerView);
+router.get("/allRentDetails", getAllRentDetailsOwnerView);
 
 /**
  * @description Get Single Rent Detail for owner user
  * @route GET /api/rentDetail/:rentDetailId
  */
-router.get("/:rentDetailId", authorizeOwnerUser, getSingleRentDetailsOwnerView);
+router.get("/:rentDetailId", getSingleRentDetailsOwnerView);
+
+/**
+ * @description Create rent payment detail history
+ * @route POST /api/rentDetail/createPaymentHistory
+ */
+router.post("/createPaymentDetail", createPaymentHistory);
 
 export default router;
