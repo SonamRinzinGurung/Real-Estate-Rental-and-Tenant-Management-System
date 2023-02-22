@@ -1,20 +1,27 @@
 import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getSingleRentDetailOwnerView } from "../../features/rentDetail/rentDetailSlice";
+import { getSingleRentDetailOwnerView } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, Footer, ImageCarousal } from "../../components";
 import { CardActionArea, Avatar, Button } from "@mui/material";
-import { dateFormatter, format } from "../../utils/valueFormatter";
+import {
+  dateFormatter,
+  format,
+  calculateNextDueDate,
+} from "../../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
+import moment from "moment";
 
 const SingleRentDetail = () => {
   const dispatch = useDispatch();
   const { rentDetailId } = useParams();
 
-  const { isLoading, rentDetail } = useSelector((state) => state.rentDetail);
+  const { isLoading, rentDetail } = useSelector(
+    (state) => state.rentDetailOwner
+  );
 
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
@@ -49,11 +56,6 @@ const SingleRentDetail = () => {
                 {rentDetail?.realEstate?.address?.location},{" "}
                 {rentDetail?.realEstate?.address?.streetName} ,Kathmandu
               </p>
-              <div className="">
-                <p className="font-robotoNormal text-xs font-semibold tracking-tight">
-                  Posted on: {dateFormatter(rentDetail?.realEstate?.createdAt)}
-                </p>
-              </div>
             </div>
             <div className="mt-4 text-primaryDark">
               <p className="font-roboto leading-4 ">Rent per month</p>
@@ -67,12 +69,15 @@ const SingleRentDetail = () => {
                 {rentDetail?.paymentPlan}
               </p>
               <p className="font-robotoNormal">
-                <span className="font-medium">Start Date:</span>{" "}
-                {dateFormatter(rentDetail?.startDate)}
+                <span className="font-medium">Current Rent Date:</span>{" "}
+                {moment(rentDetail?.currentRentDate.from).format("MMM Do")} -{" "}
+                {dateFormatter(rentDetail?.currentRentDate.to)}
               </p>
               <p className="font-robotoNormal">
-                <span className="font-medium">Current Rent Date:</span>{" "}
-                {dateFormatter(rentDetail?.currentRentDate)}
+                <span className="font-medium">Next Rent Due:</span>{" "}
+                {dateFormatter(
+                  calculateNextDueDate(rentDetail?.currentRentDate.to)
+                )}
               </p>
               <div className="flex flex-row gap-10 mt-4">
                 <Link
@@ -87,7 +92,12 @@ const SingleRentDetail = () => {
                     Send Email
                   </Button>
                 </Link>
-                <div>
+                <Link
+                  to={"/owner/rentDetail/paymentHistory/create"}
+                  state={{
+                    rentDetailId: rentDetail?._id,
+                  }}
+                >
                   <Button
                     variant="contained"
                     color="secondary"
@@ -96,7 +106,7 @@ const SingleRentDetail = () => {
                   >
                     Rent Paid
                   </Button>
-                </div>
+                </Link>
               </div>
             </div>
           </div>

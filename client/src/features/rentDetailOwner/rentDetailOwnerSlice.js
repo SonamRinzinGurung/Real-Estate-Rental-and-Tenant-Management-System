@@ -52,8 +52,23 @@ export const sendPaymentEmailToTenant = createAsyncThunk(
   }
 );
 
-const rentDetailSlice = createSlice({
-  name: "rentDetail",
+export const createPaymentHistory = createAsyncThunk(
+  "createPaymentHistory",
+  async ({ formData }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.post(
+        "/rentDetail/createPaymentHistory",
+        formData
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+const rentDetailOwnerSlice = createSlice({
+  name: "rentDetailOwner",
   initialState: {
     allRentDetails: null,
     rentDetail: null,
@@ -63,7 +78,6 @@ const rentDetailSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isProcessing: false,
-    success: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -133,9 +147,26 @@ const rentDetailSlice = createSlice({
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
+      })
+      .addCase(createPaymentHistory.pending, (state, action) => {
+        state.isProcessing = true;
+        state.success = null;
+      })
+      .addCase(createPaymentHistory.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload.msg;
+        state.alertType = "success";
+        state.success = true;
+      })
+      .addCase(createPaymentHistory.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
       });
   },
 });
 
-export const { clearAlert } = rentDetailSlice.actions;
-export default rentDetailSlice.reducer;
+export const { clearAlert } = rentDetailOwnerSlice.actions;
+export default rentDetailOwnerSlice.reducer;

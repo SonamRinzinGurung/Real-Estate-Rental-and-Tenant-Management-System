@@ -29,6 +29,6 @@ router.get("/:rentDetailId", getSingleRentDetailsOwnerView);
  * @description Create rent payment detail history
  * @route POST /api/rentDetail/createPaymentHistory
  */
-router.post("/createPaymentDetail", createPaymentHistory);
+router.post("/createPaymentHistory", createPaymentHistory);
 
 export default router;

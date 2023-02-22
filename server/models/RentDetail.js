@@ -46,8 +46,14 @@ const RentDetailSchema = new mongoose.Schema(
       default: "Unpaid",
     },
     currentRentDate: {
-      type: String,
-      default: "",
+      from: {
+        type: String,
+        required: [true, "Please provide a start date"],
+      },
+      to: {
+        type: String,
+        required: [true, "Please provide an end date"],
+      },
     },
   },
   { timestamps: true }

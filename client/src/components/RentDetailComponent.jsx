@@ -7,7 +7,11 @@ import {
   Button,
   Avatar,
 } from "@mui/material";
-import { format, dateFormatter } from "../utils/valueFormatter";
+import {
+  format,
+  dateFormatter,
+  calculateNextDueDate,
+} from "../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 
 const RentDetailComponent = ({
@@ -15,7 +19,7 @@ const RentDetailComponent = ({
   tenant,
   realEstate,
   paymentPlan,
-  startDate,
+  currentRentDate,
 }) => {
   return (
     <Card
@@ -44,7 +48,6 @@ const RentDetailComponent = ({
             >
               {realEstate?.title}
             </h4>
-            <p className="text-sm text-gray-400">{realEstate?.category}</p>
 
             <div>
               <p className="font-semibold">
@@ -59,8 +62,12 @@ const RentDetailComponent = ({
             </div>
             <div className="mt-2">
               <p className="font-robotoNormal">
-                <span className="font-medium">Start Date:</span>{" "}
-                {dateFormatter(startDate)}
+                <span className="font-medium">Current Rent Date:</span>{" "}
+                {dateFormatter(currentRentDate?.from)}
+              </p>
+              <p className="font-robotoNormal">
+                <span className="font-medium">Next Rent Due:</span>{" "}
+                {dateFormatter(calculateNextDueDate(currentRentDate?.to))}
               </p>
               <p className="font-robotoNormal">
                 <span className="font-medium">Payment Plan:</span> {paymentPlan}

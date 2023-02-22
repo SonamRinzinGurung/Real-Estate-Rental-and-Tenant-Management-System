@@ -114,7 +114,19 @@ const createPaymentHistory = async (req, res) => {
     throw new NotFoundError("Rent detail not found");
   }
 
-  const paymentDetail = await PaymentHistory.create(req.body);
+  const { currentRentDate, amountPaid, paymentMethod, nextRentDueDate } =
+    req.body;
+
+  const paymentDetail = await PaymentHistory.create({
+    rentDetail,
+    currentRentDate,
+    amountPaid,
+    paymentMethod,
+  });
+
+  // update next rent due date
+  checkRentDetail.currentRentDate = nextRentDueDate;
+  await checkRentDetail.save();
 
   res.status(201).json({ paymentDetail, msg: "Payment detail created" });
 };

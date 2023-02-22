@@ -8,8 +8,14 @@ const PaymentHistorySchema = new mongoose.Schema(
       required: true,
     },
     currentRentDate: {
-      type: String,
-      required: [true, "Please provide a current rent date"],
+      from: {
+        type: String,
+        required: [true, "Please provide a start date"],
+      },
+      to: {
+        type: String,
+        required: [true, "Please provide an end date"],
+      },
     },
     amountPaid: {
       type: Number,
@@ -18,7 +24,7 @@ const PaymentHistorySchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       enum: {
-        values: ["Cash", "Cheque", "Online"],
+        values: ["Cash", "Cheque", "Bank Transfer", "Online"],
         message: "{VALUE} is not supported",
       },
       required: [true, "Please provide a payment method"],

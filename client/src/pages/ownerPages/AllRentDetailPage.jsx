@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAllRentDetailsOwnerView } from "../../features/rentDetail/rentDetailSlice";
+import { getAllRentDetailsOwnerView } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -10,7 +10,7 @@ const AllRentDetailPage = () => {
   const dispatch = useDispatch();
 
   const { allRentDetails, isLoading } = useSelector(
-    (state) => state.rentDetail
+    (state) => state.rentDetailOwner
   );
 
   useEffect(() => {

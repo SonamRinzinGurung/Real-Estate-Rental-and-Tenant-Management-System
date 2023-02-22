@@ -230,6 +230,7 @@ const ownerUserSlice = createSlice({
       })
       .addCase(getContractOwnerView.pending, (state, action) => {
         state.isLoading = true;
+        state.success = null;
       })
       .addCase(getContractOwnerView.fulfilled, (state, action) => {
         state.isLoading = false;

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   createRentDetail,
   clearAlert,
-} from "../../features/rentDetail/rentDetailSlice";
+} from "../../features/rentDetailOwner/rentDetailOwnerSlice";
 import { getOwnerAllContracts } from "../../features/ownerUser/ownerUserSlice";
 import { AlertToast, ConfirmModal, PageLoading } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
@@ -12,13 +12,14 @@ import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import createRentImage from "../../assets/images/createRentImage.svg";
+import { calculateAddedDate } from "../../utils/valueFormatter";
 
 const CreateRentDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { success, isProcessing, alertFlag, alertMsg, alertType } = useSelector(
-    (state) => state.rentDetail
+    (state) => state.rentDetailOwner
   );
 
   const { allContracts, isLoading } = useSelector((state) => state.ownerUser);
@@ -110,7 +111,10 @@ const CreateRentDetail = () => {
       realEstate,
       paymentPlan,
       startDate,
-      currentRentDate: startDate,
+      currentRentDate: {
+        from: startDate,
+        to: calculateAddedDate(paymentPlan, startDate),
+      },
     });
 
     handleModalOpen();
