@@ -68,7 +68,8 @@ const getAllRentDetailsOwnerView = async (req, res) => {
     .populate({
       path: "owner",
       select: "_id firstName lastName address profileImage slug email",
-    });
+    })
+    .sort({ createdAt: -1 });
 
   res.json({ rentDetails, count: rentDetails.length });
 };
@@ -97,7 +98,9 @@ const getSingleRentDetailsOwnerView = async (req, res) => {
     throw new NotFoundError("Rent detail not found");
   }
 
-  res.json({ rentDetail });
+  const rentStatus = await rentDetail.isRentPaid();
+
+  res.json({ rentDetail, rentStatus });
 };
 
 /**

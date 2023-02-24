@@ -200,6 +200,7 @@ const ownerUserSlice = createSlice({
       })
       .addCase(getAllContacts.pending, (state) => {
         state.isLoading = true;
+        state.success = null;
       })
       .addCase(getAllContacts.fulfilled, (state, action) => {
         state.contacts = action.payload.contacts;

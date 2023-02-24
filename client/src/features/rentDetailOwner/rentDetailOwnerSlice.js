@@ -78,6 +78,7 @@ const rentDetailOwnerSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isProcessing: false,
+    isRentPaid: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -123,6 +124,7 @@ const rentDetailOwnerSlice = createSlice({
       })
       .addCase(getSingleRentDetailOwnerView.fulfilled, (state, action) => {
         state.rentDetail = action.payload.rentDetail;
+        state.isRentPaid = action.payload.rentStatus;
         state.isLoading = false;
         state.alertFlag = false;
       })

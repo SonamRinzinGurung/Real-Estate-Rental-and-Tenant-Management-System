@@ -59,4 +59,14 @@ const RentDetailSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+//check if rent is paid for current month
+RentDetailSchema.methods.isRentPaid = async function () {
+  const rentDeadline = new Date(this.currentRentDate.to);
+  const today = new Date();
+  if (today > rentDeadline) {
+    return false;
+  }
+  return true;
+};
+
 export default mongoose.model("RentDetail", RentDetailSchema);

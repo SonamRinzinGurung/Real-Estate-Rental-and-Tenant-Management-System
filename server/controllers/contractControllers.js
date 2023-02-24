@@ -3,6 +3,7 @@ import OwnerUser from "../models/OwnerUser.js";
 import RealEstate from "../models/RealEstate.js";
 import Contract from "../models/Contract.js";
 import RentDetail from "../models/RentDetail.js";
+import PaymentHistory from "../models/PaymentHistory.js";
 
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 import { sendEmail } from "../utils/emailSender.js";
@@ -46,27 +47,27 @@ const createContract = async (req, res) => {
     throw new NotFoundError("Real estate not found");
   }
 
+  const contract = await Contract.create(req.body);
+  const to = tenantUser.email;
+  const from = ownerUser.email;
+  const subject = `Contract created for rental of property titled ${realEstateUser.title}`;
+  const body = `
+    <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
+    <p>I hope this email finds you well. I am writing to inform about that the contract for rental of property titled <strong>${realEstateUser.title}</strong> located at ${realEstateUser.address.location}, ${realEstateUser.address.streetName} has been created successfully.</p>
+    <p>Please follow the link to view and approve this contract. Please carefully review the rental contract and let us know if you have any questions or concerns.</p>
+    <a href="http://localhost:3000/tenant/contract-agreement/${contract._id}"><strong>View Contract</strong></a><br>
+    <p>Please note that the rental contract is legally binding, and both parties are required to adhere to its terms and conditions.</p>
+    <p>If you have any questions or concerns about the rental contract or the rental process, please do not hesitate to contact me.</p>
+   <br><br>
+    <p>Best regards,</p>
+    <p>${ownerUser.firstName} ${ownerUser.lastName}</p>`;
+
+  //send email to tenant user to approve the contract
+  await sendEmail(to, from, subject, body);
+
   //change the status of the real estate to false
   realEstateUser.status = false;
   await realEstateUser.save();
-
-  const contract = await Contract.create(req.body);
-  const to = tenantUser.email;
-  const replyTo = ownerUser.email;
-  const subject = "Contract created";
-  const body = `
-    <h3>Contract created</h3>
-    <p>Contract created for <strong>${realEstateUser.title}</strong> <span>(${realEstateUser.propertyId})</span></p>
-    <p>Please follow the link to view and approve this contract</p>
-    <a href="http://localhost:3000/tenant/contract-agreement/${contract._id}"><strong>View contract</strong></a>
-   <br><br>
-    <p>Sincerely,</p>
-    <p>${ownerUser.firstName} ${ownerUser.lastName},</p>
-    <p>${ownerUser.address}</p>
-    `;
-
-  //send email to tenant user to approve the contract
-  await sendEmail(to, replyTo, subject, body);
 
   res.json({ contract });
 };
@@ -113,7 +114,7 @@ const approveContract = async (req, res) => {
   })
     .populate({
       path: "realEstate",
-      select: "title",
+      select: "title address",
     })
     .populate({
       path: "owner",
@@ -128,24 +129,26 @@ const approveContract = async (req, res) => {
     throw new NotFoundError("Contract not found");
   }
 
-  //change the status of the contract to true
-  contractDetail.status = "Active";
-  await contractDetail.save();
-
   const to = contractDetail.owner.email;
-  const replyTo = contractDetail.tenant.email;
-  const subject = "Contract approved";
+  const from = contractDetail.tenant.email;
+  const subject = `Contract approved for rental of property titled ${contractDetail.realEstate.title}`;
   const body = `
-    <h3>Contract approved</h3>
-    <p>Contract for <strong>${contractDetail.realEstate.title}</strong> has been approved and accepted.</p>
+    <p> Dear ${contractDetail.owner.firstName} ${contractDetail.owner.lastName},</p> 
+    <p>Thank you for your email informing me that the rental contract has been created for the property titled <strong>${contractDetail.realEstate.title}</strong> at ${contractDetail.realEstate.address.location}, ${contractDetail.realEstate.address.streetName}. 
+    I have carefully reviewed the terms and conditions outlined in the rental agreement and I am pleased to inform you that I agree to the terms and conditions.</p>
+    <p>I appreciate the effort you have put into creating a rental agreement that protects the interests of both parties. I look forward to a positive and mutually beneficial relationship with you as my landlord.</p>
+    <p>Thank you for your assistance.</p>
     <br><br>
-    <p>Sincerely,</p>
-    <p>${contractDetail.tenant.firstName} ${contractDetail.tenant.lastName},</p>
-    <p>${contractDetail.tenant.address}</p>
+    <p>Best Regards,</p>
+    <p>${contractDetail.tenant.firstName} ${contractDetail.tenant.lastName}</p>
     `;
 
   //send email to owner user to approve the contract
-  await sendEmail(to, replyTo, subject, body);
+  await sendEmail(to, from, subject, body);
+
+  //change the status of the contract to true
+  contractDetail.status = "Active";
+  await contractDetail.save();
 
   res.json({ contractDetail });
 };
@@ -189,15 +192,18 @@ const deleteContract = async (req, res) => {
   const contract = await Contract.findOneAndDelete({
     _id: req.params.contractId,
     owner: req.user.userId,
-    status: "Pending",
   });
 
   if (!contract) {
     throw new NotFoundError("Contract not found");
   }
 
-  //change the status of the real estate to true
   const realEstate = await RealEstate.findById(contract.realEstate);
+  if (!realEstate) {
+    throw new NotFoundError("Real Estate Not Found");
+  }
+
+  //change the status of the real estate to true
   realEstate.status = true;
   await realEstate.save();
 
@@ -208,7 +214,45 @@ const deleteContract = async (req, res) => {
     owner: contract.owner,
   });
 
-  res.json({ message: "Contract deleted successfully", success: true });
+  if (rentDetail) {
+    //delete the payment history of the contract from the payment history collection using the rent detail id
+    await PaymentHistory.deleteMany({
+      rentDetail: rentDetail._id,
+    });
+  }
+
+  //send email to tenant user that contract has been deleted
+
+  // get the tenant user and owner user details to send email
+  const tenantUser = await TenantUser.findById(contract.tenant);
+  if (!tenantUser) {
+    throw new NotFoundError("Tenant user not found");
+  }
+
+  const ownerUser = await OwnerUser.findById(req.user.userId);
+
+  //email details
+  const to = tenantUser.email;
+  const from = ownerUser.email;
+  const subject = `Contract terminated of property titled ${realEstate.title}`;
+  const body = `
+    <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
+    <p>I hope this email finds you well. I am writing to inform you about the termination of the rental contract of property titled <strong>${realEstate.title}</strong> 
+    located at ${realEstate.address.location}, ${realEstate.address.streetName}</p>
+    <p>The contract was terminated successfully along with the rent details and payment histories associated with it.</p>
+    <p>Please note that you are required to vacate the property within 7 days. 
+    We will conduct a final inspection of the property to ensure that it is in the same condition as when you moved in, 
+    with reasonable wear and tear accepted. 
+    Any damages or outstanding rent payments will be deducted from your security deposit.</p>
+   <p>Thank you for your cooperation during your stay at our property.</p>
+    <br><br>
+    <p>Best regards,</p>
+    <p>${ownerUser.firstName} ${ownerUser.lastName}</p>`;
+
+  //send email to tenant user that contract has been deleted
+  await sendEmail(to, from, subject, body);
+
+  res.json({ message: "Contract terminated successfully", success: true });
 };
 
 /**

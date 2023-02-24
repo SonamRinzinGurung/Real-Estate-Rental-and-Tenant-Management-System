@@ -14,12 +14,14 @@ import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import moment from "moment";
+import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const SingleRentDetail = () => {
   const dispatch = useDispatch();
   const { rentDetailId } = useParams();
 
-  const { isLoading, rentDetail } = useSelector(
+  const { isLoading, rentDetail, isRentPaid } = useSelector(
     (state) => state.rentDetailOwner
   );
 
@@ -79,35 +81,51 @@ const SingleRentDetail = () => {
                   calculateNextDueDate(rentDetail?.currentRentDate.to)
                 )}
               </p>
-              <div className="flex flex-row gap-10 mt-4">
-                <Link
-                  to={`/owner/rentDetail/send-payment-email/${rentDetail?._id}`}
-                >
-                  <Button
-                    variant="contained"
-                    color="tertiary"
-                    size="small"
-                    sx={{ color: "#fff" }}
+              <p className="font-robotoNormal">
+                <span className="font-medium">Rent Status:</span>{" "}
+                {isRentPaid === true ? (
+                  <>
+                    <DoneRoundedIcon color="success" /> Paid
+                  </>
+                ) : (
+                  <>
+                    <CloseRoundedIcon color="error" /> Not Paid
+                  </>
+                )}
+              </p>
+
+              {/*  If rent is not paid then show the button to send email and mark as paid */}
+              {isRentPaid === false && (
+                <div className="flex flex-row gap-10 mt-4">
+                  <Link
+                    to={`/owner/rentDetail/send-payment-email/${rentDetail?._id}`}
                   >
-                    Send Email
-                  </Button>
-                </Link>
-                <Link
-                  to={"/owner/rentDetail/paymentHistory/create"}
-                  state={{
-                    rentDetailId: rentDetail?._id,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    size="small"
-                    sx={{ color: "#fff" }}
+                    <Button
+                      variant="contained"
+                      color="tertiary"
+                      size="small"
+                      sx={{ color: "#fff" }}
+                    >
+                      Send Email
+                    </Button>
+                  </Link>
+                  <Link
+                    to={"/owner/rentDetail/paymentHistory/create"}
+                    state={{
+                      rentDetailId: rentDetail?._id,
+                    }}
                   >
-                    Rent Paid
-                  </Button>
-                </Link>
-              </div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="small"
+                      sx={{ color: "#fff" }}
+                    >
+                      Rent Paid
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </section>

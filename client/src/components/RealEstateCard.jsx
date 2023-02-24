@@ -92,7 +92,7 @@ const RealEstateCard = ({
                   color: "#0496b4",
                 }}
               >
-                More Details
+                Owner Details
               </Button>
             </Link>
           </div>

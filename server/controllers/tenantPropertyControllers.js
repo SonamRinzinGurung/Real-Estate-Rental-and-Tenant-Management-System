@@ -26,10 +26,12 @@ const getAllProperties = async (req, res) => {
     queryObject.price = { $gte: minPrice, $lte: maxPrice };
   }
 
-  let realEstateResult = RealEstate.find(queryObject).populate({
-    path: "propertyOwner",
-    select: "-password -createdAt -updatedAt -__v -contacts",
-  });
+  let realEstateResult = RealEstate.find(queryObject)
+    .populate({
+      path: "propertyOwner",
+      select: "-password -createdAt -updatedAt -__v -contacts",
+    })
+    .sort({ createdAt: -1 });
 
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 2;

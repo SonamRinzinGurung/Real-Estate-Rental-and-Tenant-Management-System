@@ -1,6 +1,5 @@
 import { format, dateFormatter } from "../utils/valueFormatter";
 import { ImageCarousal } from "../components";
-import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
@@ -17,14 +16,10 @@ const RealEstateDetailCard = ({
   createdAt,
   category,
   propertyId,
-  slug,
   fromTenant,
-  fromOwner,
   isSaved,
   isProcessing,
-  status,
 }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
     <>
@@ -107,50 +102,6 @@ const RealEstateDetailCard = ({
                 )}
               </div>
             )}
-            {fromOwner &&
-              (status ? (
-                <div className="flex flex-wrap  gap-2 mt-2 cursor-pointer text-center">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ color: "#fff" }}
-                    onClick={() => {
-                      navigate(`/owner/real-estate/update/${slug}`);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                  <Link
-                    to={`/owner/contract/create`}
-                    state={{
-                      realEstateId: _id,
-                      title: title,
-                      price: price,
-                      slug: slug,
-                    }}
-                  >
-                    <Button variant="contained" sx={{ color: "#fff" }}>
-                      Create Contract
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="p-2">
-                  <Link
-                    to={`/owner/contract/${slug}`}
-                    state={{ realEstateId: _id }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                      sx={{ color: "#fff" }}
-                    >
-                      View Contract
-                    </Button>
-                  </Link>
-                </div>
-              ))}
           </div>
         </div>
         <ImageCarousal realEstateImages={realEstateImages} />

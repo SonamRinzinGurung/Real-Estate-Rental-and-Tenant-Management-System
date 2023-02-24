@@ -26,7 +26,9 @@ const postRealEstate = async (req, res) => {
  * @returns {object} realEstate
  */
 const getOwnerRealEstates = async (req, res) => {
-  const realEstates = await RealEstate.find({ propertyOwner: req.user.userId });
+  const realEstates = await RealEstate.find({
+    propertyOwner: req.user.userId,
+  }).sort("-createdAt");
   res.json({ realEstates });
 };
 
