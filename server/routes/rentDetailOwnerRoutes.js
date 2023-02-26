@@ -5,6 +5,7 @@ import {
   getAllRentDetailsOwnerView,
   getSingleRentDetailsOwnerView,
   createPaymentHistory,
+  getAllPaymentHistory,
 } from "../controllers/rentDetailOwnerControllers.js";
 
 /**
@@ -30,5 +31,11 @@ router.get("/:rentDetailId", getSingleRentDetailsOwnerView);
  * @route POST /api/rentDetail/createPaymentHistory
  */
 router.post("/createPaymentHistory", createPaymentHistory);
+
+/**
+ * @description Get All Payment History for owner user
+ * @route GET /api/rentDetail/allPaymentHistory/:rentDetailId
+ */
+router.get("/allPaymentHistory/:rentDetailId", getAllPaymentHistory);
 
 export default router;

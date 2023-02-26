@@ -36,15 +36,6 @@ const RentDetailSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a start date"],
     },
-    paymentStatus: {
-      type: String,
-      enum: {
-        values: ["Paid", "Unpaid"],
-        message: "{VALUE} is not supported",
-      },
-      required: [true, "Please provide a payment status"],
-      default: "Unpaid",
-    },
     currentRentDate: {
       from: {
         type: String,
@@ -63,10 +54,7 @@ const RentDetailSchema = new mongoose.Schema(
 RentDetailSchema.methods.isRentPaid = async function () {
   const rentDeadline = new Date(this.currentRentDate.to);
   const today = new Date();
-  if (today > rentDeadline) {
-    return false;
-  }
-  return true;
+  return today <= rentDeadline;
 };
 
 export default mongoose.model("RentDetail", RentDetailSchema);
