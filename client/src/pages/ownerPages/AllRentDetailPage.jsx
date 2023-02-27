@@ -49,7 +49,7 @@ const AllRentDetailPage = () => {
         <h3 className="my-4 font-heading font-bold text-center">
           Rent Details
         </h3>
-        <div className="flex flex-wrap gap-8 justify-center">
+        <div className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
           {allRentDetails?.map((rentDetail) => (
             <RentDetailComponent key={rentDetail._id} {...rentDetail} />
           ))}

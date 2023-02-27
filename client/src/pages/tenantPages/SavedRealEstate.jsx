@@ -24,7 +24,7 @@ const SavedRealEstate = () => {
         <h3 className="my-4 font-heading font-bold text-center">
           Saved Properties
         </h3>
-        <div className="justify-center flex flex-wrap gap-8">
+        <div className="justify-center flex flex-wrap gap-8 mx-4 md:mx-0">
           {allRealEstate?.map((item) => {
             return <RealEstateCard key={item._id} {...item} />;
           })}

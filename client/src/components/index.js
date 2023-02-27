@@ -20,6 +20,8 @@ import UpdatePropertyForm from "./ownerComponents/UpdatePropertyForm";
 import ContactsCard from "./ownerComponents/ContactsCard";
 import ConfirmModal from "./ConfirmModal";
 import RentDetailComponent from "./RentDetailComponent";
+import ScrollToTop from "./ScrollToTop";
+import PaymentHistoryComponent from "./PaymentHistoryComponent";
 
 export {
   SharedLayoutOwner,
@@ -46,4 +48,6 @@ export {
   ContactsCard,
   ConfirmModal,
   RentDetailComponent,
+  ScrollToTop,
+  PaymentHistoryComponent,
 };

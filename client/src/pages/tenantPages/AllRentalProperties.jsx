@@ -51,7 +51,7 @@ const AllRentalProperties = () => {
               Your Rental{" "}
               {allRentalProperties?.length > 1 ? "Properties" : "Property"}
             </h3>
-            <div className="flex flex-wrap gap-8 justify-center">
+            <div className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
               {allRentalProperties?.map((item) => {
                 const {
                   title,
@@ -63,75 +63,73 @@ const AllRentalProperties = () => {
                   slug,
                 } = item?.realEstate;
                 return (
-                  <div key={item._id}>
-                    <Card
-                      sx={{
-                        minWidth: 345,
-                        maxWidth: 345,
-                        bgcolor: "transparent",
-                        boxShadow: "none",
-                        "&:hover": {
-                          boxShadow: "0 2px 5px 0 rgba(0,0,0,0.2)",
-                        },
-                        color: "#102a43",
-                      }}
-                    >
-                      <Link to={`/tenant/rental-properties/${slug}`}>
-                        <CardActionArea>
-                          <CardMedia
-                            component="img"
-                            sx={{ maxHeight: 150 }}
-                            image={realEstateImages[0]}
-                            alt={title}
-                          />
-                          <CardContent>
-                            <h4
-                              className="mb-1 overflow-hidden overflow-ellipsis whitespace-nowrap hover:text-primaryDark duration-300 ease-in-out"
-                              style={{ maxWidth: "31ch" }}
-                            >
-                              {title}
-                            </h4>
-                            <p className="text-sm text-gray-400">{category}</p>
-                            <p className="font-semibold">
-                              NPR. <span className="">{format(price)}</span> /
-                              month
-                            </p>
-                            <p className="text-base">
-                              <LocationOnOutlinedIcon color="secondary" />{" "}
-                              {address?.location}, {address?.streetName}
-                            </p>
-                          </CardContent>
-                        </CardActionArea>
-                      </Link>
-                      <div className="flex p-2">
-                        <div className="flex items-center gap-1">
-                          <Avatar
-                            src={propertyOwner?.profileImage}
-                            alt={propertyOwner?.firstName}
-                            sx={{ width: 36, height: 36 }}
-                          />
-                          <span className="font-semibold text-xs text-gray-600">
-                            {propertyOwner?.firstName} {propertyOwner?.lastName}
-                          </span>
-                        </div>
-                        <Link
-                          to={`/tenant/owner-user/${propertyOwner?.slug}`}
-                          className="ml-auto"
-                        >
-                          <Button
-                            size="small"
-                            color="tertiary"
-                            variant="outlined"
-                            sx={{
-                              color: "#0496b4",
-                            }}
+                  <Card
+                    sx={{
+                      width: 345,
+                      bgcolor: "transparent",
+                      boxShadow: "none",
+                      "&:hover": {
+                        boxShadow: "0 2px 5px 0 rgba(0,0,0,0.2)",
+                      },
+                      color: "#102a43",
+                    }}
+                    key={item._id}
+                  >
+                    <Link to={`/tenant/rental-properties/${slug}`}>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          sx={{ maxHeight: 150 }}
+                          image={realEstateImages[0]}
+                          alt={title}
+                        />
+                        <CardContent>
+                          <h4
+                            className="mb-1 overflow-hidden overflow-ellipsis whitespace-nowrap hover:text-primaryDark duration-300 ease-in-out"
+                            style={{ maxWidth: "31ch" }}
                           >
-                            Owner Details
-                          </Button>
-                        </Link>
+                            {title}
+                          </h4>
+                          <p className="text-sm text-gray-400">{category}</p>
+                          <p className="font-semibold">
+                            NPR. <span className="">{format(price)}</span> /
+                            month
+                          </p>
+                          <p className="text-base">
+                            <LocationOnOutlinedIcon color="secondary" />{" "}
+                            {address?.location}, {address?.streetName}
+                          </p>
+                        </CardContent>
+                      </CardActionArea>
+                    </Link>
+                    <div className="flex p-2">
+                      <div className="flex items-center gap-1">
+                        <Avatar
+                          src={propertyOwner?.profileImage}
+                          alt={propertyOwner?.firstName}
+                          sx={{ width: 36, height: 36 }}
+                        />
+                        <span className="font-semibold text-xs text-gray-600">
+                          {propertyOwner?.firstName} {propertyOwner?.lastName}
+                        </span>
                       </div>
-                    </Card>
-                  </div>
+                      <Link
+                        to={`/tenant/owner-user/${propertyOwner?.slug}`}
+                        className="ml-auto"
+                      >
+                        <Button
+                          size="small"
+                          color="tertiary"
+                          variant="outlined"
+                          sx={{
+                            color: "#0496b4",
+                          }}
+                        >
+                          Owner Details
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
                 );
               })}
             </div>

@@ -91,7 +91,7 @@ const Homepage = () => {
                 <CircularProgress size={"6rem"} />
               </div>
             ) : (
-              <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center">
+              <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center mx-4 md:mx-0">
                 {allRealEstate?.map((item) => {
                   return <RealEstateCard key={item._id} {...item} />;
                 })}

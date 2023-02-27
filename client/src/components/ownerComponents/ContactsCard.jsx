@@ -14,8 +14,7 @@ const ContactsCard = ({
   return (
     <Card
       sx={{
-        minWidth: 345,
-        maxWidth: 345,
+        width: 345,
         bgcolor: "transparent",
         boxShadow: "none",
         "&:hover": {

@@ -33,6 +33,7 @@ import {
   SharedLayoutTenant,
   ProtectedRoutesOwner,
   ProtectedRoutesTenant,
+  ScrollToTop,
 } from "./components";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -58,6 +59,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
+        <ScrollToTop /> {/*Scroll to top when route changes*/}
         <Routes>
           <Route
             path="/owner"

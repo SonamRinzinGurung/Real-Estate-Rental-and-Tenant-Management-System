@@ -24,7 +24,7 @@ const AllContacts = () => {
     <>
       <main className="flex flex-col mb-12 mt-8 md:items-start md:ml-10">
         <h3 className="my-4 font-heading font-bold text-center">Contacts</h3>
-        <div className="justify-center flex flex-wrap gap-8">
+        <div className="justify-center flex flex-wrap gap-8 mx-4 md:mx-0">
           {contacts?.map((user) => {
             return <ContactsCard key={user._id} {...user} />;
           })}
