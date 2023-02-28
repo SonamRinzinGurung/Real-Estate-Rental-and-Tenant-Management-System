@@ -137,7 +137,7 @@ const SingleRentDetail = () => {
               </p>
 
               {/*  If rent is not paid then show the button to send email and mark as paid */}
-              {!isRentPaid === false && (
+              {isRentPaid === false && (
                 <div className="flex flex-row gap-10 mt-4">
                   <Button
                     variant="contained"

@@ -18,6 +18,7 @@ import tenantUserRoutes from "./routes/tenantUserRoutes.js";
 import emailSenderRoutes from "./routes/emailSenderRoutes.js";
 import contractRoutes from "./routes/contractRoutes.js";
 import ownerRentDetailRoutes from "./routes/rentDetailOwnerRoutes.js";
+import tenantRentDetailRoutes from "./routes/rentDetailTenantRoutes.js";
 
 import routeNotFoundMiddleware from "./middleware/route-not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
@@ -62,6 +63,7 @@ app.use("/api/sendEmail", emailSenderRoutes); //send email
 app.use("/api/contract", contractRoutes);
 
 app.use("/api/rentDetail", authorizeOwnerUser, ownerRentDetailRoutes);
+app.use("/api/rentDetailTenant", authorizeTenantUser, tenantRentDetailRoutes);
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -11,8 +11,8 @@ const AlertToast = ({ alertFlag, alertMsg, alertType, handleClose }) => {
       autoHideDuration={4000}
       onClose={handleClose}
     >
-      <Alert severity={alertType} sx={{ width: "250px" }}>
-        {alertMsg}
+      <Alert severity={alertType || "success"} sx={{ width: "250px" }}>
+        {alertMsg || ""}
       </Alert>
     </Snackbar>
   );
