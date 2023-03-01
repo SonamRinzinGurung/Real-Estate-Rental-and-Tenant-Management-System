@@ -33,7 +33,7 @@ const RentalPropertyDetail = () => {
 
   return (
     <>
-      <main className="mb-12 mt-10 mx-12">
+      <main className="mb-12 mt-10 mx-4 md:mx-12">
         <div className="flex flex-col gap-4 mx-auto">
           <h3 className="font-heading font-bold">Rental Property Detail</h3>
           <section className="flex flex-col gap-12 rounded-md md:flex-row">
@@ -72,7 +72,7 @@ const RentalPropertyDetail = () => {
                   </span>
                 </div>
               </div>
-              <div className="">
+              <div className="flex flex-wrap gap-6">
                 <Link
                   to={`/tenant/contract/${slug}`}
                   state={{ realEstateId: realEstate?._id }}
@@ -84,6 +84,19 @@ const RentalPropertyDetail = () => {
                     sx={{ color: "#fff" }}
                   >
                     View Contract
+                  </Button>
+                </Link>
+                <Link
+                  to={`/tenant/rentDetail/${realEstate?._id + "/" + slug}`}
+                  state={{ realEstateId: realEstate?._id }}
+                >
+                  <Button
+                    variant="contained"
+                    color="tertiary"
+                    size="small"
+                    sx={{ color: "#fff" }}
+                  >
+                    Rent Detail
                   </Button>
                 </Link>
               </div>
@@ -115,7 +128,9 @@ const RentalPropertyDetail = () => {
                   </div>
                   <div className="flex mt-2 ml-1 gap-2 items-center">
                     <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-                    <p className="">{realEstate?.propertyOwner?.email}</p>
+                    <p className="overflow-auto">
+                      {realEstate?.propertyOwner?.email}
+                    </p>
                   </div>
                 </div>
               </CardActionArea>

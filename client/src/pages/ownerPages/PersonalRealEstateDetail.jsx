@@ -30,7 +30,7 @@ const PersonalRealEstateDetail = () => {
 
   return (
     <>
-      <main className="mb-12 mt-10 mx-12">
+      <main className="mb-12 mt-10 mx-4 md:mx-12">
         <div className="flex flex-col gap-4 mx-auto">
           <h3 className="font-heading font-bold">Rental Property Detail</h3>
           <section className="flex flex-col gap-12 rounded-md md:flex-row">

@@ -27,6 +27,7 @@ import {
   ContractDetailPageTenant,
   SendPaymentEmailPage,
   CreatePaymentHistory,
+  RentDetailTenantPage,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -148,6 +149,10 @@ function App() {
             <Route
               path="/tenant/contract/:slug"
               element={<ContractDetailPageTenant />}
+            />
+            <Route
+              path="/tenant/rentDetail/:realEstateId/:slug"
+              element={<RentDetailTenantPage />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />

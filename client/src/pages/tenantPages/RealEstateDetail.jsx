@@ -146,7 +146,7 @@ const RealEstateDetail = () => {
             </div>
           </div>
         </div>
-        <aside className="mx-auto my-10 p-4 lg:w-1/3 lg:mr-14">
+        <aside className="mx-4 my-10 p-4 lg:w-1/3 lg:mr-14">
           <Link to={`/tenant/owner-user/${realEstate?.propertyOwner?.slug}`}>
             <CardActionArea sx={{ borderRadius: "0.375rem" }}>
               <div className="shadow-lg rounded-md p-4">
@@ -172,13 +172,15 @@ const RealEstateDetail = () => {
                 </div>
                 <div className="flex mt-2 ml-1 gap-2 items-center">
                   <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-                  <p className="">{realEstate?.propertyOwner?.email}</p>
+                  <p className="overflow-auto">
+                    {realEstate?.propertyOwner?.email}
+                  </p>
                 </div>
               </div>
             </CardActionArea>
           </Link>
-          <div className="mt-8 shadow-lg rounded-md p-4 overflow-x-auto">
-            <form onSubmit={handleSendConfirmation}>
+          <div className="mt-8 shadow-lg rounded-md p-4">
+            <form className="overflow-x-auto" onSubmit={handleSendConfirmation}>
               <div className="flex gap-2 items-center">
                 <h4 className="font-medium">Send Email</h4>
                 <ForwardToInboxRoundedIcon color="tertiary" />

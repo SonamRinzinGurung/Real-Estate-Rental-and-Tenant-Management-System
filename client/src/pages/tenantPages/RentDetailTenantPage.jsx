@@ -1,16 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import {
-  getSingleRentDetailOwnerView,
-  getAllPaymentHistory,
-} from "../../features/rentDetailOwner/rentDetailOwnerSlice";
+import { getSingleRentDetailTenantView } from "../../features/rentDetailTenant/rentDetailTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  PageLoading,
-  Footer,
-  ImageCarousal,
-  PaymentHistoryComponent,
-} from "../../components";
+import { PageLoading, Footer, ImageCarousal } from "../../components";
 import { CardActionArea, Avatar, Button } from "@mui/material";
 import {
   dateFormatter,
@@ -25,57 +17,36 @@ import moment from "moment";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-const SingleRentDetail = () => {
+const RentDetailTenantPage = () => {
+  const { slug, realEstateId } = useParams();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { rentDetailId } = useParams();
 
-  const ref = useRef(null);
-
-  const {
-    isLoading,
-    rentDetail,
-    isRentPaid,
-    allPaymentHistory,
-    isProcessing,
-    numberOfPages,
-  } = useSelector((state) => state.rentDetailOwner);
-
-  const initialQuery = {
-    page: 1,
-    rentDetailId: rentDetailId,
-  };
-
-  // state to store query for payment history
-  const [query, setQuery] = useState(initialQuery);
+  const { rentDetail, isLoading, isRentPaid } = useSelector(
+    (state) => state.rentDetailTenant
+  );
 
   useEffect(() => {
-    dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
-  }, [dispatch, rentDetailId]);
-
-  // useEffect to get all payment history of a rent detail
-  useEffect(() => {
-    dispatch(getAllPaymentHistory({ ...query }));
-  }, [dispatch, query]);
-
-  // state to show payment history component
-  const [showPaymentHistory, setShowPaymentHistory] = useState(false);
-
-  // function to handle page number change
-  const handlePageChange = (event, value) => {
-    setQuery({ ...query, page: value });
-  };
-
-  // function to handle click on show payment history button
-  const handleShowPayment = () => {
-    dispatch(getAllPaymentHistory({ rentDetailId }));
-    setShowPaymentHistory(true); // show payment history component
-    ref.current.scrollIntoView({ behavior: "smooth" }); // scroll to payment history component on click smoothly
-  };
+    dispatch(getSingleRentDetailTenantView({ realEstateId }));
+  }, [realEstateId, dispatch]);
 
   if (isLoading) return <PageLoading />;
   if (!rentDetail)
-    return <h1 className="mt-6 text-center">Rent Detail Not Found</h1>;
+    return (
+      <>
+        <div className="flex flex-col mx-10">
+          <h1 className="mt-6 text-center">Rent Detail Not Found</h1>
+          <Button
+            size="large"
+            variant="text"
+            onClick={() => navigate(`/tenant/rental-properties/${slug}`)}
+          >
+            Go Back
+          </Button>
+        </div>
+      </>
+    );
 
   return (
     <>
@@ -135,95 +106,37 @@ const SingleRentDetail = () => {
                   </>
                 )}
               </p>
-
-              {/*  If rent is not paid then show the button to send email and mark as paid */}
-              {isRentPaid === false && (
-                <div className="flex flex-row gap-8 mt-4">
-                  <Button
-                    variant="contained"
-                    color="tertiary"
-                    size="small"
-                    sx={{ color: "#fff" }}
-                    onClick={() =>
-                      navigate(
-                        `/owner/rentDetail/send-payment-email/${rentDetail?._id}`
-                      )
-                    }
-                  >
-                    Send Email
-                  </Button>
-
-                  <Link
-                    to={"/owner/rentDetail/paymentHistory/create"}
-                    state={{
-                      rentDetailId: rentDetail?._id,
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      sx={{ color: "#fff" }}
-                    >
-                      Register Payment
-                    </Button>
-                  </Link>
-                </div>
-              )}
-              <div className="mt-6">
-                <Button
-                  onClick={handleShowPayment}
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  sx={{ color: "#fff" }}
-                >
-                  View Payment History
-                </Button>
-              </div>
             </div>
           </div>
         </section>
         <div className="mt-8">
-          <Link to={`/owner/tenant-user/${rentDetail?.tenant?.slug}`}>
+          <Link to={`/tenant/owner-user/${rentDetail?.owner?.slug}`}>
             <CardActionArea sx={{ borderRadius: "0.375rem" }}>
               <div className="p-4 shadow-lg rounded-md">
                 <div className="flex gap-2 items-center">
-                  <h4 className="font-medium">Tenant Info</h4>
+                  <h4 className="font-medium">Owner Info</h4>
                   <ContactsRoundedIcon color="secondary" />
                 </div>
                 <div className="flex mt-4 gap-2 items-center">
                   <Avatar
-                    src={rentDetail?.tenant?.profileImage}
-                    alt={(rentDetail?.tenant?.firstName).toUpperCase()}
+                    src={rentDetail?.owner?.profileImage}
+                    alt={(rentDetail?.owner?.firstName).toUpperCase()}
                   />
                   <h5 className="leading-4 font-serif">
-                    {rentDetail?.tenant?.firstName}{" "}
-                    {rentDetail?.tenant?.lastName}
+                    {rentDetail?.owner?.firstName} {rentDetail?.owner?.lastName}
                   </h5>
                 </div>
                 <div className="flex mt-2 ml-1 gap-2 items-center">
                   <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
-                  <p className="ml-3">{rentDetail?.tenant?.phoneNumber}</p>
+                  <p className="ml-3">{rentDetail?.owner?.phoneNumber}</p>
                 </div>
                 <div className="flex mt-2 ml-1 gap-2 items-center">
                   <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
-                  <p className="overflow-auto">{rentDetail?.tenant?.email}</p>
+                  <p className="overflow-auto">{rentDetail?.owner?.email}</p>
                 </div>
               </div>
             </CardActionArea>
           </Link>
-        </div>
-        <div ref={ref}>
-          {showPaymentHistory && (
-            <PaymentHistoryComponent
-              allPaymentHistory={allPaymentHistory}
-              isProcessing={isProcessing}
-              numberOfPages={numberOfPages}
-              page={query.page}
-              handlePageChange={handlePageChange}
-            />
-          )}
         </div>
       </main>
 
@@ -232,4 +145,4 @@ const SingleRentDetail = () => {
   );
 };
 
-export default SingleRentDetail;
+export default RentDetailTenantPage;
