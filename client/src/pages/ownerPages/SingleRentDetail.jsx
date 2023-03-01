@@ -41,35 +41,27 @@ const SingleRentDetail = () => {
     numberOfPages,
   } = useSelector((state) => state.rentDetailOwner);
 
-  const initialQuery = {
-    page: 1,
-    rentDetailId: rentDetailId,
-  };
-
-  // state to store query for payment history
-  const [query, setQuery] = useState(initialQuery);
+  // state to store page for payment history
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
   }, [dispatch, rentDetailId]);
-
-  // useEffect to get all payment history of a rent detail
-  useEffect(() => {
-    dispatch(getAllPaymentHistory({ ...query }));
-  }, [dispatch, query]);
 
   // state to show payment history component
   const [showPaymentHistory, setShowPaymentHistory] = useState(false);
 
   // function to handle page number change
   const handlePageChange = (event, value) => {
-    setQuery({ ...query, page: value });
+    setPage(value);
+    dispatch(getAllPaymentHistory({ page: value, rentDetailId }));
   };
 
   // function to handle click on show payment history button
   const handleShowPayment = () => {
-    dispatch(getAllPaymentHistory({ rentDetailId }));
+    dispatch(getAllPaymentHistory({ rentDetailId, page: 1 }));
     setShowPaymentHistory(true); // show payment history component
+    setPage(1);
     ref.current.scrollIntoView({ behavior: "smooth" }); // scroll to payment history component on click smoothly
   };
 
@@ -220,7 +212,7 @@ const SingleRentDetail = () => {
               allPaymentHistory={allPaymentHistory}
               isProcessing={isProcessing}
               numberOfPages={numberOfPages}
-              page={query.page}
+              page={page}
               handlePageChange={handlePageChange}
             />
           )}

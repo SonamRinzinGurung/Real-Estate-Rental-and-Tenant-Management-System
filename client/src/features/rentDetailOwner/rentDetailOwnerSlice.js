@@ -188,7 +188,7 @@ const rentDetailOwnerSlice = createSlice({
       })
       .addCase(getAllPaymentHistory.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.alertFlag = true;
+        state.alertFlag = false;
         state.allPaymentHistory = action.payload.allPaymentHistory;
         state.numberOfPages = action.payload.numberOfPages;
       })

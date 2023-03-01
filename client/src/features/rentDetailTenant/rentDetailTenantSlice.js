@@ -15,6 +15,19 @@ export const getSingleRentDetailTenantView = createAsyncThunk(
   }
 );
 
+export const getAllPaymentHistory = createAsyncThunk(
+  "getAllPaymentHistoryTenant",
+  async ({ rentDetailId, page }, thunkAPI) => {
+    try {
+      let url = `/rentDetailTenant/allPaymentHistory/${rentDetailId}?page=${page}`;
+      const { data } = await axiosFetch.get(url);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const rentDetailTenantSlice = createSlice({
   name: "rentDetailTenant",
   initialState: {
@@ -25,6 +38,7 @@ const rentDetailTenantSlice = createSlice({
     alertFlag: false,
     alertMsg: "",
     alertType: null,
+    isProcessing: false,
     isRentPaid: null,
   },
   reducers: {
@@ -47,6 +61,21 @@ const rentDetailTenantSlice = createSlice({
       })
       .addCase(getSingleRentDetailTenantView.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getAllPaymentHistory.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(getAllPaymentHistory.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = false;
+        state.allPaymentHistory = action.payload.allPaymentHistory;
+        state.numberOfPages = action.payload.numberOfPages;
+      })
+      .addCase(getAllPaymentHistory.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

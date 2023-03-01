@@ -1,8 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { getSingleRentDetailTenantView } from "../../features/rentDetailTenant/rentDetailTenantSlice";
+import {
+  getSingleRentDetailTenantView,
+  getAllPaymentHistory,
+} from "../../features/rentDetailTenant/rentDetailTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoading, Footer, ImageCarousal } from "../../components";
+import {
+  PageLoading,
+  Footer,
+  ImageCarousal,
+  PaymentHistoryComponent,
+} from "../../components";
 import { CardActionArea, Avatar, Button } from "@mui/material";
 import {
   dateFormatter,
@@ -22,14 +30,42 @@ const RentDetailTenantPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const ref = useRef(null);
 
-  const { rentDetail, isLoading, isRentPaid } = useSelector(
-    (state) => state.rentDetailTenant
-  );
+  const {
+    rentDetail,
+    isLoading,
+    isRentPaid,
+    allPaymentHistory,
+    isProcessing,
+    numberOfPages,
+  } = useSelector((state) => state.rentDetailTenant);
+
+  // state to store page for payment history
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     dispatch(getSingleRentDetailTenantView({ realEstateId }));
   }, [realEstateId, dispatch]);
+
+  // state to show payment history component
+  const [showPaymentHistory, setShowPaymentHistory] = useState(false);
+
+  // function to handle page number change
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    dispatch(
+      getAllPaymentHistory({ page: value, rentDetailId: rentDetail?._id })
+    );
+  };
+
+  // function to handle click on show payment history button
+  const handleShowPayment = () => {
+    dispatch(getAllPaymentHistory({ rentDetailId: rentDetail?._id, page: 1 }));
+    setShowPaymentHistory(true); // show payment history component
+    setPage(1);
+    ref.current.scrollIntoView({ behavior: "smooth" }); // scroll to payment history component on click smoothly
+  };
 
   if (isLoading) return <PageLoading />;
   if (!rentDetail)
@@ -106,6 +142,17 @@ const RentDetailTenantPage = () => {
                   </>
                 )}
               </p>
+              <div className="mt-6">
+                <Button
+                  onClick={handleShowPayment}
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  sx={{ color: "#fff" }}
+                >
+                  View Payment History
+                </Button>
+              </div>
             </div>
           </div>
         </section>
@@ -137,6 +184,17 @@ const RentDetailTenantPage = () => {
               </div>
             </CardActionArea>
           </Link>
+        </div>
+        <div ref={ref}>
+          {showPaymentHistory && (
+            <PaymentHistoryComponent
+              allPaymentHistory={allPaymentHistory}
+              isProcessing={isProcessing}
+              numberOfPages={numberOfPages}
+              page={page}
+              handlePageChange={handlePageChange}
+            />
+          )}
         </div>
       </main>
 
