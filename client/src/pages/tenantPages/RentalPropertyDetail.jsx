@@ -73,10 +73,7 @@ const RentalPropertyDetail = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-6">
-                <Link
-                  to={`/tenant/contract/${slug}`}
-                  state={{ realEstateId: realEstate?._id }}
-                >
+                <Link to={`/tenant/contract/${realEstate?._id}/${slug}`}>
                   <Button
                     variant="contained"
                     color="secondary"

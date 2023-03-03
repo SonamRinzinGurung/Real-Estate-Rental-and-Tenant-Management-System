@@ -33,7 +33,7 @@ const RentDetailComponent = ({
         color: "#102a43",
       }}
     >
-      <Link to={`/owner/rentDetail/${_id}`}>
+      <Link to={`/owner/rentDetail/${_id}/${realEstate?.slug}`}>
         <CardActionArea>
           <CardMedia
             component="img"

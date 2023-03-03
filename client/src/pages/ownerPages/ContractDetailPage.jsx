@@ -5,7 +5,7 @@ import {
   deleteContract,
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { PageLoading, AlertToast, ConfirmModal } from "../../components";
 import { Button, CircularProgress } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -18,8 +18,7 @@ import { dateFormatter, format } from "../../utils/valueFormatter";
 const ContractDetailPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { realEstateId } = location?.state;
+  const { realEstateId } = useParams();
 
   const {
     contractDetail,

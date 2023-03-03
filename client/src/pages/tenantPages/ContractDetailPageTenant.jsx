@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getContractWithRealEstateID } from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading } from "../../components";
@@ -10,8 +10,7 @@ import { dateFormatter, format } from "../../utils/valueFormatter";
 
 const ContractDetailPageTenant = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { realEstateId } = location?.state;
+  const { realEstateId } = useParams();
 
   useEffect(() => {
     dispatch(getContractWithRealEstateID({ realEstateId }));

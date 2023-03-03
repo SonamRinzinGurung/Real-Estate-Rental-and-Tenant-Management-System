@@ -103,10 +103,7 @@ const PersonalRealEstateDetail = () => {
                 </div>
               ) : (
                 <div className="">
-                  <Link
-                    to={`/owner/contract/${slug}`}
-                    state={{ realEstateId: realEstate?._id }}
-                  >
+                  <Link to={`/owner/contract/${realEstate?._id}/${slug}`}>
                     <Button
                       variant="contained"
                       color="secondary"

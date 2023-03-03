@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useCallback, useEffect } from "react";
 import {
   getSingleRentDetailOwnerView,
@@ -23,9 +23,7 @@ import {
 import paymentImg from "../../assets/images/payment.svg";
 
 const CreatePaymentHistory = () => {
-  const location = useLocation();
-
-  const { rentDetailId } = location?.state;
+  const { rentDetailId } = useParams();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

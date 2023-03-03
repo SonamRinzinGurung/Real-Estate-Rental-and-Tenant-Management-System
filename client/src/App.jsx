@@ -91,7 +91,7 @@ function App() {
               element={<CreateContractPage />}
             />
             <Route
-              path="/owner/contract/:slug"
+              path="/owner/contract/:realEstateId/:slug"
               element={<ContractDetailPage />}
             />
             <Route path="/owner/rentDetail" element={<AllRentDetailPage />} />
@@ -100,7 +100,7 @@ function App() {
               element={<CreateRentDetail />}
             />
             <Route
-              path="/owner/rentDetail/:rentDetailId"
+              path="/owner/rentDetail/:rentDetailId/:slug"
               element={<SingleRentDetail />}
             />
             <Route
@@ -108,7 +108,7 @@ function App() {
               element={<SendPaymentEmailPage />}
             />
             <Route
-              path="/owner/rentDetail/paymentHistory/create"
+              path="/owner/rentDetail/paymentHistory/:rentDetailId/create"
               element={<CreatePaymentHistory />}
             />
           </Route>
@@ -147,7 +147,7 @@ function App() {
               element={<RentalPropertyDetail />}
             />
             <Route
-              path="/tenant/contract/:slug"
+              path="/tenant/contract/:realEstateId/:slug"
               element={<ContractDetailPageTenant />}
             />
             <Route
