@@ -40,11 +40,13 @@ const SendPaymentEmailPage = () => {
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
-        navigate(`/owner/rentDetail/${rentDetailId}`);
+        navigate(
+          `/owner/rentDetail/${rentDetailId}/${rentDetail?.realEstate.slug}`
+        );
       }, 4500);
       return () => clearTimeout(timer);
     }
-  }, [success, navigate, rentDetailId]);
+  }, [success, navigate, rentDetailId, rentDetail?.realEstate.slug]);
 
   const handleAlertClose = useCallback(
     (event, reason) => {

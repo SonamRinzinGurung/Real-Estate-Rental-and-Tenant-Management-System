@@ -116,6 +116,13 @@ const createPaymentHistory = async (req, res) => {
   if (!checkRentDetail) {
     throw new NotFoundError("Rent detail not found");
   }
+  const rentStatus = await checkRentDetail.isRentPaid();
+
+  if (rentStatus) {
+    throw new BadRequestError(
+      "Rent payment for this month is already registered."
+    );
+  }
 
   const { currentRentDate, amountPaid, paymentMethod, nextRentDueDate } =
     req.body;

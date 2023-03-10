@@ -15,9 +15,9 @@ export const postRealEstate = createAsyncThunk(
 
 export const getPersonalRealEstate = createAsyncThunk(
   "getPersonalRealEstate",
-  async (arg, thunkAPI) => {
+  async ({ page }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get("/owner/real-estate");
+      const { data } = await axiosFetch.get(`/owner/real-estate?page=${page}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -63,6 +63,7 @@ const realEstateOwnerSlice = createSlice({
     alertType: null,
     postSuccess: false,
     isProcessing: false,
+    numberOfPages: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -96,6 +97,7 @@ const realEstateOwnerSlice = createSlice({
       .addCase(getPersonalRealEstate.fulfilled, (state, action) => {
         state.isLoading = false;
         state.allRealEstate = action.payload.realEstates;
+        state.numberOfPages = action.payload.numberOfPages;
         state.alertFlag = false;
       })
       .addCase(getPersonalRealEstate.rejected, (state, action) => {
@@ -106,6 +108,7 @@ const realEstateOwnerSlice = createSlice({
       })
       .addCase(getRealEstateDetail.pending, (state) => {
         state.isLoading = true;
+        state.postSuccess = false;
       })
       .addCase(getRealEstateDetail.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -124,6 +127,7 @@ const realEstateOwnerSlice = createSlice({
       .addCase(updateRealEstateDetail.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.realEstate = action.payload.updatedRealEstate;
+        state.postSuccess = true;
         state.alertFlag = true;
         state.alertMsg = "Property details updated successfully";
         state.alertType = "success";

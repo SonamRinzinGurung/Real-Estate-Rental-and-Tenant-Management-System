@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { AlertToast, PageLoading, UpdatePropertyForm } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   clearAlert,
   updateRealEstateDetail,
@@ -18,15 +18,28 @@ const UpdateRealEstateDetail = () => {
     alertType,
     isLoading,
     realEstate,
+    postSuccess,
     isProcessing,
   } = useSelector((store) => store.realEstateOwner);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { slug } = useParams();
 
   useEffect(() => {
     dispatch(getRealEstateDetail({ slug }));
   }, [slug, dispatch]);
+
+  // Redirect to real estate detail page of the property after successful update
+  useEffect(() => {
+    if (postSuccess) {
+      const timer = setTimeout(() => {
+        navigate(`/owner/real-estate/${realEstate?.slug}`);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [postSuccess, navigate, realEstate?.slug]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

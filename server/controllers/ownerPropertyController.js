@@ -26,10 +26,26 @@ const postRealEstate = async (req, res) => {
  * @returns {object} realEstate
  */
 const getOwnerRealEstates = async (req, res) => {
-  const realEstates = await RealEstate.find({
+  let realEstateResults = RealEstate.find({
     propertyOwner: req.user.userId,
   }).sort("-createdAt");
-  res.json({ realEstates });
+
+  const page = Number(req.query.page) || 1; //page number from query string
+  const limit = 5; //limit of items per response
+  const skip = (page - 1) * limit; //calculate the number of documents to skip
+
+  realEstateResults = realEstateResults.skip(skip).limit(limit);
+  const realEstates = await realEstateResults; //execute the query
+
+  //get total documents in the RealEstate collection
+  const totalRealEstates = await RealEstate.countDocuments({
+    propertyOwner: req.user.userId,
+  });
+
+  //calculate total pages
+  const numberOfPages = Math.ceil(totalRealEstates / limit);
+
+  res.json({ realEstates, numberOfPages, totalRealEstates });
 };
 
 /**

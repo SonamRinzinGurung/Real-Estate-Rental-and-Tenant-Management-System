@@ -1,24 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPersonalRealEstate } from "../../features/realEstateOwner/realEstateOwnerSlice";
-import { Footer, PageLoading, RealEstateCard } from "../../components";
-import { Button } from "@mui/material";
+import { Footer, RealEstateCard } from "../../components";
+import { Button, Pagination, CircularProgress } from "@mui/material";
 
 const Homepage = () => {
   const dispatch = useDispatch();
 
-  const { allRealEstate, isLoading } = useSelector(
+  const { allRealEstate, isLoading, numberOfPages } = useSelector(
     (store) => store.realEstateOwner
   );
-  useEffect(() => {
-    dispatch(getPersonalRealEstate());
-  }, [dispatch]);
 
-  if (isLoading) return <PageLoading />;
+  // state to store page number
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    dispatch(getPersonalRealEstate({ page }));
+  }, [dispatch, page]);
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <>
-      <main className="flex flex-col mb-12 mt-8 md:items-start md:ml-10">
+      <div className="mt-8 mb-12">
         {allRealEstate?.length === 0 ? (
           <>
             <div className="mx-auto text-center">
@@ -37,16 +43,30 @@ const Homepage = () => {
             <h3 className="my-4 font-heading font-bold text-center">
               Your {allRealEstate?.length > 1 ? "Properties" : "Property"}
             </h3>
-            <div className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
-              {allRealEstate?.map((item) => {
-                return (
-                  <RealEstateCard key={item._id} {...item} fromOwnerUser />
-                );
-              })}
-            </div>
+            {isLoading ? (
+              <div className="flex justify-center mt-12 h-64 mx-auto">
+                <CircularProgress size={"6rem"} />
+              </div>
+            ) : (
+              <main className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
+                {allRealEstate?.map((item) => {
+                  return (
+                    <RealEstateCard key={item._id} {...item} fromOwnerUser />
+                  );
+                })}
+              </main>
+            )}
           </>
         )}
-      </main>
+      </div>
+
+      <Pagination
+        count={numberOfPages || 1}
+        page={page}
+        onChange={handlePageChange}
+        color="secondary"
+        className="flex justify-center mb-12"
+      />
       <Footer />
     </>
   );
