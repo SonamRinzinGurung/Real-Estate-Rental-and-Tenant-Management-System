@@ -52,9 +52,13 @@ export const addOrRemoveContact = createAsyncThunk(
 
 export const getAllContacts = createAsyncThunk(
   "getAllContacts",
-  async (arg, thunkAPI) => {
+  async ({ name }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get("/owner/contacts/all");
+      let url = "/owner/contacts/all";
+      if (name) {
+        url = url + `?name=${name}`;
+      }
+      const { data } = await axiosFetch.get(url);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);

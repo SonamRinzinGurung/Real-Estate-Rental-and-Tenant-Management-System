@@ -114,12 +114,27 @@ const addContactToggle = async (req, res) => {
  */
 const getAllContacts = async (req, res) => {
   const { userId } = req.user;
+  const { name } = req.query;
+
+  // Get the current owner user's contact list
   const currentOwnerUser = await OwnerUser.findById(userId).populate({
     path: "contacts",
     select: "-savedProperties -createdAt -updatedAt -__v",
   });
+
   if (!currentOwnerUser) throw new NotFoundError("User not found");
-  res.json({ contacts: currentOwnerUser.contacts });
+
+  let contacts = currentOwnerUser.contacts; // Get the current owner user's contact list
+  // Filter the contact list by name if a name is provided in the query
+  if (name) {
+    contacts = contacts.filter((contact) => {
+      return (
+        contact.firstName.toLowerCase().includes(name.toLowerCase()) ||
+        contact.lastName.toLowerCase().includes(name.toLowerCase())
+      );
+    });
+  }
+  res.json({ contacts });
 };
 
 export {

@@ -76,20 +76,20 @@ const Homepage = () => {
           {...query}
         />
 
-        {allRealEstate?.length === 0 ? (
-          <h2 className="text-center mt-8 mb-6 font-heading font-bold">
-            No Real Estate Found
-          </h2>
+        {isLoading ? (
+          <div className="flex justify-center mt-12 h-96">
+            <CircularProgress size={"8rem"} />
+          </div>
         ) : (
           <>
             <h3 className="text-center mt-8 mb-6 font-heading font-bold">
               All Properties
             </h3>
 
-            {isLoading ? (
-              <div className="flex justify-center mt-12 h-screen">
-                <CircularProgress size={"6rem"} />
-              </div>
+            {allRealEstate?.length === 0 ? (
+              <h2 className="text-center mt-8 mb-6 font-heading font-bold">
+                No Real Estate Found
+              </h2>
             ) : (
               <main className="flex flex-wrap gap-5 justify-center mb-12 md:justify-center mx-4 md:mx-0">
                 {allRealEstate?.map((item) => {

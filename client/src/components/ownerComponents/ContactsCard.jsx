@@ -27,7 +27,7 @@ const ContactsCard = ({
         <CardActionArea>
           <CardMedia
             component="img"
-            sx={{ maxHeight: 280 }}
+            sx={{ maxHeight: 260 }}
             image={profileImage}
             alt={firstName}
           />

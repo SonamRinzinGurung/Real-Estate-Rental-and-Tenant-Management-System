@@ -36,7 +36,7 @@ const AllRentDetailPage = () => {
   return (
     <>
       <main className="flex flex-col mb-12 mt-6 md:items-start md:ml-10">
-        <div className="ml-4 md:ml-0">
+        <div className="self-center md:self-start">
           <Button
             variant="contained"
             onClick={() => navigate("/owner/rentDetail/create")}
@@ -49,9 +49,11 @@ const AllRentDetailPage = () => {
         <h3 className="my-4 font-heading font-bold text-center">
           Rent Details
         </h3>
-        <div className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
+        <div className="flex flex-wrap gap-8 justify-center mx-4 md:justify-start md:mx-0">
           {allRentDetails?.map((rentDetail) => (
-            <RentDetailComponent key={rentDetail._id} {...rentDetail} />
+            <>
+              <RentDetailComponent key={rentDetail._id} {...rentDetail} />
+            </>
           ))}
         </div>
       </main>

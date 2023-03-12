@@ -22,41 +22,35 @@ const Homepage = () => {
     setPage(value);
   };
 
+  if (allRealEstate?.length === 0)
+    return (
+      <div className="mx-auto text-center mt-8">
+        <h4 className="mb-4">You have not posted any properties</h4>
+        <Button
+          href="/owner/property/post"
+          variant="contained"
+          sx={{ color: "#fff" }}
+        >
+          Post Property
+        </Button>
+      </div>
+    );
   return (
     <>
-      <div className="mt-8 mb-12">
-        {allRealEstate?.length === 0 ? (
-          <>
-            <div className="mx-auto text-center">
-              <h4 className="mb-4">You have not posted any properties</h4>
-              <Button
-                href="/owner/property/post"
-                variant="contained"
-                sx={{ color: "#fff" }}
-              >
-                Post Property
-              </Button>
-            </div>
-          </>
+      <div className="flex flex-col mt-8 mb-12 md:items-start md:ml-10">
+        <h3 className="my-4 font-heading font-bold text-center">
+          Your {allRealEstate?.length > 1 ? "Properties" : "Property"}
+        </h3>
+        {isLoading ? (
+          <div className="flex justify-center mt-12 h-64 mx-auto">
+            <CircularProgress size={"6rem"} />
+          </div>
         ) : (
-          <>
-            <h3 className="my-4 font-heading font-bold text-center">
-              Your {allRealEstate?.length > 1 ? "Properties" : "Property"}
-            </h3>
-            {isLoading ? (
-              <div className="flex justify-center mt-12 h-64 mx-auto">
-                <CircularProgress size={"6rem"} />
-              </div>
-            ) : (
-              <main className="flex flex-wrap gap-8 justify-center mx-4 md:mx-0">
-                {allRealEstate?.map((item) => {
-                  return (
-                    <RealEstateCard key={item._id} {...item} fromOwnerUser />
-                  );
-                })}
-              </main>
-            )}
-          </>
+          <main className="flex flex-wrap gap-8 justify-center md:justify-start mx-4 md:mx-0">
+            {allRealEstate?.map((item) => {
+              return <RealEstateCard key={item._id} {...item} fromOwnerUser />;
+            })}
+          </main>
         )}
       </div>
 
