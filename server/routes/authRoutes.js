@@ -6,6 +6,8 @@ import {
   refreshOwner,
   refreshTenant,
   logout,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/authController.js";
 import upload from "../middleware/multerImageMiddleware.js";
 import { cloudinaryProfileImageUpload } from "../middleware/cloudinaryUpload.js";
@@ -40,6 +42,18 @@ router.post(
   cloudinaryProfileImageUpload,
   register
 );
+
+/**
+ * @description Forgot Password - send email
+ * @route POST /api/auth/forgot-password
+ */
+router.post("/forgot-password", forgotPassword);
+
+/**
+ * @description Reset Password
+ * @route PATCH /api/auth/reset-password
+ */
+router.patch("/reset-password", resetPassword);
 
 /**
  * @description logout user

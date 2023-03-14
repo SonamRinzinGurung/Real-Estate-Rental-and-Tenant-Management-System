@@ -7,6 +7,7 @@ import {
 } from "../request-errors/index.js";
 import { isEmailValid } from "../utils/validateEmail.js";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../utils/emailSender.js";
 
 /**
  * @description Login a user
@@ -173,6 +174,158 @@ const refreshTenant = async (req, res) => {
 };
 
 /**
+ * @description Forgot Password - send email
+ * @route POST /api/auth/forgot-password
+ */
+const forgotPassword = async (req, res) => {
+  const { email, role } = req.body;
+  const { valid, reason, validators } = await isEmailValid(email);
+  if (!valid) {
+    throw new BadRequestError(validators[reason].reason);
+  }
+  if (role === "owner") {
+    const user = await OwnerUser.findOne({ email }); //check if user exists
+    if (!user) {
+      throw new BadRequestError("User with this email was not found");
+    }
+
+    //generate token
+    const token = jwt.sign({ _id: user._id }, process.env.RESET_PASSWORD_KEY, {
+      expiresIn: "5m",
+    });
+
+    // send email with token
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Reset Account Password Link";
+    const body = `
+  <h3>Please click the link below to reset your password</h3>
+  <a href="${process.env.CLIENT_URL}/owner/reset-password/${token}">Reset Password</a>`;
+
+    //update the user and add the token
+    user.passwordResetToken = token;
+    user.save(async (err, result) => {
+      if (err) {
+        return res.status(400).json({ msg: "Error saving token in database" });
+      } else {
+        //if no error
+        //send email
+        await sendEmail(to, from, subject, body);
+        return res.json({ msg: `Email has been sent to ${email}` });
+      }
+    });
+  } else if (role === "tenant") {
+    const user = await TenantUser.findOne({ email });
+    if (!user) {
+      throw new BadRequestError("User with this email was not found");
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.RESET_PASSWORD_KEY, {
+      expiresIn: "5m",
+    });
+
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Reset Account Password Link";
+    const body = `
+  <h3>Please click the link below to reset your password</h3>
+  <a href="${process.env.CLIENT_URL}/tenant/reset-password/${token}">Reset Password</a>`;
+
+    //update the user and add the token
+    user.passwordResetToken = token;
+    user.save(async (err, result) => {
+      if (err) {
+        return res.status(400).json({ msg: "Error saving token in database" });
+      } else {
+        //if no error
+        //send email
+        await sendEmail(to, from, subject, body);
+        return res.json({ msg: `Email has been sent to ${email}` });
+      }
+    });
+  } else {
+    throw new BadRequestError("Invalid Role");
+  }
+};
+
+/**
+ * @description Reset Password
+ * @route POST /api/auth/reset-password
+ */
+const resetPassword = async (req, res) => {
+  const { token, newPassword, passwordRepeated, role } = req.body;
+  if (!token) {
+    throw new BadRequestError("Token is required");
+  }
+  if (!newPassword || !passwordRepeated) {
+    throw new BadRequestError("Password is required");
+  }
+
+  if (newPassword !== passwordRepeated) {
+    throw new BadRequestError("Passwords do not match");
+  }
+
+  if (role === "owner") {
+    //verify token
+    jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_KEY,
+      async (error, payload) => {
+        if (error) {
+          return res.status(400).json({ msg: "Invalid or expired token" });
+        }
+        //find user with token
+        const user = await OwnerUser.findOne({ passwordResetToken: token });
+        if (!user) {
+          return res
+            .status(400)
+            .json({ msg: "User with this token was not found" });
+        }
+
+        //update password
+        user.password = newPassword;
+        user.passwordResetToken = "";
+        user.save((err, result) => {
+          if (err) {
+            return res.status(400).json({ msg: "Reset Password Error" });
+          } else {
+            return res.json({ msg: "Your password has been changed" });
+          }
+        });
+      }
+    );
+  } else if (role === "tenant") {
+    jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_KEY,
+      async (error, payload) => {
+        if (error) {
+          return res.status(400).json({ msg: "Invalid or expired token" });
+        }
+        const user = await TenantUser.findOne({ passwordResetToken: token });
+        if (!user) {
+          return res
+            .status(400)
+            .json({ msg: "User with this token was not found" });
+        }
+
+        user.password = newPassword;
+        user.passwordResetToken = "";
+        user.save((err, result) => {
+          if (err) {
+            return res.status(400).json({ msg: "Reset Password Error" });
+          } else {
+            return res.json({ msg: "Your password has been changed" });
+          }
+        });
+      }
+    );
+  } else {
+    throw new BadRequestError("Invalid Role");
+  }
+};
+
+/**
  * @description Logout a user
  */
 const logout = (req, res) => {
@@ -184,4 +337,12 @@ const logout = (req, res) => {
   res.json({ message: "Cookie cleared" });
 };
 
-export { login, register, refreshOwner, refreshTenant, logout };
+export {
+  login,
+  register,
+  refreshOwner,
+  refreshTenant,
+  forgotPassword,
+  resetPassword,
+  logout,
+};

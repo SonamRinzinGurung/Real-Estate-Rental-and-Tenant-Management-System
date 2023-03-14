@@ -67,6 +67,10 @@ const TenantUserSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
   },
   { timestamps: true }
 );

@@ -67,6 +67,10 @@ const OwnerUserSchema = new mongoose.Schema(
       minlength: 5,
       select: false,
     },
+    passwordResetToken: {
+      type: String,
+      select: false,
+    },
   },
   { timestamps: true }
 );
