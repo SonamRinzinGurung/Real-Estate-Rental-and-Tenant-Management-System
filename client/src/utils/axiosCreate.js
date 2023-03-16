@@ -44,7 +44,8 @@ axiosFetch.interceptors.response.use(
       } catch (err) {
         if (
           err?.response.status === 401 &&
-          err?.response.data.msg === "Invalid refresh token"
+          (err?.response.data.msg === "Invalid refresh token" ||
+            err?.response.data.msg === "Refresh token not found")
         ) {
           try {
             store.dispatch(logOut());

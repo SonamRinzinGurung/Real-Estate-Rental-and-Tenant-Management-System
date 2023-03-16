@@ -179,10 +179,7 @@ const refreshTenant = async (req, res) => {
  */
 const forgotPassword = async (req, res) => {
   const { email, role } = req.body;
-  const { valid, reason, validators } = await isEmailValid(email);
-  if (!valid) {
-    throw new BadRequestError(validators[reason].reason);
-  }
+
   if (role === "owner") {
     const user = await OwnerUser.findOne({ email }); //check if user exists
     if (!user) {
@@ -200,18 +197,20 @@ const forgotPassword = async (req, res) => {
     const subject = "Reset Account Password Link";
     const body = `
   <h3>Please click the link below to reset your password</h3>
-  <a href="${process.env.CLIENT_URL}/owner/reset-password/${token}">Reset Password</a>`;
+  <a href="${process.env.CLIENT_URL}/reset-password/owner/${token}">Reset Password</a>`;
 
     //update the user and add the token
     user.passwordResetToken = token;
     user.save(async (err, result) => {
       if (err) {
-        return res.status(400).json({ msg: "Error saving token in database" });
+        return res
+          .status(400)
+          .json({ msg: "Error occurred while saving the token in database" });
       } else {
         //if no error
         //send email
         await sendEmail(to, from, subject, body);
-        return res.json({ msg: `Email has been sent to ${email}` });
+        return res.json({ msg: `Token has been sent to ${email}` });
       }
     });
   } else if (role === "tenant") {
@@ -229,18 +228,20 @@ const forgotPassword = async (req, res) => {
     const subject = "Reset Account Password Link";
     const body = `
   <h3>Please click the link below to reset your password</h3>
-  <a href="${process.env.CLIENT_URL}/tenant/reset-password/${token}">Reset Password</a>`;
+  <a href="${process.env.CLIENT_URL}/reset-password/tenant/${token}">Reset Password</a>`;
 
     //update the user and add the token
     user.passwordResetToken = token;
     user.save(async (err, result) => {
       if (err) {
-        return res.status(400).json({ msg: "Error saving token in database" });
+        return res
+          .status(400)
+          .json({ msg: "Error occurred while saving the token in database" });
       } else {
         //if no error
         //send email
         await sendEmail(to, from, subject, body);
-        return res.json({ msg: `Email has been sent to ${email}` });
+        return res.json({ msg: `Token has been sent to ${email}` });
       }
     });
   } else {
@@ -255,7 +256,7 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   const { token, newPassword, passwordRepeated, role } = req.body;
   if (!token) {
-    throw new BadRequestError("Token is required");
+    throw new BadRequestError("Token not found");
   }
   if (!newPassword || !passwordRepeated) {
     throw new BadRequestError("Password is required");
@@ -287,9 +288,11 @@ const resetPassword = async (req, res) => {
         user.passwordResetToken = "";
         user.save((err, result) => {
           if (err) {
-            return res.status(400).json({ msg: "Reset Password Error" });
+            return res
+              .status(400)
+              .json({ msg: "Error occurred while resetting password" });
           } else {
-            return res.json({ msg: "Your password has been changed" });
+            return res.json({ msg: "Password successfully changed" });
           }
         });
       }
@@ -313,9 +316,11 @@ const resetPassword = async (req, res) => {
         user.passwordResetToken = "";
         user.save((err, result) => {
           if (err) {
-            return res.status(400).json({ msg: "Reset Password Error" });
+            return res
+              .status(400)
+              .json({ msg: "Error occurred while resetting password" });
           } else {
-            return res.json({ msg: "Your password has been changed" });
+            return res.json({ msg: "Password successfully changed" });
           }
         });
       }

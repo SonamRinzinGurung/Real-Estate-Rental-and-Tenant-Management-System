@@ -99,34 +99,45 @@ const Login = () => {
                   value={values.password}
                   handleChange={handleChange}
                 />
+                <div className="self-end">
+                  <Link
+                    to={`/forgot-password/${param.role}`}
+                    className="text-sm text-tertiary font-robotoNormal hover:text-tertiaryDark transition duration-200 ease-in-out"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
               </div>
 
-              <div className="text-center lg:text-left">
-                <Button
-                  variant="contained"
-                  type="submit"
-                  size="medium"
-                  color="primary"
-                  sx={{
-                    color: "white",
-                    width: "25%",
-                    "&:hover": {
-                      backgroundColor: "primary.dark",
-                      opacity: [0.9, 0.8, 0.7],
-                    },
-                  }}
-                >
-                  {isLoading ? (
-                    <CircularProgress
-                      size={26}
-                      sx={{
-                        color: "#fff",
-                      }}
-                    />
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
+              <div className="text-center">
+                <div className="mx-auto w-3/4 md:w-1/3">
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    size="medium"
+                    color="primary"
+                    disabled={isLoading}
+                    sx={{
+                      color: "white",
+                      width: "100%",
+                      "&:hover": {
+                        backgroundColor: "primary.dark",
+                        opacity: [0.9, 0.8, 0.7],
+                      },
+                    }}
+                  >
+                    {isLoading ? (
+                      <CircularProgress
+                        size={26}
+                        sx={{
+                          color: "#fff",
+                        }}
+                      />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </div>
                 <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
                   Don't have an account?{" "}
                   <Link

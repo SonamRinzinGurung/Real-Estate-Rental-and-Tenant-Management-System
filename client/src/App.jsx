@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Login,
   Register,
+  ForgotPassword,
   HomepageOwner,
   HomepageTenant,
   Landing,
@@ -157,6 +158,7 @@ function App() {
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
+          <Route path="/forgot-password/:role" element={<ForgotPassword />} />
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

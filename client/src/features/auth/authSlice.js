@@ -63,6 +63,18 @@ export const registerTenant = createAsyncThunk(
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "forgotPassword",
+  async ({ userInfo }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.post("/auth/forgot-password", userInfo);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const logOut = createAsyncThunk("logOut", async (arg, thunkAPI) => {
   try {
     await axiosFetch.post("/auth/logout");
@@ -85,12 +97,14 @@ const authSlice = createSlice({
     errorFlag: false,
     errorMsg: "",
     alertType: null,
+    success: null,
   },
   reducers: {
     stateClear: (state) => {
       state.user = null;
       state.token = "";
       state.userType = "";
+      state.success = null;
     },
     clearAlert: (state) => {
       state.errorFlag = false;
@@ -158,6 +172,22 @@ const authSlice = createSlice({
         state.userType = action.payload.userType;
       })
       .addCase(registerTenant.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.errorMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.alertType = "success";
+        state.errorMsg = action.payload.msg;
+        state.success = true;
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
