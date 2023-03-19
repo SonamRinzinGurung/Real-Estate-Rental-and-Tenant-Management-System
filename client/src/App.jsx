@@ -3,6 +3,7 @@ import {
   Login,
   Register,
   ForgotPassword,
+  ResetPassword,
   HomepageOwner,
   HomepageTenant,
   Landing,
@@ -159,6 +160,10 @@ function App() {
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
           <Route path="/forgot-password/:role" element={<ForgotPassword />} />
+          <Route
+            path="/reset-password/:role/:token"
+            element={<ResetPassword />}
+          />
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

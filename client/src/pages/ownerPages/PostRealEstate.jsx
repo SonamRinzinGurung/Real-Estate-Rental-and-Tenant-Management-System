@@ -257,6 +257,7 @@ const PostRealEstate = () => {
 
               <div className="text-center mt-2">
                 <Button
+                  disabled={isLoading || (alertFlag && alertType === "success")}
                   type="submit"
                   variant="contained"
                   size="large"

@@ -222,6 +222,7 @@ const SendPaymentEmailPage = () => {
           </div>
           <div className="flex mt-2 gap-2 justify-end py-2">
             <Button
+              disabled={isProcessing}
               type="submit"
               variant="contained"
               color="tertiary"

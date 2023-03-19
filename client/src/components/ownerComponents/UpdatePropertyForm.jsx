@@ -158,6 +158,7 @@ const UpdatePropertyForm = ({
 
       <div className="text-center mt-2">
         <Button
+          disabled={isProcessing}
           type="submit"
           variant="contained"
           size="large"

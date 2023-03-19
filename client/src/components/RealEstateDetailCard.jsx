@@ -59,6 +59,7 @@ const RealEstateDetailCard = ({
               >
                 {isSaved ? (
                   <Button
+                    disabled={isProcessing}
                     variant="text"
                     color="secondary"
                     startIcon={<BookmarkRoundedIcon />}
@@ -83,6 +84,7 @@ const RealEstateDetailCard = ({
                   </Button>
                 ) : (
                   <Button
+                    disabled={isProcessing}
                     variant="text"
                     color="secondary"
                     startIcon={<BookmarkBorderRoundedIcon />}

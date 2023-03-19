@@ -205,6 +205,7 @@ const CreateRentDetail = () => {
             </div>
             <div className="text-center mt-4 mb-6">
               <Button
+                disabled={isProcessing}
                 type="submit"
                 variant="contained"
                 size="large"

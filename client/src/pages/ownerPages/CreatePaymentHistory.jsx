@@ -179,6 +179,9 @@ const CreatePaymentHistory = () => {
             </div>
             <div className="text-center mt-4 mb-6">
               <Button
+                disabled={
+                  isProcessing || (alertFlag && alertType === "success")
+                }
                 type="submit"
                 variant="contained"
                 size="large"

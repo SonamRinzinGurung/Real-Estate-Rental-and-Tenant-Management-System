@@ -75,6 +75,21 @@ export const forgotPassword = createAsyncThunk(
   }
 );
 
+export const resetPassword = createAsyncThunk(
+  "resetPassword",
+  async ({ resetInfo }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch(
+        "/auth/reset-password",
+        resetInfo
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const logOut = createAsyncThunk("logOut", async (arg, thunkAPI) => {
   try {
     await axiosFetch.post("/auth/logout");
@@ -188,6 +203,22 @@ const authSlice = createSlice({
         state.success = true;
       })
       .addCase(forgotPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.errorMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.alertType = "success";
+        state.errorMsg = action.payload.msg;
+        state.success = true;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;

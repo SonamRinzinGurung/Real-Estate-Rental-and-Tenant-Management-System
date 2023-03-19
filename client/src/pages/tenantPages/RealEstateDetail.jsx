@@ -240,6 +240,7 @@ const RealEstateDetail = () => {
                   sx={{ color: "#fff" }}
                   size="small"
                   startIcon={<SendRoundedIcon />}
+                  disabled={isProcessing}
                 >
                   {isProcessing ? (
                     <CircularProgress

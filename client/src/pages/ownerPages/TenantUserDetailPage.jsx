@@ -83,6 +83,7 @@ const TenantUserDetailPage = () => {
             </div>
             {isContact ? (
               <Button
+                disabled={isProcessing}
                 onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
                 variant="contained"
                 color="error"
@@ -106,6 +107,7 @@ const TenantUserDetailPage = () => {
               </Button>
             ) : (
               <Button
+                disabled={isProcessing}
                 onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
                 variant="contained"
                 color="secondary"

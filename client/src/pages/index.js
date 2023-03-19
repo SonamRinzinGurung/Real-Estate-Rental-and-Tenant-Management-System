@@ -1,6 +1,7 @@
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
+import ResetPassword from "./ResetPassword";
 import HomepageOwner from "./ownerPages/Homepage-Owner";
 import HomepageTenant from "./tenantPages/Homepage-Tenant";
 import Landing from "./Landing";
@@ -32,6 +33,7 @@ export {
   Login,
   Register,
   ForgotPassword,
+  ResetPassword,
   HomepageOwner,
   HomepageTenant,
   Landing,

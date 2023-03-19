@@ -22,7 +22,7 @@ const CreateContractPage = () => {
     useSelector((state) => state.ownerUser);
 
   useEffect(() => {
-    dispatch(getAllContacts());
+    dispatch(getAllContacts({ name: "" }));
   }, [dispatch]);
 
   const [contractForm, setContractFrom] = useState({
@@ -166,6 +166,9 @@ const CreateContractPage = () => {
             </div>
             <div className="text-center mt-4 mb-6">
               <Button
+                disabled={
+                  isProcessing || (alertFlag && alertType === "success")
+                }
                 type="submit"
                 variant="contained"
                 size="large"
