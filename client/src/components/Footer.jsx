@@ -20,30 +20,23 @@ const Footer = () => {
         </div>
         <ul className="flex flex-wrap items-center mb-6 text-sm sm:mb-0">
           <li>
-            <a href="#" className="mr-4 hover:underline md:mr-6 ">
+            <a href="/about" className="mr-4 hover:underline md:mr-6 ">
               About
             </a>
           </li>
           <li>
-            <a href="#" className="mr-4 hover:underline md:mr-6">
+            <a href="/privacy" className="mr-4 hover:underline md:mr-6">
               Privacy Policy
-            </a>
-          </li>
-
-          <li>
-            <a href="#" className="hover:underline">
-              Contact
             </a>
           </li>
         </ul>
       </div>
       <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
       <span className="block text-sm  sm:text-center ">
-        © 2022{" "}
+        2023 |{" "}
         <Link to={`/${userType}`} className="hover:underline">
-          Property Plus™
+          Property Plus
         </Link>
-        . All Rights Reserved.
       </span>
     </footer>
   );

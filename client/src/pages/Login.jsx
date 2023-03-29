@@ -83,7 +83,7 @@ const Login = () => {
           <div className="lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-6">
-                <h4 className="">Login to your account</h4>
+                <h4 className="text-center">Login to your account</h4>
               </div>
 
               <div className="flex flex-col gap-2 mb-2">

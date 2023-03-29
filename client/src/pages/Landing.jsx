@@ -164,30 +164,23 @@ const Landing = () => {
           </div>
           <ul className="flex flex-wrap items-center mb-6 text-sm sm:mb-0">
             <li>
-              <Link to="#" className="mr-4 hover:underline md:mr-6 ">
+              <Link to="/about" className="mr-4 hover:underline md:mr-6 ">
                 About
               </Link>
             </li>
             <li>
-              <Link to="#" className="mr-4 hover:underline md:mr-6">
+              <Link to="/privacy" className="mr-4 hover:underline md:mr-6">
                 Privacy Policy
-              </Link>
-            </li>
-
-            <li>
-              <Link to="#" className="hover:underline">
-                Contact
               </Link>
             </li>
           </ul>
         </div>
         <hr className="my-6 border-gray-700 sm:mx-auto  lg:my-8" />
         <span className="block text-sm  sm:text-center ">
-          © 2022{" "}
+          2023 |{" "}
           <Link to="/" className="hover:underline">
-            Property Plus™
+            Property Plus
           </Link>
-          . All Rights Reserved.
         </span>
       </footer>
     </div>

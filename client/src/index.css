@@ -22,23 +22,23 @@ h6 {
 }
 
 h1 {
-  font-size: clamp(2.441rem, 5.5vw, 3.052rem);
+  font-size: clamp(2rem, 4.8vw, 2.5rem);
 }
 
 h2 {
-  font-size: clamp(1.953rem, 5vw, 2.441rem);
+  font-size: clamp(1.5rem, 4.2vw, 2rem);
 }
 
 h3 {
-  font-size: clamp(1.563rem, 4vw, 1.953rem);
+  font-size: clamp(1.3rem, 3.7vw, 1.73rem);
 }
 
 h4 {
-  font-size: clamp(1.25rem, 3.5vw, 1.563rem);
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
 }
 
 h5 {
-  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-size: clamp(0.8rem, 2.5vw, 1.1rem);
 }
 
 a {
@@ -46,7 +46,7 @@ a {
 }
 
 p {
-  font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+  font-size: clamp(0.7rem, 2.3vw, 1rem);
 }
 
 /* Button in file upload input field */
@@ -73,4 +73,18 @@ input[type="number"] {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

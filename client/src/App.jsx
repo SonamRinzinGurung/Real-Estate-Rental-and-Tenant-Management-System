@@ -7,6 +7,8 @@ import {
   HomepageOwner,
   HomepageTenant,
   Landing,
+  AboutPage,
+  PrivacyPoliciesPage,
   NotFound,
   PostRealEstate,
   RealEstateDetail,
@@ -166,6 +168,8 @@ function App() {
           />
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPoliciesPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

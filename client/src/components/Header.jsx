@@ -78,12 +78,8 @@ const Header = () => {
         </section>
       )}
       <header className="flex m-1 shadow-sm justify-center items-center">
-        <Logo />
-        <div className="flex flex-col justify-center  ml-2 mr-auto">
-          <h5 className="font-display">Rent Manager</h5>
-          <p className="hidden text-xs md:block md:text-sm">
-            Find and Manage your rentals in one place
-          </p>
+        <div className="flex flex-col justify-center ml-2 mr-auto">
+          <Logo />
         </div>
 
         <nav className="hidden justify-evenly items-center w-1/3 lg:flex">

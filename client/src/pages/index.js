@@ -6,6 +6,8 @@ import HomepageOwner from "./ownerPages/Homepage-Owner";
 import HomepageTenant from "./tenantPages/Homepage-Tenant";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
+import AboutPage from "./AboutPage";
+import PrivacyPoliciesPage from "./PrivacyPoliciesPage";
 import PostRealEstate from "./ownerPages/PostRealEstate";
 import RealEstateDetail from "./tenantPages/RealEstateDetail";
 import PersonalRealEstateDetail from "./ownerPages/PersonalRealEstateDetail";
@@ -38,6 +40,8 @@ export {
   HomepageTenant,
   Landing,
   NotFound,
+  AboutPage,
+  PrivacyPoliciesPage,
   PostRealEstate,
   RealEstateDetail,
   PersonalRealEstateDetail,

@@ -89,11 +89,11 @@ const Register = () => {
       </header>
 
       <main className="px-6 h-full mt-7 mb-12">
-        <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
+        <div className="flex lg:justify-between justify-center items-start flex-wrap h-full g-6">
           <div className="lg:w-5/12 md:w-8/12">
             <form onSubmit={handleSubmit} id="form">
               <div className="flex justify-center mt-3 mb-4">
-                <h4 className="">Register for your new account</h4>
+                <h4 className="text-center">Register for your new account</h4>
               </div>
               <div className="flex flex-wrap gap-2 justify-center md:ml-16">
                 <FormTextField
@@ -217,7 +217,7 @@ const Register = () => {
               </div>
             </form>
           </div>
-          <div className="hidden grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0 sm:block">
+          <div className="hidden md:w-6/12 mb-12 md:mb-0 md:block mt-8">
             <img src={registerImg} className="w-full" alt="login banner" />
           </div>
         </div>
