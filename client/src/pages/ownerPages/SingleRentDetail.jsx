@@ -24,6 +24,9 @@ import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import moment from "moment";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import HistoryIcon from "@mui/icons-material/History";
 
 const SingleRentDetail = () => {
   const dispatch = useDispatch();
@@ -141,6 +144,7 @@ const SingleRentDetail = () => {
                         `/owner/rentDetail/send-payment-email/${rentDetail?._id}`
                       )
                     }
+                    startIcon={<MailOutlineIcon />}
                   >
                     Send Email
                   </Button>
@@ -153,6 +157,7 @@ const SingleRentDetail = () => {
                       color="primary"
                       size="small"
                       sx={{ color: "#fff" }}
+                      startIcon={<PointOfSaleIcon />}
                     >
                       Register Payment
                     </Button>
@@ -166,6 +171,7 @@ const SingleRentDetail = () => {
                   color="secondary"
                   size="small"
                   sx={{ color: "#fff" }}
+                  startIcon={<HistoryIcon />}
                 >
                   View Payment History
                 </Button>

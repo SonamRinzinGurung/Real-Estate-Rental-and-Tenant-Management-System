@@ -32,6 +32,7 @@ import {
   SendPaymentEmailPage,
   CreatePaymentHistory,
   RentDetailTenantPage,
+  SendComplaint,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -157,6 +158,10 @@ function App() {
             <Route
               path="/tenant/rentDetail/:realEstateId/:slug"
               element={<RentDetailTenantPage />}
+            />
+            <Route
+              path="/tenant/send-complaint/:slug"
+              element={<SendComplaint />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />

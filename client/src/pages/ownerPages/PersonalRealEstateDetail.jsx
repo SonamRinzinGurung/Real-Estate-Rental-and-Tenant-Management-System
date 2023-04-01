@@ -9,6 +9,9 @@ import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import GavelIcon from "@mui/icons-material/Gavel";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import ArticleIcon from "@mui/icons-material/Article";
 
 const PersonalRealEstateDetail = () => {
   const { slug } = useParams();
@@ -80,6 +83,7 @@ const PersonalRealEstateDetail = () => {
                     onClick={() => {
                       navigate(`/owner/real-estate/update/${slug}`);
                     }}
+                    startIcon={<BorderColorIcon />}
                   >
                     Edit
                   </Button>
@@ -96,6 +100,7 @@ const PersonalRealEstateDetail = () => {
                       variant="contained"
                       sx={{ color: "#fff" }}
                       size="small"
+                      startIcon={<GavelIcon />}
                     >
                       Create Contract
                     </Button>
@@ -109,6 +114,7 @@ const PersonalRealEstateDetail = () => {
                       color="secondary"
                       size="small"
                       sx={{ color: "#fff" }}
+                      startIcon={<ArticleIcon />}
                     >
                       View Contract
                     </Button>

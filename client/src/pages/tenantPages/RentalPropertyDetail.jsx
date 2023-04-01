@@ -12,6 +12,9 @@ import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import ArticleIcon from "@mui/icons-material/Article";
+import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
+import MailIcon from "@mui/icons-material/Mail";
 
 const RentalPropertyDetail = () => {
   const { realEstate, isLoading } = useSelector(
@@ -79,6 +82,7 @@ const RentalPropertyDetail = () => {
                     color="secondary"
                     size="small"
                     sx={{ color: "#fff" }}
+                    startIcon={<ArticleIcon />}
                   >
                     View Contract
                   </Button>
@@ -92,8 +96,20 @@ const RentalPropertyDetail = () => {
                     color="tertiary"
                     size="small"
                     sx={{ color: "#fff" }}
+                    startIcon={<MapsHomeWorkIcon />}
                   >
                     Rent Detail
+                  </Button>
+                </Link>
+                <Link to={`/tenant/send-complaint/${slug}`}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    sx={{ color: "#fff" }}
+                    startIcon={<MailIcon />}
+                  >
+                    Send Complaint
                   </Button>
                 </Link>
               </div>

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { PageLoading, RentDetailComponent, Footer } from "../../components";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const AllRentDetailPage = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const AllRentDetailPage = () => {
           variant="contained"
           onClick={() => navigate("/owner/rentDetail/create")}
           sx={{ color: "#fff" }}
+          startIcon={<AddCircleOutlineIcon />}
         >
           Create Rent Detail
         </Button>
@@ -42,6 +44,7 @@ const AllRentDetailPage = () => {
             onClick={() => navigate("/owner/rentDetail/create")}
             sx={{ color: "#fff" }}
             size="small"
+            startIcon={<AddCircleOutlineIcon />}
           >
             Create Rent Detail
           </Button>

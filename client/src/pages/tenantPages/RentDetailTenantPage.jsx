@@ -24,6 +24,7 @@ import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import moment from "moment";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import HistoryIcon from "@mui/icons-material/History";
 
 const RentDetailTenantPage = () => {
   const { slug, realEstateId } = useParams();
@@ -149,6 +150,7 @@ const RentDetailTenantPage = () => {
                   color="secondary"
                   size="small"
                   sx={{ color: "#fff" }}
+                  startIcon={<HistoryIcon />}
                 >
                   View Payment History
                 </Button>
