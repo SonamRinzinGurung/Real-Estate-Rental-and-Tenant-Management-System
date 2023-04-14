@@ -95,7 +95,7 @@ const CreateContractPage = () => {
   }, [dispatch, formData, handleModalClose]);
 
   return (
-    <main className="flex flex-col md:flex-row">
+    <main className="flex flex-row mb-8 md:mb-0">
       <div className="mt-10 flex flex-col items-center md:ml-14 md:items-start">
         <div className="mb-6">
           <h3 className="font-heading font-bold">Create Contract</h3>
@@ -103,9 +103,9 @@ const CreateContractPage = () => {
             Fill in the form below to create a contract
           </p>
         </div>
-        <div className="mb-4">
-          <h3 className="">Real Estate</h3>
-          <p className="-mt-2">{title}</p>
+        <div className="mb-4 flex items-center">
+          <h5 className="font-semibold">Real Estate Title: </h5>
+          <h5 className="ml-2">{title}</h5>
         </div>
         <div className="">
           <form id="form" onSubmit={handleConfirmation}>
@@ -222,7 +222,7 @@ const CreateContractPage = () => {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 mb-6 md:mb-0">
+      <div className="hidden md:block mx-auto mt-10 mb-6 md:mb-0">
         <img src={contractImage} alt="" />
       </div>
 

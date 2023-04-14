@@ -125,10 +125,6 @@ const authSlice = createSlice({
       state.errorFlag = false;
       state.errorMsg = "";
     },
-    setCredentials: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -219,6 +215,21 @@ const authSlice = createSlice({
         state.success = true;
       })
       .addCase(resetPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.errorMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(logOut.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logOut.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.alertType = "success";
+        state.errorMsg = "Logged out successfully";
+      })
+      .addCase(logOut.rejected, (state, action) => {
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;

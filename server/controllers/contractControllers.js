@@ -55,7 +55,7 @@ const createContract = async (req, res) => {
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
     <p>I hope this email finds you well. I am writing to inform about that the contract for rental of property titled <strong>${realEstateUser.title}</strong> located at ${realEstateUser.address.location}, ${realEstateUser.address.streetName} has been created successfully.</p>
     <p>Please follow the link to view and approve this contract. Please carefully review the rental contract and let us know if you have any questions or concerns.</p>
-    <a href="http://localhost:3000/tenant/contract-agreement/${contract._id}"><strong>View Contract</strong></a><br>
+    <a href="${process.env.CLIENT_URL}/tenant/contract-agreement/${contract._id}"><strong>View Contract</strong></a><br>
     <p>Please note that the rental contract is legally binding, and both parties are required to adhere to its terms and conditions.</p>
     <p>If you have any questions or concerns about the rental contract or the rental process, please do not hesitate to contact me.</p>
    <br><br>

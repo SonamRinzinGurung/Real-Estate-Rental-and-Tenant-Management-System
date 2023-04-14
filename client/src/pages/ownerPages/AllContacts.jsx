@@ -68,9 +68,7 @@ const AllContacts = () => {
           ) : (
             <>
               {contacts?.length === 0 ? (
-                <h3 className="text-center mt-8 mb-6">
-                  You do not have any contacts
-                </h3>
+                <h3 className="text-center mt-8 mb-6">Contact not found</h3>
               ) : (
                 <>
                   {contacts?.map((user) => {

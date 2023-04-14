@@ -1,19 +1,38 @@
 import { useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Logo } from "../components";
+import { Logo, AlertToast } from "../components";
 import landingImg from "../assets/images/landing1.svg";
 import landingImg2 from "../assets/images/landing2.svg";
 import { Button } from "@mui/material";
+import { clearAlert } from "../features/auth/authSlice";
 
 const Landing = () => {
-  const { user, userType } = useSelector((store) => store.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, userType, errorFlag, alertType, errorMsg } = useSelector(
+    (store) => store.auth
+  );
+
+  // if user is logged in, redirect to home page
   useEffect(() => {
     if (user) {
       navigate(`/${userType}`);
     }
   }, [user, navigate, userType]);
+
+  // function to handle alert close
+  const handleAlertClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex m-1 shadow-sm">
@@ -183,6 +202,12 @@ const Landing = () => {
           </Link>
         </span>
       </footer>
+      <AlertToast
+        alertFlag={errorFlag}
+        alertMsg={errorMsg}
+        alertType={alertType}
+        handleClose={handleAlertClose}
+      />
     </div>
   );
 };

@@ -97,12 +97,7 @@ const RentDetailTenantPage = () => {
           </div>
           <div className="">
             <div className="flex flex-col gap-2">
-              <Link to={`/owner/real-estate/${rentDetail?.realEstate?.slug}`}>
-                <h3 className="font-semibold hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
-                  {rentDetail?.realEstate?.title}
-                </h3>
-              </Link>
-
+              <h3 className="font-semibold">{rentDetail?.realEstate?.title}</h3>
               <p className="-ml-1 text-base tracking-tight">
                 <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
                 {rentDetail?.realEstate?.address?.location},{" "}
