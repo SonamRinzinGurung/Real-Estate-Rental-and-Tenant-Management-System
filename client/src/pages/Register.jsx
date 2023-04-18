@@ -186,6 +186,7 @@ const Register = () => {
                   variant="contained"
                   size="large"
                   color="primary"
+                  disabled={isLoading}
                   sx={{
                     color: "white",
                     "&:hover": {

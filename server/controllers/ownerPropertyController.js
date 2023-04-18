@@ -120,9 +120,45 @@ const updatePropertyDetails = async (req, res) => {
   res.json({ updatedRealEstate });
 };
 
+/**
+ * @description Update Property Details
+ * @returns message
+ */
+const deleteProperty = async (req, res) => {
+  const { slug } = req.params;
+  const realEstate = await RealEstate.findOne({ slug });
+
+  if (!realEstate) {
+    throw new NotFoundError(`Property not found`);
+  }
+
+  // check if user is authorized to delete property
+  if (realEstate.propertyOwner.toString() !== req.user.userId) {
+    throw new ForbiddenRequestError(
+      "You are not authorized to delete this property"
+    );
+  }
+
+  // check if property is okay to delete
+  if (realEstate.status === false) {
+    throw new BadRequestError(
+      "Property cannot be deleted, it has active tenant"
+    );
+  }
+
+  await RealEstate.findOneAndDelete({
+    slug,
+    propertyOwner: req.user.userId,
+    status: true,
+  });
+
+  res.json({ success: true, message: "Property deleted successfully" });
+};
+
 export {
   postRealEstate,
   getOwnerRealEstates,
   getSingleProperty,
   updatePropertyDetails,
+  deleteProperty,
 };

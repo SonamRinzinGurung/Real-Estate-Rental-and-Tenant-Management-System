@@ -52,6 +52,20 @@ export const updateRealEstateDetail = createAsyncThunk(
   }
 );
 
+export const deleteProperty = createAsyncThunk(
+  "deleteProperty",
+  async ({ slug }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.delete(
+        `/owner/real-estate/delete/${slug}`
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const realEstateOwnerSlice = createSlice({
   name: "property",
   initialState: {
@@ -133,6 +147,22 @@ const realEstateOwnerSlice = createSlice({
         state.alertType = "success";
       })
       .addCase(updateRealEstateDetail.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(deleteProperty.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(deleteProperty.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.postSuccess = true;
+        state.alertFlag = true;
+        state.alertMsg = "Property deleted successfully. Redirecting...";
+        state.alertType = "success";
+      })
+      .addCase(deleteProperty.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

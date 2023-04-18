@@ -1,10 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getRealEstateDetail } from "../../features/realEstateOwner/realEstateOwnerSlice";
-import { PageLoading, Footer, ImageCarousal } from "../../components";
+import {
+  getRealEstateDetail,
+  deleteProperty,
+  clearAlert,
+} from "../../features/realEstateOwner/realEstateOwnerSlice";
+import {
+  PageLoading,
+  Footer,
+  ImageCarousal,
+  ConfirmModal,
+  AlertToast,
+} from "../../components";
 import { format, dateFormatter } from "../../utils/valueFormatter";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
@@ -12,6 +22,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import GavelIcon from "@mui/icons-material/Gavel";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import ArticleIcon from "@mui/icons-material/Article";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 
 const PersonalRealEstateDetail = () => {
   const { slug } = useParams();
@@ -22,9 +33,46 @@ const PersonalRealEstateDetail = () => {
     dispatch(getRealEstateDetail({ slug }));
   }, [slug, dispatch]);
 
-  const { realEstate, isLoading } = useSelector(
-    (store) => store.realEstateOwner
+  const {
+    realEstate,
+    isLoading,
+    isProcessing,
+    alertFlag,
+    alertMsg,
+    alertType,
+    postSuccess,
+  } = useSelector((store) => store.realEstateOwner);
+
+  // Redirect to detail page of the property after successful contract creation
+  useEffect(() => {
+    if (postSuccess) {
+      const timer = setTimeout(() => {
+        navigate(`/owner`);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [postSuccess, navigate, slug]);
+
+  //close the alert toast
+  const handleAlertClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
   );
+
+  //handel modal open and close state
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = useCallback(() => setOpen(true), []);
+  const handleModalClose = useCallback(() => setOpen(false), []);
+
+  const handleDeleteProperty = useCallback(() => {
+    dispatch(deleteProperty({ slug }));
+    handleModalClose();
+  }, [dispatch, slug, handleModalClose]);
 
   if (isLoading) return <PageLoading />;
 
@@ -74,7 +122,7 @@ const PersonalRealEstateDetail = () => {
               </div>
               {/* Render the edit and create contract if the real estate property is available for rental */}
               {realEstate?.status === true ? (
-                <div className="flex flex-wrap gap-2 mt-2 text-center">
+                <div className="flex flex-wrap gap-4 mt-2 text-center">
                   <Button
                     variant="contained"
                     color="secondary"
@@ -105,6 +153,28 @@ const PersonalRealEstateDetail = () => {
                       Create Contract
                     </Button>
                   </Link>
+                  <Button
+                    disabled={
+                      isProcessing || (alertFlag && alertType === "success")
+                    }
+                    variant="contained"
+                    color="error"
+                    sx={{ color: "#fff" }}
+                    size="small"
+                    onClick={handleModalOpen}
+                    startIcon={<DeleteForeverRoundedIcon />}
+                  >
+                    {isProcessing ? (
+                      <CircularProgress
+                        size={24}
+                        sx={{
+                          color: "#fff",
+                        }}
+                      />
+                    ) : (
+                      "Delete Property"
+                    )}
+                  </Button>
                 </div>
               ) : (
                 <div className="">
@@ -160,6 +230,34 @@ const PersonalRealEstateDetail = () => {
             </div>
           </div>
         </div>
+        <div>
+          <ConfirmModal open={open} handleModalClose={handleModalClose}>
+            <h3 className="text-center">Confirm Delete?</h3>
+            <p className="text-center my-4">
+              Are you sure you want to delete this property? This action cannot
+              be undone.
+            </p>
+            <div className="flex flex-wrap justify-center gap-8 mt-8">
+              <Button onClick={handleModalClose} color="error">
+                Close
+              </Button>
+
+              <Button
+                onClick={handleDeleteProperty}
+                color="success"
+                variant="contained"
+              >
+                Confirm
+              </Button>
+            </div>
+          </ConfirmModal>
+        </div>
+        <AlertToast
+          alertFlag={alertFlag}
+          alertMsg={alertMsg}
+          alertType={alertType}
+          handleClose={handleAlertClose}
+        />
       </main>
       <Footer />
     </>

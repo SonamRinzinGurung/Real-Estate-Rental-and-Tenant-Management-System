@@ -221,6 +221,7 @@ const ContractAgreementPage = () => {
               size="large"
               color="tertiary"
               sx={{ color: "#fff" }}
+              disabled={isProcessing}
               startIcon={<CheckCircleRoundedIcon />}
             >
               {isProcessing ? (

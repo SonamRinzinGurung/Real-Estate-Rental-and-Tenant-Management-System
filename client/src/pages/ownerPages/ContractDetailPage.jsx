@@ -39,7 +39,7 @@ const ContractDetailPage = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${contractDetail?.realEstate?.slug}`);
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, contractDetail?.realEstate?.slug]);
@@ -234,6 +234,7 @@ const ContractDetailPage = () => {
           size="medium"
           color="error"
           sx={{ color: "#fff" }}
+          disabled={isProcessing || (alertFlag && alertType === "success")}
           startIcon={<RemoveCircleRoundedIcon />}
         >
           {isProcessing ? (
