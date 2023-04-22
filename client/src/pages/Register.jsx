@@ -37,12 +37,26 @@ const Register = () => {
     address: "",
     phoneNumber: "",
     gender: "",
-    image: "",
     password: "",
   });
 
   const [date, setDate] = useState(null);
 
+  // preview image
+  const [image, setImage] = useState(null);
+  const handleImageChange = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]));
+  };
+
+  const previewImage = () => {
+    if (image) {
+      return (
+        <div className="p-2">
+          <img src={image} alt="profilePreview" className="h-24 md:h-28" />
+        </div>
+      );
+    }
+  };
   const handleChange = useCallback(
     (e) => {
       setFormValues({ ...values, [e.target.name]: e.target.value });
@@ -153,7 +167,7 @@ const Register = () => {
                 <div className="flex flex-col justify-center my-2">
                   <label
                     htmlFor="profileImg"
-                    className="form-label inline-block mb-2 text-[#000000dd] cursor-pointer font-robotoNormal"
+                    className="mb-2 cursor-pointer font-robotoNormal self-center"
                   >
                     Upload Profile Images
                   </label>
@@ -161,16 +175,17 @@ const Register = () => {
                   <input
                     required
                     name="profileImage"
-                    className="form-control block font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
+                    className="font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
                     type="file"
                     id="profileImg"
-                    onChange={(e) =>
-                      setFormValues({ ...values, image: e.target.value })
-                    }
+                    onChange={handleImageChange}
                   />
                   <p className="mt-1 text-sm text-gray-500">
                     JPG, JPEG, PNG or GIF (MAX 3.5mb per)
                   </p>
+                  <div className="self-center border mt-2">
+                    {previewImage()}
+                  </div>
                 </div>
               </div>
               <div className="w-1/2 mx-auto mt-2">

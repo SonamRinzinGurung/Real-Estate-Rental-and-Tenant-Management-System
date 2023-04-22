@@ -37,10 +37,28 @@ const PostRealEstate = () => {
     area: "",
     floors: "",
     facing: "",
-    realEstateImages: null,
   };
 
   const [values, setFormValues] = useState(initialFormValues);
+
+  const [images, setImages] = useState(null);
+
+  const handleImagesChange = (e) => {
+    const arr = Array.from(e.target.files);
+    setImages(arr.map((file) => URL.createObjectURL(file)));
+  };
+
+  const previewImage = () => {
+    if (images) {
+      return images.map((image, index) => {
+        return (
+          <div className="p-2" key={index}>
+            <img src={image} alt="profilePreview" className="h-24 md:h-28" />
+          </div>
+        );
+      });
+    }
+  };
 
   const handleChange = useCallback(
     (e) => {
@@ -50,6 +68,7 @@ const PostRealEstate = () => {
   );
 
   const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -241,16 +260,14 @@ const PostRealEstate = () => {
                       type="file"
                       id="formFileMultiple"
                       multiple
-                      onChange={(e) =>
-                        setFormValues({
-                          ...values,
-                          realEstateImages: e.target.value,
-                        })
-                      }
+                      onChange={handleImagesChange}
                     />
                     <p className="mt-1 text-xs text-gray-400">
                       JPG, JPEG, PNG or GIF (MAX 3.5mb per)
                     </p>
+                  </div>
+                  <div className="flex flex-wrap self-center border mt-2">
+                    {previewImage()}
                   </div>
                 </div>
               </div>
