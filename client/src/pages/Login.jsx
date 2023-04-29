@@ -75,7 +75,7 @@ const Login = () => {
         </div>
       </header>
 
-      <main className="px-6 h-full mt-7">
+      <main className="px-6 h-full mt-12">
         <div className="flex lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="grow-0 shrink-1 md:shrink-0 basis-auto lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
             <img src={loginImg} className="w-full" alt="login banner" />
@@ -83,7 +83,7 @@ const Login = () => {
           <div className="lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
             <form onSubmit={handleSubmit}>
               <div className="flex justify-center mb-6">
-                <h4 className="text-center">Login to your account</h4>
+                <h3 className="text-center">Login to your account</h3>
               </div>
 
               <div className="flex flex-col gap-2 mb-2">
@@ -138,7 +138,7 @@ const Login = () => {
                     )}
                   </Button>
                 </div>
-                <p className="text-sm font-medium mt-2 pt-1 mb-0 md:text-base">
+                <p className="text-sm font-medium mt-4 pt-1 mb-0 md:text-base">
                   Don't have an account?{" "}
                   <Link
                     to={`/register/${param.role}`}

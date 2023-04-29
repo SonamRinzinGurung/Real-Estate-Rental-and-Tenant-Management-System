@@ -129,7 +129,7 @@ const CreateRentDetail = () => {
 
   return (
     <main className="flex flex-col md:flex-row">
-      <div className="mt-10 flex flex-col items-center md:ml-14 md:items-start">
+      <div className="mt-10 flex flex-col items-center md:ml-16 md:items-start">
         <div className="mb-6">
           <h3 className="font-heading font-bold">Create Rent Detail</h3>
           <p className="text-gray-400 -mt-2 font-robotoNormal">
@@ -259,7 +259,7 @@ const CreateRentDetail = () => {
         </div>
       </div>
 
-      <div className="mt-10 mb-6 md:mb-0 mx-4 self-center">
+      <div className="mt-10 mb-6 md:mb-0 mx-14 self-center">
         <img src={createRentImage} alt="" />
       </div>
 

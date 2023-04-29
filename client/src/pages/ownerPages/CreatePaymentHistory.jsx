@@ -118,7 +118,7 @@ const CreatePaymentHistory = () => {
     return <h1 className="mt-6 text-center">Rent Detail Not Found</h1>;
 
   return (
-    <main className="flex mt-10 flex-row justify-center">
+    <main className="flex mt-14 flex-row justify-center">
       <div className="flex flex-col items-center md:ml-14 md:items-start">
         <div className="mb-6 text-center md:text-start">
           <h3 className="font-heading font-bold">Payment Detail</h3>
