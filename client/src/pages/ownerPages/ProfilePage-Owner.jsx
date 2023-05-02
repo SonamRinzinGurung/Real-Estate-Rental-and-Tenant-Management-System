@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getProfileDetails,
@@ -10,6 +10,7 @@ import {
   PageLoading,
   UserProfileComponent,
 } from "../../components";
+import ImageViewer from "react-simple-image-viewer";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -41,21 +42,48 @@ const ProfilePage = () => {
     dispatch(updateProfile({ formValues }));
   };
 
+  // toggle open and close of ImageViewer
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+  // open the ImageViewer and set the currentImageIndex to the index of the image that was clicked
+  const openImageViewer = useCallback((index) => {
+    setIsViewerOpen(true);
+  }, []);
+
+  // close the ImageViewer
+  const closeImageViewer = () => {
+    setIsViewerOpen(false);
+  };
+
   if (isLoading) return <PageLoading />;
 
   return (
     <>
-      <main className="flex justify-center">
-        <div className="hidden md:block md:w-1/3 mt-10 ml-16">
+      <main className="flex flex-col items-center md:flex-row md:justify-center md:mx-28">
+        <div className="md:w-1/3 mt-10">
           <p className="font-bold font-heading text-2xl my-2">
             {user?.firstName} {user?.lastName}
           </p>
-          <div className="hidden w-60 rounded-lg overflow-hidden mt-4 md:block">
+          <div className="w-60 rounded-lg overflow-hidden mt-4 cursor-pointer">
             <img
               className="h-60 w-full object-cover"
               src={user?.profileImage}
               alt="profile"
+              onClick={() => openImageViewer(0)}
             />
+            {/* Open and View the Image */}
+            {isViewerOpen && (
+              <ImageViewer
+                src={[user?.profileImage]}
+                currentIndex={0}
+                onClose={closeImageViewer}
+                disableScroll={false}
+                backgroundStyle={{
+                  backgroundColor: "rgba(0,0,0,0.9)",
+                }}
+                closeOnClickOutside={true}
+              />
+            )}
           </div>
         </div>
         <div className="w-3/4 mt-10">

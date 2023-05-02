@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOwnerUserDetails } from "../../features/tenantUser/tenantUserSlice";
 import { useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import { RealEstateCard, Footer, PageLoading } from "../../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import ImageViewer from "react-simple-image-viewer";
 
 const OwnerUserDetailPage = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,19 @@ const OwnerUserDetailPage = () => {
   useEffect(() => {
     dispatch(getOwnerUserDetails({ slug }));
   }, [dispatch, slug]);
+
+  // toggle open and close of ImageViewer
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+  // open the ImageViewer and set the currentImageIndex to the index of the image that was clicked
+  const openImageViewer = useCallback((index) => {
+    setIsViewerOpen(true);
+  }, []);
+
+  // close the ImageViewer
+  const closeImageViewer = () => {
+    setIsViewerOpen(false);
+  };
 
   if (isLoading) return <PageLoading />;
 
@@ -33,12 +47,26 @@ const OwnerUserDetailPage = () => {
       <main className="flex flex-col md:flex-row gap-8 md:items-start">
         <div className="flex flex-col mt-10 mb-5 md:mb-12 md:w-1/4 items-center gap-1 md:ml-10">
           <h3 className="font-heading font-semibold text-4xl">Profile</h3>
-          <div className="w-48 h-48 mt-6">
+          <div className="w-48 h-48 mt-6 cursor-pointer">
             <img
               src={user?.profileImage}
               alt="profile"
               className="rounded-full w-full h-full object-cover"
+              onClick={() => openImageViewer(0)}
             />
+            {/* Open and View the Image */}
+            {isViewerOpen && (
+              <ImageViewer
+                src={[user?.profileImage]}
+                currentIndex={0}
+                onClose={closeImageViewer}
+                disableScroll={false}
+                backgroundStyle={{
+                  backgroundColor: "rgba(0,0,0,0.9)",
+                }}
+                closeOnClickOutside={true}
+              />
+            )}
           </div>
           <p className="mt-2 text-lg">
             {user?.firstName} {user?.lastName}

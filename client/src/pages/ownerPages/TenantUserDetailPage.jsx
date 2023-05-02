@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getTenantUserDetails,
@@ -14,6 +14,7 @@ import { Button } from "@mui/material";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import CircularProgress from "@mui/material/CircularProgress";
+import ImageViewer from "react-simple-image-viewer";
 
 const TenantUserDetailPage = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,19 @@ const TenantUserDetailPage = () => {
     [dispatch]
   );
 
+  // toggle open and close of ImageViewer
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+  // open the ImageViewer and set the currentImageIndex to the index of the image that was clicked
+  const openImageViewer = useCallback((index) => {
+    setIsViewerOpen(true);
+  }, []);
+
+  // close the ImageViewer
+  const closeImageViewer = () => {
+    setIsViewerOpen(false);
+  };
+
   if (isLoading) return <PageLoading />;
 
   if (!user)
@@ -57,12 +71,26 @@ const TenantUserDetailPage = () => {
       <main className="flex flex-col mx-auto mb-12 mt-10 md:flex md:ml-10">
         <h3 className="font-heading font-semibold text-4xl">Profile</h3>
         <div className="flex flex-col mt-6 gap-4 md:flex-row">
-          <div className="w-48 h-48 md:w-96 md:h-96">
+          <div className="w-48 h-48 md:w-96 md:h-96 cursor-pointer">
             <img
               src={user?.profileImage}
               alt="profile"
               className="rounded-md w-full h-full object-cover"
+              onClick={() => openImageViewer(0)}
             />
+            {/* Open and View the Image */}
+            {isViewerOpen && (
+              <ImageViewer
+                src={[user?.profileImage]}
+                currentIndex={0}
+                onClose={closeImageViewer}
+                disableScroll={false}
+                backgroundStyle={{
+                  backgroundColor: "rgba(0,0,0,0.9)",
+                }}
+                closeOnClickOutside={true}
+              />
+            )}
           </div>
           <div className="md:ml-4">
             <p className="mt-2 text-2xl font-robotoNormal">
