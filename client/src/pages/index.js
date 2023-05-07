@@ -31,6 +31,8 @@ import SendPaymentEmailPage from "./ownerPages/SendPaymentEmailPage";
 import CreatePaymentHistory from "./ownerPages/CreatePaymentHistory";
 import RentDetailTenantPage from "./tenantPages/RentDetailTenantPage";
 import SendComplaint from "./tenantPages/SendComplaint";
+import VerifyEmailPage from "./VerifyEmailPage";
+import VerificationMessagePage from "./VerificationMessagePage";
 
 export {
   Login,
@@ -66,4 +68,6 @@ export {
   CreatePaymentHistory,
   RentDetailTenantPage,
   SendComplaint,
+  VerifyEmailPage,
+  VerificationMessagePage,
 };

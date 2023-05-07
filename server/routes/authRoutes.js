@@ -8,6 +8,8 @@ import {
   logout,
   forgotPassword,
   resetPassword,
+  verifyAccount,
+  resendVerificationEmail,
 } from "../controllers/authController.js";
 import upload from "../middleware/multerImageMiddleware.js";
 import { cloudinaryProfileImageUpload } from "../middleware/cloudinaryUpload.js";
@@ -42,6 +44,18 @@ router.post(
   cloudinaryProfileImageUpload,
   register
 );
+
+/**
+ * @description Verify Email
+ * @route POST /api/auth/verify-account
+ */
+router.post("/verify-account", verifyAccount);
+
+/**
+ * @description Resend Verification Email
+ * @route PATCH /api/auth/resend-verification-email
+ */
+router.patch("/resend-verification-email", resendVerificationEmail);
 
 /**
  * @description Forgot Password - send email

@@ -37,7 +37,10 @@ const OwnerUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a phone number"],
       unique: true,
-      match: [/^[9]+[7-8]+\d{8}$/, "Please provide a valid phone number"],
+      match: [
+        /^[9]+[7-8]+\d{8}$/,
+        "Please provide a valid phone number: eg 9800000000",
+      ],
     },
     dateOfBirth: {
       type: String,
@@ -68,6 +71,14 @@ const OwnerUserSchema = new mongoose.Schema(
       select: false,
     },
     passwordResetToken: {
+      type: String,
+      select: false,
+    },
+    accountStatus: {
+      type: Boolean,
+      default: false,
+    },
+    accountVerificationToken: {
       type: String,
       select: false,
     },

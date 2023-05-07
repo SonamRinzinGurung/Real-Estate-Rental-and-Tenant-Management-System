@@ -8,9 +8,18 @@ export const loginOwner = createAsyncThunk(
   async ({ userInfo }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.post("/auth/login", userInfo);
-      localStorage.setItem("user", JSON.stringify(data.owner));
-      localStorage.setItem("token", data.accessToken);
-      localStorage.setItem("userType", data.userType);
+
+      // if account is verified, save user info to local storage
+      if (data.accountStatus) {
+        localStorage.setItem("user", JSON.stringify(data.owner));
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("userType", data.userType);
+        localStorage.removeItem("email");
+
+        // if account is not verified, save email to local storage
+      } else if (!data.accountStatus) {
+        localStorage.setItem("email", data.email);
+      }
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -23,9 +32,38 @@ export const registerOwner = createAsyncThunk(
   async ({ formData }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.post("/auth/register", formData);
-      localStorage.setItem("user", JSON.stringify(data.owner));
-      localStorage.setItem("token", data.accessToken);
-      localStorage.setItem("userType", data.userType);
+      localStorage.setItem("email", data.email);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const verifyAccountOwner = createAsyncThunk(
+  "verifyAccountOwner",
+  async ({ verifyInfo }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.post(
+        "/auth/verify-account",
+        verifyInfo
+      );
+      localStorage.removeItem("email"); // remove email from local storage
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const resendVerificationEmail = createAsyncThunk(
+  "resendVerificationEmail",
+  async ({ resendInfo }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch(
+        "/auth/resend-verification-email",
+        resendInfo
+      );
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -38,9 +76,15 @@ export const loginTenant = createAsyncThunk(
   async ({ userInfo }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.post("/auth/login", userInfo);
-      localStorage.setItem("user", JSON.stringify(data.tenant));
-      localStorage.setItem("token", data.accessToken);
-      localStorage.setItem("userType", data.userType);
+
+      if (data.accountStatus) {
+        localStorage.setItem("user", JSON.stringify(data.tenant));
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("userType", data.userType);
+        localStorage.removeItem("email");
+      } else if (!data.accountStatus) {
+        localStorage.setItem("email", data.email);
+      }
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -53,9 +97,7 @@ export const registerTenant = createAsyncThunk(
   async ({ formData }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.post("/auth/register", formData);
-      localStorage.setItem("user", JSON.stringify(data.tenant));
-      localStorage.setItem("token", data.accessToken);
-      localStorage.setItem("userType", data.userType);
+      localStorage.setItem("email", data.email);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -113,6 +155,7 @@ const authSlice = createSlice({
     errorMsg: "",
     alertType: null,
     success: null,
+    accountStatus: null,
   },
   reducers: {
     stateClear: (state) => {
@@ -136,6 +179,8 @@ const authSlice = createSlice({
         state.user = action.payload.owner;
         state.token = action.payload.accessToken;
         state.userType = action.payload.userType;
+        state.accountStatus = action.payload.accountStatus;
+        state.success = true;
       })
       .addCase(loginOwner.rejected, (state, action) => {
         state.isLoading = false;
@@ -148,11 +193,41 @@ const authSlice = createSlice({
       })
       .addCase(registerOwner.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.owner;
-        state.token = action.payload.accessToken;
         state.userType = action.payload.userType;
+        state.success = true;
       })
       .addCase(registerOwner.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.errorMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(verifyAccountOwner.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(verifyAccountOwner.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.alertType = "success";
+        state.errorMsg = "Account verified successfully";
+        state.success = true;
+      })
+      .addCase(verifyAccountOwner.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.errorMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(resendVerificationEmail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(resendVerificationEmail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorFlag = true;
+        state.alertType = "success";
+        state.errorMsg = "Verification Link sent successfully";
+      })
+      .addCase(resendVerificationEmail.rejected, (state, action) => {
         state.isLoading = false;
         state.errorFlag = true;
         state.errorMsg = action.payload;
@@ -166,6 +241,8 @@ const authSlice = createSlice({
         state.user = action.payload.tenant;
         state.token = action.payload.accessToken;
         state.userType = action.payload.userType;
+        state.accountStatus = action.payload.accountStatus;
+        state.success = true;
       })
       .addCase(loginTenant.rejected, (state, action) => {
         state.isLoading = false;
@@ -178,9 +255,8 @@ const authSlice = createSlice({
       })
       .addCase(registerTenant.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.tenant;
-        state.token = action.payload.accessToken;
         state.userType = action.payload.userType;
+        state.success = true;
       })
       .addCase(registerTenant.rejected, (state, action) => {
         state.isLoading = false;

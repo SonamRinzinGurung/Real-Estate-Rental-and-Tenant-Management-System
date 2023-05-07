@@ -10,6 +10,7 @@ import {
   clearAlert,
   loginOwner,
   loginTenant,
+  stateClear,
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
@@ -17,10 +18,19 @@ import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Login = () => {
-  const { user, userType, errorMsg, errorFlag, alertType, isLoading } =
-    useSelector((store) => store.auth);
+  const {
+    user,
+    accountStatus,
+    success,
+    userType,
+    errorMsg,
+    errorFlag,
+    alertType,
+    isLoading,
+  } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
+  const dispatch = useDispatch();
 
   const [values, setFormValues] = useState({ email: "", password: "" });
 
@@ -30,7 +40,14 @@ const Login = () => {
     }
   }, [user, navigate, userType]);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    if (success && accountStatus) {
+      navigate(`/${userType}`);
+    } else if (success && !accountStatus) {
+      navigate(`/account-created/${userType}`);
+      dispatch(stateClear());
+    }
+  }, [accountStatus, success, navigate, userType, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,7 +103,7 @@ const Login = () => {
                 <h3 className="text-center">Login to your account</h3>
               </div>
 
-              <div className="flex flex-col gap-2 mb-2">
+              <div className="flex flex-col gap-6 mb-2">
                 <FormTextField
                   value={values.email}
                   name={"email"}

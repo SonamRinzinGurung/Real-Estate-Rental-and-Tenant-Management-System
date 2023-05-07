@@ -12,6 +12,7 @@ import {
   registerOwner,
   registerTenant,
   clearAlert,
+  stateClear,
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
@@ -19,16 +20,18 @@ import { Button, CircularProgress } from "@mui/material";
 import moment from "moment";
 
 const Register = () => {
-  const { user, userType, errorFlag, errorMsg, isLoading, alertType } =
+  const { success, userType, errorFlag, errorMsg, isLoading, alertType } =
     useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user) {
-      navigate(`/${userType}`);
+    if (success) {
+      navigate(`/account-created/${userType}`);
+      dispatch(stateClear());
     }
-  }, [user, navigate, userType]);
+  }, [navigate, userType, success, dispatch]);
 
   const [values, setFormValues] = useState({
     firstName: "",
@@ -64,7 +67,6 @@ const Register = () => {
     [values]
   );
 
-  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -109,7 +111,7 @@ const Register = () => {
               <div className="flex justify-center mt-3 mb-4">
                 <h4 className="text-center">Register for your new account</h4>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center md:ml-16">
+              <div className="flex flex-wrap gap-4 justify-center md:ml-16">
                 <FormTextField
                   label="First Name"
                   name="firstName"
@@ -195,7 +197,7 @@ const Register = () => {
                 />
               </div>
 
-              <div className="text-center mt-4">
+              <div className="text-center mt-6">
                 <Button
                   type="submit"
                   variant="contained"

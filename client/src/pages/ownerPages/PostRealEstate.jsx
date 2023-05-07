@@ -112,7 +112,7 @@ const PostRealEstate = () => {
                 </p>
               </div>
               <div className="flex flex-wrap flex-col gap-2 ml-5">
-                <div className="flex flex-col gap-2 my-2">
+                <div className="flex flex-col gap-4 my-2">
                   <h5 className="mb-1">
                     <InfoIcon /> Initial Details
                   </h5>
@@ -136,7 +136,7 @@ const PostRealEstate = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <div className="flex flex-col gap-3 my-2">
+                <div className="flex flex-col gap-4 my-2">
                   <h5 className="mb-1">
                     <BungalowIcon /> Property Info
                   </h5>
@@ -216,7 +216,7 @@ const PostRealEstate = () => {
                     handleChange={handleChange}
                   />
                 </div>
-                <div className="flex flex-col gap-3 my-2">
+                <div className="flex flex-col gap-4 my-2">
                   <h5 className="mb-1">
                     <LocationOnIcon /> Address
                   </h5>

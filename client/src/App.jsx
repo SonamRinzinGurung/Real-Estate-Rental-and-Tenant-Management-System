@@ -33,6 +33,8 @@ import {
   CreatePaymentHistory,
   RentDetailTenantPage,
   SendComplaint,
+  VerifyEmailPage,
+  VerificationMessagePage,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -170,6 +172,14 @@ function App() {
           <Route
             path="/reset-password/:role/:token"
             element={<ResetPassword />}
+          />
+          <Route
+            path="/account-created/:role"
+            element={<VerificationMessagePage />}
+          />
+          <Route
+            path="/verify-account/:role/:token"
+            element={<VerifyEmailPage />}
           />
           <Route path="/" element={<Landing />} />
           <Route path="*" element={<NotFound />} />

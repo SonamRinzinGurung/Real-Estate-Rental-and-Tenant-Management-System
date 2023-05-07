@@ -1,11 +1,6 @@
 import OwnerUser from "../models/OwnerUser.js";
 import TenantUser from "../models/TenantUser.js";
-import {
-  BadRequestError,
-  ForbiddenRequestError,
-  UnAuthorizedError,
-} from "../request-errors/index.js";
-import { isEmailValid } from "../utils/validateEmail.js";
+import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/emailSender.js";
 
@@ -24,10 +19,22 @@ const login = async (req, res) => {
     if (!owner) {
       throw new UnAuthorizedError("Email not found!");
     }
+
     const isMatch = await owner.matchPassword(password);
     if (!isMatch) {
       throw new UnAuthorizedError("Incorrect Password!");
     }
+
+    // check if account's email is verified
+    if (!owner.accountStatus) {
+      return res.status(200).json({
+        message: "Account not verified",
+        email: owner.email,
+        accountStatus: owner.accountStatus,
+        userType: "owner",
+      });
+    }
+
     const accessToken = owner.createAccessToken();
     const refreshToken = owner.createRefreshToken();
 
@@ -39,7 +46,12 @@ const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refresh token expiry
     });
     owner.password = undefined;
-    res.status(200).json({ owner, accessToken, userType: "owner" });
+    res.status(200).json({
+      owner,
+      accessToken,
+      userType: "owner",
+      accountStatus: owner.accountStatus,
+    });
   } else if (role === "tenant") {
     const tenant = await TenantUser.findOne({ email }).select("+password");
     if (!tenant) {
@@ -49,6 +61,17 @@ const login = async (req, res) => {
     if (!isMatch) {
       throw new UnAuthorizedError("Incorrect Password!");
     }
+
+    // check if account's email is verified
+    if (!tenant.accountStatus) {
+      return res.status(200).json({
+        message: "Account not verified",
+        email: tenant.email,
+        accountStatus: tenant.accountStatus,
+        userType: "tenant",
+      });
+    }
+
     const accessToken = tenant.createAccessToken();
     const refreshToken = tenant.createRefreshToken();
 
@@ -60,7 +83,12 @@ const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refresh token expiry
     });
     tenant.password = undefined;
-    res.status(200).json({ tenant, accessToken, userType: "tenant" });
+    res.status(200).json({
+      tenant,
+      accessToken,
+      userType: "tenant",
+      accountStatus: tenant.accountStatus,
+    });
   } else {
     throw new BadRequestError("Invalid Role");
   }
@@ -73,41 +101,248 @@ const login = async (req, res) => {
  */
 const register = async (req, res) => {
   const { role, email } = req.body;
-  const { valid, reason, validators } = await isEmailValid(email);
-  if (!valid) {
-    throw new BadRequestError(validators[reason].reason);
-  }
+
   if (role === "owner") {
+    //generate token
+    const verificationToken = jwt.sign(
+      { email: email },
+      process.env.EMAIL_VERIFICATION_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    // add token to req.body
+    req.body.accountVerificationToken = verificationToken;
+
+    // create owner
     const owner = await OwnerUser.create(req.body);
 
-    const accessToken = owner.createAccessToken();
-    const refreshToken = owner.createRefreshToken();
-
-    // Create secure cookie with refresh token
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true, //accessible only by web server
-      secure: true, //https
-      sameSite: "None", //cross-site cookie
-      maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refresh token expiry
-    });
+    // remove password and token from response object
     owner.password = undefined;
-    res.status(201).json({ owner, accessToken, userType: "owner" });
+    owner.accountVerificationToken = undefined;
+
+    // send email with token link
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Email Verification Link";
+    const body = `
+    <p> Hello ${owner.firstName} ${owner.lastName},</p>
+    <p>Please click on the link below to verify your account on Property Plus</p>
+    <a href="${process.env.CLIENT_URL}/verify-account/owner/${verificationToken}">Verify Account</a>
+    <p>Regards,</p>
+    <p>Team Property Plus</p>
+    `;
+    await sendEmail(to, from, subject, body);
+
+    res
+      .status(201)
+      .json({ success: true, userType: "owner", email: owner.email });
   } else if (role === "tenant") {
-    const tenant = await TenantUser.create(req.body);
+    //generate token
+    const verificationToken = jwt.sign(
+      { email: email },
+      process.env.EMAIL_VERIFICATION_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
 
-    const accessToken = tenant.createAccessToken();
-    const refreshToken = tenant.createRefreshToken();
+    // add token to req.body
+    req.body.accountVerificationToken = verificationToken;
 
-    // Create secure cookie with refresh token
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true, //accessible only by web server
-      secure: true, //https
-      sameSite: "None", //cross-site cookie
-      maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match refresh token expiry
-    });
+    const tenant = await TenantUser.create(req.body); // create tenant
+
+    // remove password and token from response object
     tenant.password = undefined;
+    tenant.accountVerificationToken = undefined;
 
-    res.status(201).json({ tenant, accessToken, userType: "tenant" });
+    // send email with token link
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Email Verification Link";
+    const body = `
+    <p> Hello ${tenant.firstName} ${tenant.lastName},</p>
+    <p>Please click on the link below to verify your account on Property Plus</p>
+    <a href="${process.env.CLIENT_URL}/verify-account/tenant/${verificationToken}">Verify Account</a>
+    <p>Regards,</p>
+    <p>Team Property Plus</p>
+    `;
+    await sendEmail(to, from, subject, body);
+
+    res
+      .status(201)
+      .json({ success: true, userType: "tenant", email: tenant.email });
+  } else {
+    throw new BadRequestError("Invalid Role");
+  }
+};
+
+/**
+ * @description Verify user account
+ */
+const verifyAccount = (req, res) => {
+  const { role, token } = req.body;
+
+  if (!token) {
+    throw new BadRequestError("Token not found");
+  }
+  if (role === "owner") {
+    //verify token
+    jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_KEY,
+      async (error, payload) => {
+        if (error) {
+          return res.status(400).json({ msg: "Invalid or expired token" });
+        }
+        //find user with token and email
+        const user = await OwnerUser.findOne({
+          accountVerificationToken: token,
+          email: payload.email,
+        });
+        if (!user) {
+          return res
+            .status(400)
+            .json({ msg: "User with this token was not found" });
+        }
+
+        // update user account status
+        user.accountStatus = true;
+        user.accountVerificationToken = "";
+
+        user.save((err, result) => {
+          if (err) {
+            return res
+              .status(400)
+              .json({ msg: "Error occurred while updating user status" });
+          } else {
+            return res.json({ msg: "User successfully verified" });
+          }
+        });
+      }
+    );
+  } else if (role === "tenant") {
+    //verify token
+    jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_KEY,
+      async (error, payload) => {
+        if (error) {
+          return res.status(400).json({ msg: "Invalid or expired token" });
+        }
+        //find user with token and email
+        const user = await TenantUser.findOne({
+          accountVerificationToken: token,
+          email: payload.email,
+        });
+        if (!user) {
+          return res
+            .status(400)
+            .json({ msg: "User with this token was not found" });
+        }
+
+        // update user account status
+        user.accountStatus = true;
+        user.accountVerificationToken = "";
+
+        user.save((err, result) => {
+          if (err) {
+            return res
+              .status(400)
+              .json({ msg: "Error occurred while updating user status" });
+          } else {
+            return res.json({ msg: "User successfully verified" });
+          }
+        });
+      }
+    );
+  } else {
+    throw new BadRequestError("Invalid Role");
+  }
+};
+
+/**
+ * @description Resend the verification email
+ */
+const resendVerificationEmail = async (req, res) => {
+  const { email, role } = req.body;
+
+  if (role === "owner") {
+    //generate token
+    const verificationToken = jwt.sign(
+      { email: email },
+      process.env.EMAIL_VERIFICATION_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    // find user with email
+    const owner = await OwnerUser.findOne({ email: email });
+
+    if (!owner) {
+      throw new BadRequestError("User not found");
+    }
+
+    // update the token in db
+    owner.accountVerificationToken = verificationToken;
+    await owner.save();
+
+    // send email with token code
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Email Verification Link";
+    const body = `
+    <p> Hello ${owner.firstName} ${owner.lastName},</p>
+    <p>Please click on the link below to verify your account on Property Plus</p>
+    <a href="${process.env.CLIENT_URL}/verify-account/owner/${verificationToken}">Verify Account</a>
+    <p>Regards,</p>
+    <p>Team Property Plus</p>
+    `;
+
+    // send email with token link
+    await sendEmail(to, from, subject, body);
+
+    res
+      .status(200)
+      .json({ success: true, msg: "Token reset and sent successfully" });
+  } else if (role === "tenant") {
+    //generate token
+    const verificationToken = jwt.sign(
+      { email: email },
+      process.env.EMAIL_VERIFICATION_KEY,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    const tenant = await TenantUser.findOne({ email: email });
+
+    if (!tenant) {
+      throw new BadRequestError("User not found");
+    }
+
+    // update the token in db
+    tenant.accountVerificationToken = verificationToken;
+    await tenant.save();
+
+    // send email with token code
+    const to = email;
+    const from = process.env.EMAIL_USER;
+    const subject = "Email Verification Link";
+    const body = `
+    <p> Hello ${tenant.firstName} ${tenant.lastName},</p>
+    <p>Please click on the link below to verify your account on Property Plus</p>
+    <a href="${process.env.CLIENT_URL}/verify-account/tenant/${verificationToken}">Verify Account</a>
+    <p>Regards,</p>
+    <p>Team Property Plus</p>
+    `;
+    await sendEmail(to, from, subject, body);
+
+    res
+      .status(200)
+      .json({ success: true, msg: "Token reset and sent successfully" });
   } else {
     throw new BadRequestError("Invalid Role");
   }
@@ -345,9 +580,11 @@ const logout = (req, res) => {
 export {
   login,
   register,
+  verifyAccount,
   refreshOwner,
   refreshTenant,
   forgotPassword,
   resetPassword,
   logout,
+  resendVerificationEmail,
 };
