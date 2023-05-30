@@ -134,6 +134,10 @@ const getAllContacts = async (req, res) => {
       );
     });
   }
+
+  // reverse the contact list so that the most recent contact is at the top
+  contacts = contacts.reverse();
+
   res.json({ contacts });
 };
 

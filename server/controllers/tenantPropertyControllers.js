@@ -34,7 +34,7 @@ const getAllProperties = async (req, res) => {
     .sort({ createdAt: -1 });
 
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 2;
+  const limit = Number(req.query.limit) || 4;
   const skip = (page - 1) * limit;
 
   realEstateResult = realEstateResult.skip(skip).limit(limit);
@@ -144,6 +144,9 @@ const getAllSavedProperties = async (req, res) => {
   if (!currentTenantUser) {
     throw new NotFoundError(`User with id: ${userId} not found`);
   }
+
+  // reverse the saved properties array to show the latest saved property first
+  currentTenantUser.savedProperties.reverse();
 
   res.json({ savedProperties: currentTenantUser.savedProperties });
 };

@@ -2,6 +2,8 @@
 
 Property Plus is a real estate rental and tenant management system. It is a web application that allows users to manage their properties and tenants. It is a full stack application that uses the following technologies:
 
+Live Site - [Property Plus](https://property-plus.netlify.app/)
+
 ## Features
 
 - Post a property for rent
@@ -61,6 +63,7 @@ REFRESH_LIFETIME=7d
 CLOUDINARY_API_KEY= <your_cloudinary_api_key>
 CLOUDINARY_API_SECRET= <your_cloudinary_api_secret>
 RESET_PASSWORD_KEY= <your_reset_password_key>
+EMAIL_VERIFICATION_KEY= <your_email_verification_key>
 CLIENT_URL=http://localhost:3000
 EMAIL_HOST=smtp.ethereal.email
 EMAIL_PORT=587
@@ -78,3 +81,7 @@ $ npm run dev
 ## Author
 
 [Sonam Rinzin Gurung](https://github.com/SonamRinzinGurung)
+
+## Repository
+
+[Property Plus](https://github.com/SonamRinzinGurung/Real-Estate-Rental-and-Tenant-Management-System)

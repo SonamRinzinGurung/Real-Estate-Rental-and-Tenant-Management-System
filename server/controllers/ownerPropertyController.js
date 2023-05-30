@@ -31,7 +31,7 @@ const getOwnerRealEstates = async (req, res) => {
   }).sort("-createdAt");
 
   const page = Number(req.query.page) || 1; //page number from query string
-  const limit = 5; //limit of items per response
+  const limit = 3; //limit of items per response
   const skip = (page - 1) * limit; //calculate the number of documents to skip
 
   realEstateResults = realEstateResults.skip(skip).limit(limit);

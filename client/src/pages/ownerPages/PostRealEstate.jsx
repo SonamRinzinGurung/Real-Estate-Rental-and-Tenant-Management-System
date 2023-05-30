@@ -144,7 +144,7 @@ const PostRealEstate = () => {
                     label="Price"
                     name="price"
                     type="number"
-                    placeholder="Price"
+                    placeholder="Rent per month"
                     required
                     value={values.price}
                     color="tertiary"
