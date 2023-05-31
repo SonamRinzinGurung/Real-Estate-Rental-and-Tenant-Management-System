@@ -35,6 +35,7 @@ import {
   SendComplaint,
   VerifyEmailPage,
   VerificationMessagePage,
+  AllContactsTenant,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -164,6 +165,10 @@ function App() {
             <Route
               path="/tenant/send-complaint/:slug"
               element={<SendComplaint />}
+            />
+            <Route
+              path="/tenant/contacts/all"
+              element={<AllContactsTenant />}
             />
           </Route>
           <Route path="/login/:role" element={<Login />} />

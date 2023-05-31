@@ -12,7 +12,9 @@ const getSingleTenantUser = async (req, res) => {
   const { slug } = req.params;
   const { userId } = req.user;
 
-  const user = await TenantUser.findOne({ slug }).select("-savedProperties");
+  const user = await TenantUser.findOne({ slug }).select(
+    "-savedProperties -contacts -accountVerificationToken"
+  );
 
   if (!user) {
     throw new NotFoundError("User not found");
@@ -119,7 +121,8 @@ const getAllContacts = async (req, res) => {
   // Get the current owner user's contact list
   const currentOwnerUser = await OwnerUser.findById(userId).populate({
     path: "contacts",
-    select: "-savedProperties -createdAt -updatedAt -__v",
+    select:
+      "-savedProperties -contacts -accountVerificationToken -createdAt -updatedAt -__v",
   });
 
   if (!currentOwnerUser) throw new NotFoundError("User not found");

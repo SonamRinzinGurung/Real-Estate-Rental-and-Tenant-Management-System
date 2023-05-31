@@ -4,6 +4,8 @@ import {
   getSingleOwnerUser,
   getSelfDetail,
   updateProfile,
+  addContactToggle,
+  getAllContacts,
 } from "../controllers/tenantUserControllers.js";
 
 /**
@@ -23,5 +25,17 @@ router.get("/profile", getSelfDetail);
  * @route PATCH /api/tenant/profile
  */
 router.patch("/profile", updateProfile);
+
+/**
+ * @description Toggle Add Contact (Add or Remove Contact)
+ * @route PATCH /api/tenant/addContact/:id
+ */
+router.patch("/addContact/:id", addContactToggle);
+
+/**
+ * @description Get All Contacts
+ * @route PATCH /api/tenant/contacts/all
+ */
+router.get("/contacts/all", getAllContacts);
 
 export default router;

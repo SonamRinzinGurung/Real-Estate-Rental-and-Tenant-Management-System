@@ -125,6 +125,24 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
           Saved
         </Button>
       </Link>
+      <Link
+        to="/tenant/contacts/all"
+        onClick={toggleMenu}
+        className="text-center"
+      >
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Contacts
+        </Button>
+      </Link>
     </>
   );
 };

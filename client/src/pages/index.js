@@ -33,6 +33,7 @@ import RentDetailTenantPage from "./tenantPages/RentDetailTenantPage";
 import SendComplaint from "./tenantPages/SendComplaint";
 import VerifyEmailPage from "./VerifyEmailPage";
 import VerificationMessagePage from "./VerificationMessagePage";
+import AllContactsTenant from "./tenantPages/AllContactsTenant";
 
 export {
   Login,
@@ -70,4 +71,5 @@ export {
   SendComplaint,
   VerifyEmailPage,
   VerificationMessagePage,
+  AllContactsTenant,
 };

@@ -57,6 +57,13 @@ const TenantUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a profile image"],
     },
+    contacts: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "OwnerUser",
+        default: [],
+      },
+    ],
     password: {
       type: String,
       required: [true, "Please provide a password"],

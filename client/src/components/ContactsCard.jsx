@@ -10,6 +10,7 @@ const ContactsCard = ({
   profileImage,
   email,
   slug,
+  tenant,
 }) => {
   return (
     <Card
@@ -23,7 +24,9 @@ const ContactsCard = ({
         color: "#102a43",
       }}
     >
-      <Link to={`/owner/tenant-user/${slug}`}>
+      <Link
+        to={`/${tenant ? "tenant/owner-user" : "owner/tenant-user"}/${slug}`}
+      >
         <CardActionArea>
           <CardMedia
             component="img"

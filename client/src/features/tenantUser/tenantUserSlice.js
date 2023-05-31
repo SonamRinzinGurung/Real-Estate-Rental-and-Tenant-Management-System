@@ -37,6 +37,35 @@ export const updateTenantProfile = createAsyncThunk(
   }
 );
 
+export const addOrRemoveContact = createAsyncThunk(
+  "addRemoveContact",
+  async ({ id }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch(`/tenant/addContact/${id}`);
+      localStorage.setItem("user", JSON.stringify(data.updatedUser));
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const getAllContacts = createAsyncThunk(
+  "allContacts",
+  async ({ name }, thunkAPI) => {
+    try {
+      let url = "/tenant/contacts/all";
+      if (name) {
+        url = url + `?name=${name}`;
+      }
+      const { data } = await axiosFetch.get(url);
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const getContractWithID = createAsyncThunk(
   "getContractWithID",
   async ({ contractId }, thunkAPI) => {
@@ -88,6 +117,9 @@ const tenantUserSlice = createSlice({
     alertMsg: "",
     alertType: null,
     isProcessing: false,
+    contacts: null,
+    isContact: null,
+    success: null,
   },
   reducers: {
     clearAlert: (state) => {
@@ -118,6 +150,7 @@ const tenantUserSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user;
         state.realEstates = action.payload.realEstates;
+        state.isContact = action.payload.isContact;
         state.alertFlag = false;
       })
       .addCase(getOwnerUserDetails.rejected, (state, action) => {
@@ -138,6 +171,37 @@ const tenantUserSlice = createSlice({
       })
       .addCase(updateTenantProfile.rejected, (state, action) => {
         state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(addOrRemoveContact.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(addOrRemoveContact.fulfilled, (state, action) => {
+        state.alertFlag = true;
+        state.isContact = action.payload.isContact;
+        state.alertMsg = action.payload.message;
+        state.alertType = "success";
+        state.isProcessing = false;
+      })
+      .addCase(addOrRemoveContact.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(getAllContacts.pending, (state) => {
+        state.isLoading = true;
+        state.success = null;
+      })
+      .addCase(getAllContacts.fulfilled, (state, action) => {
+        state.contacts = action.payload.contacts;
+        state.isLoading = false;
+        state.alertFlag = false;
+      })
+      .addCase(getAllContacts.rejected, (state, action) => {
+        state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

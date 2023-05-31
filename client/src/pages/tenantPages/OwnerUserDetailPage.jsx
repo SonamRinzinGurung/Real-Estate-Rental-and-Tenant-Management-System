@@ -1,24 +1,55 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getOwnerUserDetails } from "../../features/tenantUser/tenantUserSlice";
+import {
+  getOwnerUserDetails,
+  addOrRemoveContact,
+  clearAlert,
+} from "../../features/tenantUser/tenantUserSlice";
 import { useParams } from "react-router-dom";
-import { RealEstateCard, Footer, PageLoading } from "../../components";
+import {
+  RealEstateCard,
+  Footer,
+  PageLoading,
+  AlertToast,
+} from "../../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ImageViewer from "react-simple-image-viewer";
+import { Button } from "@mui/material";
+import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
+import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const OwnerUserDetailPage = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
 
-  const { user, realEstates, isLoading } = useSelector(
-    (state) => state.tenantUser
-  );
+  const {
+    user,
+    realEstates,
+    isLoading,
+    isContact,
+    isProcessing,
+    alertFlag,
+    alertMsg,
+    alertType,
+  } = useSelector((state) => state.tenantUser);
 
   useEffect(() => {
     dispatch(getOwnerUserDetails({ slug }));
   }, [dispatch, slug]);
+
+  // close the alert
+  const handleClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
 
   // toggle open and close of ImageViewer
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -84,6 +115,56 @@ const OwnerUserDetailPage = () => {
             <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
             <p className="">{user?.email}</p>
           </div>
+
+          {isContact ? (
+            <Button
+              disabled={isProcessing}
+              onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
+              variant="contained"
+              color="error"
+              startIcon={<PersonRemoveAlt1RoundedIcon />}
+              size="medium"
+              sx={{
+                color: "white",
+                marginTop: "12px",
+              }}
+            >
+              {isProcessing ? (
+                <CircularProgress
+                  size={26}
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              ) : (
+                "Remove"
+              )}
+            </Button>
+          ) : (
+            <Button
+              disabled={isProcessing}
+              onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
+              variant="contained"
+              color="secondary"
+              startIcon={<ContactPageRoundedIcon />}
+              size="medium"
+              sx={{
+                color: "white",
+                marginTop: "12px",
+              }}
+            >
+              {isProcessing ? (
+                <CircularProgress
+                  size={26}
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              ) : (
+                "Add"
+              )}
+            </Button>
+          )}
         </div>
         <div className="mb-12 md:w-3/4 md:mt-10">
           {realEstates?.length === 0 ? (
@@ -105,6 +186,12 @@ const OwnerUserDetailPage = () => {
             </>
           )}
         </div>
+        <AlertToast
+          alertFlag={alertFlag}
+          alertMsg={alertMsg}
+          alertType={alertType}
+          handleClose={handleClose}
+        />
       </main>
       <Footer />
     </>

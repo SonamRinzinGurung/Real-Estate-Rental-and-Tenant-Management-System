@@ -17,7 +17,7 @@ import UserProfileComponent from "./UserProfileComponent";
 import DatePicker from "./DatePicker";
 import SearchAndFilter from "./tenantComponents/SearchAndFilter";
 import UpdatePropertyForm from "./ownerComponents/UpdatePropertyForm";
-import ContactsCard from "./ownerComponents/ContactsCard";
+import ContactsCard from "./ContactsCard";
 import ConfirmModal from "./ConfirmModal";
 import RentDetailComponent from "./RentDetailComponent";
 import ScrollToTop from "./ScrollToTop";
