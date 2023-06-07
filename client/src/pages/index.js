@@ -34,7 +34,7 @@ import SendComplaint from "./tenantPages/SendComplaint";
 import VerifyEmailPage from "./VerifyEmailPage";
 import VerificationMessagePage from "./VerificationMessagePage";
 import AllContactsTenant from "./tenantPages/AllContactsTenant";
-
+import OwnerChat from "./ownerPages/OwnerChat";
 export {
   Login,
   Register,
@@ -72,4 +72,5 @@ export {
   VerifyEmailPage,
   VerificationMessagePage,
   AllContactsTenant,
+  OwnerChat,
 };

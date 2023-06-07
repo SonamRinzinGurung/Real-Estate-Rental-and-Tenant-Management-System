@@ -22,7 +22,8 @@ import ConfirmModal from "./ConfirmModal";
 import RentDetailComponent from "./RentDetailComponent";
 import ScrollToTop from "./ScrollToTop";
 import PaymentHistoryComponent from "./PaymentHistoryComponent";
-
+import ChatUserOwner from "./ownerComponents/ChatUser-OwnerComponent";
+import ChatMessageOwner from "./ownerComponents/ChatMessage-OwnerComponent";
 export {
   SharedLayoutOwner,
   SharedLayoutTenant,
@@ -50,4 +51,6 @@ export {
   RentDetailComponent,
   ScrollToTop,
   PaymentHistoryComponent,
+  ChatUserOwner,
+  ChatMessageOwner,
 };

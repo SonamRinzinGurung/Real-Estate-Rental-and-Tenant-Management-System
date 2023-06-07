@@ -36,6 +36,7 @@ import {
   VerifyEmailPage,
   VerificationMessagePage,
   AllContactsTenant,
+  OwnerChat,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -119,6 +120,7 @@ function App() {
               path="/owner/rentDetail/paymentHistory/:rentDetailId/create"
               element={<CreatePaymentHistory />}
             />
+            <Route path="/owner/chat" element={<OwnerChat />} />
           </Route>
           <Route
             path="/tenant"

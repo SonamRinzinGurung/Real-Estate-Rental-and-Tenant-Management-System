@@ -27,6 +27,7 @@ import {
   authorizeOwnerUser,
   authorizeTenantUser,
 } from "./middleware/userAuthorization.js";
+import { Server } from "socket.io";
 
 //using morgan for logging requests
 if (process.env.NODE_ENV !== "production") {
@@ -77,12 +78,43 @@ const PORT = process.env.PORT || 5000; //port number
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
   } catch (error) {
     console.log(error);
   }
 };
 start();
+
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+// Socket setup
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("addUser", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+  socket.on("sendMsg", (data) => {
+    const sendUserSocketId = onlineUsers.get(data.to);
+    if (sendUserSocketId) {
+      socket.to(sendUserSocketId).emit("receiveMsg", data.message);
+    }
+  });
+  socket.on("disconnect", () => {
+    for (let [key, value] of onlineUsers) {
+      if (value === socket.id) {
+        onlineUsers.delete(key);
+        break;
+      }
+    }
+  });
+});
