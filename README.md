@@ -1,6 +1,6 @@
 # Real Estate Rental and Tenant Management System - Property Plus
 
-Property Plus is a real estate rental and tenant management system. It is a web application that allows users to manage their properties and tenants. It is a full stack application that uses the following technologies:
+Property Plus is a real estate rental and tenant management system. It is a web application that allows two types of users to use the application. The two types of users are the owner and the tenant. The owner can post a property for rent, manage tenants, register rent payment, and create a property contract. The tenant can search and filter properties, view property details, send an email to the owner of the property, and use the built-in chat application for communication between the owner and the tenant.
 
 Live Site - [Property Plus](https://property-plus.netlify.app/)
 
@@ -9,7 +9,9 @@ Live Site - [Property Plus](https://property-plus.netlify.app/)
 - Post a property for rent
 - Search and filter properties
 - View property details
-- Send email to the owner of the property
+- Built-in Chat Application for communication between owner and tenant
+- Secure JWT authentication using access and refresh tokens
+- Send emails between owner and tenant
 - Create Property Contract
 - Manage tenants
 - Register Rent Payment

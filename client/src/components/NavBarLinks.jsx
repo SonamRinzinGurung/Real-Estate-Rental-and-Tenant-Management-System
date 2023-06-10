@@ -68,6 +68,20 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
           Rent
         </Button>
       </Link>
+      <Link to="/owner/chat" onClick={toggleMenu} className="text-center">
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Chat
+        </Button>
+      </Link>
     </>
   );
 };
@@ -141,6 +155,20 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
           }}
         >
           Contacts
+        </Button>
+      </Link>
+      <Link to="/tenant/chat" onClick={toggleMenu} className="text-center">
+        <Button
+          type="text"
+          sx={{
+            color: "black",
+            "&:hover": {
+              color: "primary.dark",
+            },
+            width: "100%",
+          }}
+        >
+          Chat
         </Button>
       </Link>
     </>

@@ -109,12 +109,4 @@ io.on("connection", (socket) => {
       socket.to(sendUserSocketId).emit("receiveMsg", data.message);
     }
   });
-  socket.on("disconnect", () => {
-    for (let [key, value] of onlineUsers) {
-      if (value === socket.id) {
-        onlineUsers.delete(key);
-        break;
-      }
-    }
-  });
 });

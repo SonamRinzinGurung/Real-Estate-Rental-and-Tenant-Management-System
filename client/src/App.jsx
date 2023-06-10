@@ -37,6 +37,7 @@ import {
   VerificationMessagePage,
   AllContactsTenant,
   OwnerChat,
+  TenantChat,
 } from "./pages";
 import {
   SharedLayoutOwner,
@@ -172,6 +173,7 @@ function App() {
               path="/tenant/contacts/all"
               element={<AllContactsTenant />}
             />
+            <Route path="/tenant/chat" element={<TenantChat />} />
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />

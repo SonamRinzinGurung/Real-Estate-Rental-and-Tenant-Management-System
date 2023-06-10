@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllContacts } from "../../features/ownerUser/ownerUserSlice";
+import { getAllContacts } from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
 import { io } from "socket.io-client";
 
-const OwnerChat = () => {
+const TenantChat = () => {
   const dispatch = useDispatch();
   const socket = useRef();
 
-  const { contacts, isLoading } = useSelector((state) => state.ownerUser);
+  const { contacts, isLoading } = useSelector((state) => state.tenantUser);
   const { user } = useSelector((state) => state.auth);
   const [currentChat, setCurrentChat] = useState(null);
   const [currentSelectedChatIndex, setCurrentChatIndex] = useState(null);
@@ -41,7 +41,6 @@ const OwnerChat = () => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col flex-wrap justify-center gap-8 md:justify-start mt-12 mb-8 mx-2 md:mx-4">
       <h1 className="font-heading font-bold">Chat</h1>
@@ -67,14 +66,16 @@ const OwnerChat = () => {
             </div>
           ))}
         </div>
+
         <ChatMessages
           chat={currentChat}
           currentUser={user.slug}
           socket={socket}
+          fromTenant
         />
       </div>
     </div>
   );
 };
 
-export default OwnerChat;
+export default TenantChat;
