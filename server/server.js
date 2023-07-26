@@ -29,9 +29,20 @@ import {
 } from "./middleware/userAuthorization.js";
 import { Server } from "socket.io";
 
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
 //using morgan for logging requests
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
+}
+
+//static folder for frontend build files in production mode only (to serve frontend files)
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+if (process.env.NODE_ENV === "production") {
+  //set static folder for frontend build files
+  app.use(express.static(path.resolve(__dirname, "../client/build")));
 }
 
 app.use(express.json()); //to parse json data
@@ -68,6 +79,14 @@ app.use("/api/rentDetail", authorizeOwnerUser, ownerRentDetailRoutes);
 app.use("/api/rentDetailTenant", authorizeTenantUser, tenantRentDetailRoutes);
 
 app.use("/api/chat", chatRoutes);
+
+//serve frontend files in production mode only
+
+if (process.env.NODE_ENV === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+  });
+}
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);
