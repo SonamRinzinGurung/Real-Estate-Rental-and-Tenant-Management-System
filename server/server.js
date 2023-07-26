@@ -8,6 +8,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
+//security packages
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+
 import connectDB from "./database/connectDB.js"; //function to connect to the database
 //routes
 import authRoutes from "./routes/authRoutes.js";
@@ -40,12 +45,15 @@ if (process.env.NODE_ENV !== "production") {
 //static folder for frontend build files in production mode only (to serve frontend files)
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-if (process.env.NODE_ENV === "production") {
-  //set static folder for frontend build files
-  app.use(express.static(path.resolve(__dirname, "../client/build")));
-}
+//set static folder for frontend build files
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(express.json()); //to parse json data
+
+app.use(helmet()); //secure headers
+app.use(xss()); //sanitize input , prevent cross site scripting
+app.use(mongoSanitize()); //prevents mongodb operator injection
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -82,11 +90,9 @@ app.use("/api/chat", chatRoutes);
 
 //serve frontend files in production mode only
 
-if (process.env.NODE_ENV === "production") {
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
-  });
-}
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+});
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -139,8 +139,8 @@ const ChatMessages = ({ chat, currentUser, socket, fromTenant }) => {
             ref={scrollRef}
           >
             <div
-              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl bg-white my-1 ${
-                !message.fromSelf && "bg-primary text-white"
+              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl my-1 ${
+                !message.fromSelf ? "bg-primary text-white" : "bg-white"
               }`}
             >
               <p>{message.message}</p>
