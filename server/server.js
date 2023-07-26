@@ -50,7 +50,7 @@ app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(express.json()); //to parse json data
 
-app.use(helmet()); //secure headers
+app.use(helmet({ contentSecurityPolicy: false })); //secure headers
 app.use(xss()); //sanitize input , prevent cross site scripting
 app.use(mongoSanitize()); //prevents mongodb operator injection
 
@@ -90,8 +90,8 @@ app.use("/api/chat", chatRoutes);
 
 //serve frontend files in production mode only
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build","index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
 });
 
 app.use(routeNotFoundMiddleware);
