@@ -46,12 +46,11 @@ if (process.env.NODE_ENV !== "production") {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 //set static folder for frontend build files
-app.use(express.static(path.resolve(__dirname, "build")));
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 app.use(express.json()); //to parse json data
-
-app.use(helmet({ contentSecurityPolicy: false })); //secure headers
-app.use(xss()); //sanitize input , prevent cross site scripting
+// app.use(helmet({ contentSecurityPolicy: false })); //secure headers
+// app.use(xss()); //sanitize input , prevent cross site scripting
 app.use(mongoSanitize()); //prevents mongodb operator injection
 
 app.use(
@@ -91,7 +90,7 @@ app.use("/api/chat", chatRoutes);
 //serve frontend files in production mode only
 
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 app.use(routeNotFoundMiddleware);
