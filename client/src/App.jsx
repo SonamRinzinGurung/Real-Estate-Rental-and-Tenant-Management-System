@@ -81,47 +81,41 @@ function App() {
             }
           >
             <Route index element={<HomepageOwner />} />
-            <Route path="/owner/property/post" element={<PostRealEstate />} />
+            <Route path="property/post" element={<PostRealEstate />} />
             <Route
-              path="/owner/real-estate/:slug"
+              path="real-estate/:slug"
               element={<PersonalRealEstateDetail />}
             />
             <Route
-              path="/owner/real-estate/update/:slug"
+              path="real-estate/update/:slug"
               element={<UpdateRealEstateDetail />}
             />
-            <Route path="/owner/profile" element={<ProfilePageOwner />} />
+            <Route path="profile" element={<ProfilePageOwner />} />
             <Route
-              path="/owner/tenant-user/:slug"
+              path="tenant-user/:slug"
               element={<TenantUserDetailPage />}
             />
-            <Route path="/owner/contacts/all" element={<AllContacts />} />
+            <Route path="contacts/all" element={<AllContacts />} />
+            <Route path="contract/create" element={<CreateContractPage />} />
             <Route
-              path="/owner/contract/create"
-              element={<CreateContractPage />}
-            />
-            <Route
-              path="/owner/contract/:realEstateId/:slug"
+              path="contract/:realEstateId/:slug"
               element={<ContractDetailPage />}
             />
-            <Route path="/owner/rentDetail" element={<AllRentDetailPage />} />
+            <Route path="rentDetail" element={<AllRentDetailPage />} />
+            <Route path="rentDetail/create" element={<CreateRentDetail />} />
             <Route
-              path="/owner/rentDetail/create"
-              element={<CreateRentDetail />}
-            />
-            <Route
-              path="/owner/rentDetail/:rentDetailId/:slug"
+              path="rentDetail/:rentDetailId/:slug"
               element={<SingleRentDetail />}
             />
             <Route
-              path="/owner/rentDetail/send-payment-email/:rentDetailId"
+              path="rentDetail/send-payment-email/:rentDetailId"
               element={<SendPaymentEmailPage />}
             />
             <Route
-              path="/owner/rentDetail/paymentHistory/:rentDetailId/create"
+              path="rentDetail/paymentHistory/:rentDetailId/create"
               element={<CreatePaymentHistory />}
             />
-            <Route path="/owner/chat" element={<OwnerChat />} />
+            <Route path="chat" element={<OwnerChat />} />
           </Route>
           <Route
             path="/tenant"
@@ -132,48 +126,33 @@ function App() {
             }
           >
             <Route index element={<HomepageTenant />} />
+            <Route path="real-estate/:slug" element={<RealEstateDetail />} />
+            <Route path="real-estate/saved/all" element={<SavedRealEstate />} />
+            <Route path="profile" element={<ProfilePageTenant />} />
+            <Route path="owner-user/:slug" element={<OwnerUserDetailPage />} />
             <Route
-              path="/tenant/real-estate/:slug"
-              element={<RealEstateDetail />}
-            />
-            <Route
-              path="/tenant/real-estate/saved/all"
-              element={<SavedRealEstate />}
-            />
-            <Route path="/tenant/profile" element={<ProfilePageTenant />} />
-            <Route
-              path="/tenant/owner-user/:slug"
-              element={<OwnerUserDetailPage />}
-            />
-            <Route
-              path="/tenant/contract-agreement/:contractId"
+              path="contract-agreement/:contractId"
               element={<ContractAgreementPage />}
             />
             <Route
-              path="/tenant/rental-properties/all"
+              path="rental-properties/all"
               element={<AllRentalProperties />}
             />
             <Route
-              path="/tenant/rental-properties/:slug"
+              path="rental-properties/:slug"
               element={<RentalPropertyDetail />}
             />
             <Route
-              path="/tenant/contract/:realEstateId/:slug"
+              path="contract/:realEstateId/:slug"
               element={<ContractDetailPageTenant />}
             />
             <Route
-              path="/tenant/rentDetail/:realEstateId/:slug"
+              path="rentDetail/:realEstateId/:slug"
               element={<RentDetailTenantPage />}
             />
-            <Route
-              path="/tenant/send-complaint/:slug"
-              element={<SendComplaint />}
-            />
-            <Route
-              path="/tenant/contacts/all"
-              element={<AllContactsTenant />}
-            />
-            <Route path="/tenant/chat" element={<TenantChat />} />
+            <Route path="send-complaint/:slug" element={<SendComplaint />} />
+            <Route path="contacts/all" element={<AllContactsTenant />} />
+            <Route path="chat" element={<TenantChat />} />
           </Route>
           <Route path="/login/:role" element={<Login />} />
           <Route path="/register/:role" element={<Register />} />
@@ -190,7 +169,7 @@ function App() {
             path="/verify-account/:role/:token"
             element={<VerifyEmailPage />}
           />
-          <Route path="/" element={<Landing />} />
+          <Route index element={<Landing />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPoliciesPage />} />
