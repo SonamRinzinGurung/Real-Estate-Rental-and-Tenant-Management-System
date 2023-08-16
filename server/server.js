@@ -72,6 +72,11 @@ app.use(function (req, res, next) {
   next();
 });
 
+//serve frontend files in production mode only
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/owner/real-estate", authorizeOwnerUser, ownerPropertyRoutes);
 app.use("/api/tenant/real-estate", authorizeTenantUser, tenantPropertyRoutes);
@@ -87,12 +92,6 @@ app.use("/api/rentDetail", authorizeOwnerUser, ownerRentDetailRoutes);
 app.use("/api/rentDetailTenant", authorizeTenantUser, tenantRentDetailRoutes);
 
 app.use("/api/chat", chatRoutes);
-
-//serve frontend files in production mode only
-
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
-});
 
 app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -80,6 +80,17 @@ const Login = () => {
     },
     [values]
   );
+
+  const handleFillCredentials = useCallback(() => {
+    setFormValues({
+      email:
+        param.role === "owner"
+          ? "kanyenorth2000@gmail.com"
+          : "np03cs4s210047@heraldcollege.edu.np",
+      password: "secret",
+    });
+  }, []);
+
   return (
     <div>
       <header className="flex m-1 shadow-sm">
@@ -116,6 +127,20 @@ const Login = () => {
                   value={values.password}
                   handleChange={handleChange}
                 />
+                <div>
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    color="tertiary"
+                    disabled={isLoading}
+                    sx={{
+                      color: "white",
+                    }}
+                    onClick={handleFillCredentials}
+                  >
+                    Fill with demo credentials
+                  </Button>
+                </div>
                 <div className="self-end">
                   <Link
                     to={`/forgot-password/${param.role}`}
