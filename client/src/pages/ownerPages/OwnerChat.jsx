@@ -15,7 +15,7 @@ const OwnerChat = () => {
 
   useEffect(() => {
     if (user) {
-      socket.current = io(process.env.REACT_APP_API_HOST);
+      socket.current = io(import.meta.env.VITE_APP_API_HOST);
       socket.current.emit("addUser", user._id);
     }
   }, [user]);

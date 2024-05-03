@@ -46,11 +46,11 @@ if (process.env.NODE_ENV !== "production") {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 //set static folder for frontend build files
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(path.resolve(__dirname, "../client/dist")));
 
 app.use(express.json()); //to parse json data
-// app.use(helmet({ contentSecurityPolicy: false })); //secure headers
-// app.use(xss()); //sanitize input , prevent cross site scripting
+app.use(helmet({ contentSecurityPolicy: false })); //secure headers
+app.use(xss()); //sanitize input , prevent cross site scripting
 app.use(mongoSanitize()); //prevents mongodb operator injection
 
 app.use(
