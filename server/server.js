@@ -53,6 +53,8 @@ app.use(helmet({ contentSecurityPolicy: false })); //secure headers
 app.use(xss()); //sanitize input , prevent cross site scripting
 app.use(mongoSanitize()); //prevents mongodb operator injection
 
+app.set("trust proxy", 1); //trust first proxy
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
