@@ -90,7 +90,7 @@ app.use("/api/chat", chatRoutes);
 //serve frontend files in production mode only
 
 app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+  res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 });
 
 app.use(routeNotFoundMiddleware);

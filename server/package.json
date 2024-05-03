@@ -23,6 +23,7 @@
     "express-async-errors": "^3.1.1",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^6.7.0",
+    "he": "^1.2.0",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.0",
