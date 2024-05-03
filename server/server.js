@@ -91,12 +91,12 @@ app.use("/api/chat", chatRoutes);
 
 //serve frontend files in production mode only
 
-app.get("/*", function (req, res) {
+app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 });
 
-app.use(routeNotFoundMiddleware);
 app.use(errorHandlerMiddleware);
+app.use(routeNotFoundMiddleware);
 
 const PORT = process.env.PORT || 5000; //port number
 
