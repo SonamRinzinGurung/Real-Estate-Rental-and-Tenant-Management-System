@@ -40,17 +40,16 @@ $ cd server
 $ npm install
 ```
 
-3. Install the required packages for the frontend:
+3. Open a new terminal session and install the required packages for the frontend:
 
 ```bash
 $ cd client
 $ npm install
 ```
 
-4. Configure the environment variables:
+4. Configure the environment variables inside the server folder:
 
 ```bash
-$ cd server
 
 - create a .env file and add the following variables:
 - generate secret keys for jwt tokens using online tools
@@ -79,11 +78,11 @@ EMAIL_PASS= <your_ethereal_email_pass>
 $ cd server
 $ npm run dev
 ```
+*** 
+### Author
 
-## Author
+[Sonam Rinzin Gurung](https://www.linkedin.com/in/sonam-rinzin-gurung-59060b211/)
 
-[Sonam Rinzin Gurung](https://github.com/SonamRinzinGurung)
-
-## Repository
+### Repository
 
 [Property Plus](https://github.com/SonamRinzinGurung/Real-Estate-Rental-and-Tenant-Management-System)

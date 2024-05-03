@@ -1,6 +1,5 @@
-import SharedLayoutOwner from "./ownerComponents/SharedLayoutOwner";
-import SharedLayoutTenant from "./tenantComponents/SharedLayoutTenant";
-import { ProtectedRoutesOwner, ProtectedRoutesTenant } from "./ProtectedRoutes";
+import SharedLayout from "./SharedLayout";
+import ProtectedRoutes from "./ProtectedRoutes";
 import Logo from "./Logo";
 import FormPasswordField from "./FormPasswordField";
 import FormTextField from "./FormTextField";
@@ -27,10 +26,8 @@ import ChatMessages from "./ChatMessagesComponent";
 import ChatInput from "./ChatInput";
 
 export {
-  SharedLayoutOwner,
-  SharedLayoutTenant,
-  ProtectedRoutesOwner,
-  ProtectedRoutesTenant,
+  SharedLayout,
+  ProtectedRoutes,
   Logo,
   FormPasswordField,
   FormTextField,

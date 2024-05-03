@@ -85,8 +85,8 @@ const Login = () => {
     setFormValues({
       email:
         param.role === "owner"
-          ? "kanyenorth2000@gmail.com"
-          : "np03cs4s210047@heraldcollege.edu.np",
+          ? "test_owner_user@property.com"
+          : "test_tenant_user@property.com",
       password: "secret",
     });
   }, []);
