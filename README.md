@@ -66,13 +66,24 @@ CLOUDINARY_API_SECRET= <your_cloudinary_api_secret>
 RESET_PASSWORD_KEY= <your_reset_password_key>
 EMAIL_VERIFICATION_KEY= <your_email_verification_key>
 CLIENT_URL=http://localhost:3000
-EMAIL_HOST=smtp.ethereal.email
+EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_USER= <your_ethereal_email_user>
-EMAIL_PASS= <your_ethereal_email_pass>
+EMAIL_USER= <your_gmail_address>
+EMAIL_PASS= <your_gmail_pass> or <your_gmail_app_password>
 ```
 
-5. Run the application:
+5. Configure the environment variables inside the client folder:
+
+```bash
+
+- create a .env.local file and add the following variables:
+
+VITE_APP_BASE_URL=http://localhost:3000
+VITE_APP_API_URL=http://localhost:5000/api
+VITE_APP_API_HOST=http://localhost:5000
+```
+
+6. Run the application:
 
 ```bash
 $ cd server
