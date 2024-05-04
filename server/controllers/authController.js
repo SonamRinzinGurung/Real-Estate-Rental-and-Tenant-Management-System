@@ -129,7 +129,7 @@ const register = async (req, res) => {
     const body = `
     <p> Hello ${owner.firstName} ${owner.lastName},</p>
     <p>Please click on the link below to verify your account on Property Plus</p>
-    <a href="${process.env.CLIENT_URL}/verify-account/owner/${verificationToken}">Verify Account</a>
+    <a href="${process.env.CLIENT_URL}/#/verify-account/owner/${verificationToken}">Verify Account</a>
     <p>Regards,</p>
     <p>Team Property Plus</p>
     `;
@@ -164,7 +164,7 @@ const register = async (req, res) => {
     const body = `
     <p> Hello ${tenant.firstName} ${tenant.lastName},</p>
     <p>Please click on the link below to verify your account on Property Plus</p>
-    <a href="${process.env.CLIENT_URL}/verify-account/tenant/${verificationToken}">Verify Account</a>
+    <a href="${process.env.CLIENT_URL}/#/verify-account/tenant/${verificationToken}">Verify Account</a>
     <p>Regards,</p>
     <p>Team Property Plus</p>
     `;
@@ -296,7 +296,7 @@ const resendVerificationEmail = async (req, res) => {
     const body = `
     <p> Hello ${owner.firstName} ${owner.lastName},</p>
     <p>Please click on the link below to verify your account on Property Plus</p>
-    <a href="${process.env.CLIENT_URL}/verify-account/owner/${verificationToken}">Verify Account</a>
+    <a href="${process.env.CLIENT_URL}/#/verify-account/owner/${verificationToken}">Verify Account</a>
     <p>Regards,</p>
     <p>Team Property Plus</p>
     `;
@@ -334,7 +334,7 @@ const resendVerificationEmail = async (req, res) => {
     const body = `
     <p> Hello ${tenant.firstName} ${tenant.lastName},</p>
     <p>Please click on the link below to verify your account on Property Plus</p>
-    <a href="${process.env.CLIENT_URL}/verify-account/tenant/${verificationToken}">Verify Account</a>
+    <a href="${process.env.CLIENT_URL}/#/verify-account/tenant/${verificationToken}">Verify Account</a>
     <p>Regards,</p>
     <p>Team Property Plus</p>
     `;
@@ -432,7 +432,7 @@ const forgotPassword = async (req, res) => {
     const subject = "Reset Account Password Link";
     const body = `
   <h3>Please click the link below to reset your password</h3>
-  <a href="${process.env.CLIENT_URL}/reset-password/owner/${token}">Reset Password</a>`;
+  <a href="${process.env.CLIENT_URL}/#/reset-password/owner/${token}">Reset Password</a>`;
 
     //update the user and add the token
     user.passwordResetToken = token;
@@ -463,7 +463,7 @@ const forgotPassword = async (req, res) => {
     const subject = "Reset Account Password Link";
     const body = `
   <h3>Please click the link below to reset your password</h3>
-  <a href="${process.env.CLIENT_URL}/reset-password/tenant/${token}">Reset Password</a>`;
+  <a href="${process.env.CLIENT_URL}/#/reset-password/tenant/${token}">Reset Password</a>`;
 
     //update the user and add the token
     user.passwordResetToken = token;
