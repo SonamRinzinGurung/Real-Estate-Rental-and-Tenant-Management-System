@@ -27,7 +27,7 @@ const Homepage = () => {
       <div className="mx-auto text-center mt-8">
         <h4 className="mb-4">You have not posted any properties</h4>
         <Button
-          href="/owner/property/post"
+          href="/#/owner/property/post"
           variant="contained"
           sx={{ color: "#fff" }}
         >

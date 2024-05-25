@@ -37,10 +37,6 @@ const TenantUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a phone number"],
       unique: true,
-      match: [
-        /^[9]+[7-8]+\d{8}$/,
-        "Please provide a valid phone number: eg 9800000000",
-      ],
     },
     dateOfBirth: {
       type: String,
