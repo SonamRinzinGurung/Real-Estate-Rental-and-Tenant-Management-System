@@ -61,6 +61,7 @@ REFRESH_TOKEN_SECRET_OWNER= <your_refresh_token_secret_owner>
 REFRESH_TOKEN_SECRET_TENANT= <your_refresh_token_secret_tenant>
 ACCESS_LIFETIME=15m
 REFRESH_LIFETIME=7d
+CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
 CLOUDINARY_API_KEY= <your_cloudinary_api_key>
 CLOUDINARY_API_SECRET= <your_cloudinary_api_secret>
 RESET_PASSWORD_KEY= <your_reset_password_key>
