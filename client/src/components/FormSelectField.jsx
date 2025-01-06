@@ -10,7 +10,6 @@ const FormSelectField = ({ label, value, name, options, handleChange }) => {
       value={value}
       onChange={handleChange}
       name={name}
-      sx={{ width: "60%" }}
       color="tertiary"
     >
       {options.map((option) => (
