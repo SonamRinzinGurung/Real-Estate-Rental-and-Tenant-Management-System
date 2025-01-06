@@ -33,6 +33,14 @@ const TenantUserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide an address"],
     },
+    city: {
+      type: String,
+      required: [true, "Please provide an city"],
+    },
+    country: {
+      type: String,
+      required: [true, "Please provide an country"],
+    },
     phoneNumber: {
       type: String,
       required: [true, "Please provide a phone number"],
