@@ -24,8 +24,8 @@ const RealEstateSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please provide a price for the property"],
-      min: [1000, "Price cannot be less than Rs. 1000"],
-      max: [1000000, "Price cannot be more than Rs. 10,00,000"],
+      min: [1000, "Price cannot be less than 1000"],
+      max: [100000000, "Price cannot be more than 100000000"],
     },
     address: {
       location: {
@@ -56,7 +56,7 @@ const RealEstateSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please provide the number of floors in the property"],
       min: [1, "Number of floors cannot be less than 1"],
-      max: [100, "Number of floors cannot be more than 100"],
+      max: [200, "Number of floors cannot be more than 200"],
     },
 
     facing: {

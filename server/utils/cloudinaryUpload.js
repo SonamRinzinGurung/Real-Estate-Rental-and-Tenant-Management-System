@@ -32,3 +32,27 @@ export const cloudinaryProfileImageUpload = async (req) => {
     );
     return profileImage;
 };
+
+export const cloudinaryMultipleUpload = async (req) => {
+    const files = req.files;
+    let realEstateImages = [];
+    if (!files) {
+        throw new BadRequestError("Please upload at least one image.");
+    }
+    for (const file of files) {
+        await cloudinary.v2.uploader.upload(
+            file.path,
+            {
+                folder: "real-estate-system/realEstateImages",
+            },
+            (err, result) => {
+                if (err) {
+                    throw new BadRequestError("Error uploading image");
+                }
+                realEstateImages.push(result.secure_url);
+            }
+        );
+    }
+
+    return realEstateImages;
+};

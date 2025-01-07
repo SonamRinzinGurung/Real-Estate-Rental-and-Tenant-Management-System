@@ -5,6 +5,7 @@ import {
   ForbiddenRequestError,
   BadRequestError,
 } from "../request-errors/index.js";
+import { cloudinaryMultipleUpload } from "../utils/cloudinaryUpload.js";
 
 /**
  * @description Post Real Estate
@@ -18,6 +19,11 @@ const postRealEstate = async (req, res) => {
   req.body.propertyId = nanoid(7);
 
   const realEstate = await RealEstate.create(req.body);
+
+  const realEstateImages = await cloudinaryMultipleUpload(req);
+  realEstate.realEstateImages = realEstateImages;
+  await realEstate.save();
+
   res.status(201).json({ realEstate });
 };
 

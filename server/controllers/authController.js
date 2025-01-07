@@ -160,8 +160,8 @@ const register = async (req, res) => {
     const tenant = await TenantUser.create(req.body); // create tenant
 
     // remove password and token from response object
-    tenant.password = undefined;
-    tenant.accountVerificationToken = undefined;
+    // tenant.password = undefined;
+    // tenant.accountVerificationToken = undefined;
 
     // send email with token link
     const to = email;
@@ -175,6 +175,10 @@ const register = async (req, res) => {
     <p>Team Property Plus</p>
     `;
     await sendEmail(to, from, subject, body);
+
+    const profileImage = await cloudinaryProfileImageUpload(req)
+    tenant.profileImage = profileImage;
+    await tenant.save();
 
     res
       .status(201)
