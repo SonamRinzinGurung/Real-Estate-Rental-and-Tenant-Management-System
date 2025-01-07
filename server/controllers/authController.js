@@ -3,6 +3,7 @@ import TenantUser from "../models/TenantUser.js";
 import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/emailSender.js";
+import { cloudinaryProfileImageUpload } from "../utils/cloudinaryUpload.js";
 
 /**
  * @description Login a user
@@ -100,8 +101,9 @@ const login = async (req, res) => {
  * @returns {string} token
  */
 const register = async (req, res) => {
-  const { role, email } = req.body;
 
+  const { role, email } = req.body;
+  // console.log(req.body)
   if (role === "owner") {
     //generate token
     const verificationToken = jwt.sign(
@@ -119,8 +121,8 @@ const register = async (req, res) => {
     const owner = await OwnerUser.create(req.body);
 
     // remove password and token from response object
-    owner.password = undefined;
-    owner.accountVerificationToken = undefined;
+    // owner.password = undefined;
+    // owner.accountVerificationToken = undefined;
 
     // send email with token link
     const to = email;
@@ -134,6 +136,10 @@ const register = async (req, res) => {
     <p>Team Property Plus</p>
     `;
     await sendEmail(to, from, subject, body);
+
+    const profileImage = await cloudinaryProfileImageUpload(req)
+    owner.profileImage = profileImage;
+    await owner.save();
 
     res
       .status(201)

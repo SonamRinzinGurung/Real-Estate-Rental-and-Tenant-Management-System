@@ -59,7 +59,6 @@ const OwnerUserSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      required: [true, "Please provide a profile image"],
     },
     contacts: [
       {

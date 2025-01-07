@@ -12,7 +12,6 @@ import {
   resendVerificationEmail,
 } from "../controllers/authController.js";
 import upload from "../middleware/multerImageMiddleware.js";
-import { cloudinaryProfileImageUpload } from "../middleware/cloudinaryUpload.js";
 import { apiLimiter } from "../middleware/rateLimiter.js";
 
 /**
@@ -41,7 +40,6 @@ router.post(
   "/register",
   apiLimiter,
   upload.single("profileImage"),
-  cloudinaryProfileImageUpload,
   register
 );
 
