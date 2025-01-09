@@ -48,7 +48,7 @@ const PersonalRealEstateDetail = () => {
     if (postSuccess) {
       const timer = setTimeout(() => {
         navigate(`/owner`);
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [postSuccess, navigate, slug]);
@@ -98,8 +98,10 @@ const PersonalRealEstateDetail = () => {
                 </div>
                 <p className="-ml-1 text-base tracking-tight">
                   <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
-                  {realEstate?.address?.location},{" "}
-                  {realEstate?.address?.streetName} ,Kathmandu
+                  {realEstate?.address?.streetName}, {" "}
+                  {realEstate?.address?.city},{" "}
+                  {realEstate?.address?.state}, {" "}
+                  {realEstate?.address?.country}
                 </p>
                 <div className="">
                   <p className="font-robotoNormal text-xs font-semibold tracking-tight">

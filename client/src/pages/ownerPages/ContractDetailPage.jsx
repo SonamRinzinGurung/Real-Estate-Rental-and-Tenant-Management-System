@@ -39,7 +39,7 @@ const ContractDetailPage = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${contractDetail?.realEstate?.slug}`);
-      }, 2000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, contractDetail?.realEstate?.slug]);
@@ -99,8 +99,10 @@ const ContractDetailPage = () => {
           <p>{contractDetail?.realEstate?.category}</p>
           <p className="">
             <LocationOnOutlinedIcon color="success" />{" "}
-            {contractDetail?.realEstate?.address.location},{" "}
-            {contractDetail?.realEstate?.address?.streetName}
+            {contractDetail?.realEstate?.address.streetName},{" "}
+            {contractDetail?.realEstate?.address.city},{" "}
+            {contractDetail?.realEstate?.address.state},{" "}
+            {contractDetail?.realEstate?.address?.country}
           </p>
         </div>
 

@@ -8,10 +8,11 @@ const FormTextField = ({
   handleChange,
   label,
   autoFocus,
+  required = true,
 }) => {
   return (
     <TextField
-      required
+      required={required}
       name={name}
       type={type}
       value={value}

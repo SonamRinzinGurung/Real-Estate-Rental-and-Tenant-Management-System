@@ -92,8 +92,10 @@ const ContractAgreementPage = () => {
               <p>{contractDetail?.realEstate?.category}</p>
               <p className="">
                 <LocationOnOutlinedIcon color="success" />{" "}
-                {contractDetail?.realEstate?.address.location},{" "}
-                {contractDetail?.realEstate?.address?.streetName}
+                {contractDetail?.realEstate?.address.streetName},{" "}
+                {contractDetail?.realEstate?.address?.city},{" "}
+                {contractDetail?.realEstate?.address?.state},{" "}
+                {contractDetail?.realEstate?.address?.country}
               </p>
             </div>
 

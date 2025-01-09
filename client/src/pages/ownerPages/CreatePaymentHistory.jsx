@@ -63,7 +63,7 @@ const CreatePaymentHistory = () => {
         navigate(
           `/owner/rentDetail/${rentDetailId}/${rentDetail?.realEstate.slug}`
         );
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, rentDetailId, rentDetail?.realEstate.slug]);

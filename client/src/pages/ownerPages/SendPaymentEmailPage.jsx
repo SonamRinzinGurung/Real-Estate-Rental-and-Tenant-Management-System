@@ -43,7 +43,7 @@ const SendPaymentEmailPage = () => {
         navigate(
           `/owner/rentDetail/${rentDetailId}/${rentDetail?.realEstate.slug}`
         );
-      }, 4500);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, rentDetailId, rentDetail?.realEstate.slug]);

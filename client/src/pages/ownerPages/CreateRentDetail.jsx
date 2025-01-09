@@ -82,7 +82,7 @@ const CreateRentDetail = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate(`/owner/rentDetail`);
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate]);

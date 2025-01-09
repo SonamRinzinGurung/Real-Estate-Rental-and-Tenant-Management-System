@@ -56,8 +56,8 @@ const RentDetailComponent = ({
               </p>
               <p className="">
                 <LocationOnOutlinedIcon color="secondary" />{" "}
-                {realEstate?.address?.location},{" "}
-                {realEstate?.address?.streetName}
+                {realEstate?.address?.streetName},{" "}
+                {realEstate?.address?.city}
               </p>
             </div>
             <div className="mt-2">

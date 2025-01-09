@@ -3,7 +3,6 @@ import { FormTextField, FormSelectField } from "../../components";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
-import { locationNames } from "../../utils/locationNames";
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -23,8 +22,10 @@ const UpdatePropertyForm = ({
   const initialFormValues = {
     price,
     description,
-    location: address?.location,
     streetName: address?.streetName,
+    city: address?.city,
+    state: address?.state,
+    country: address?.country,
     category,
     area,
     floors,
@@ -138,13 +139,6 @@ const UpdatePropertyForm = ({
           <h5 className="mb-1">
             <LocationOnIcon /> Address
           </h5>
-          <FormSelectField
-            label="Location"
-            name="location"
-            options={locationNames}
-            value={values.location}
-            handleChange={handleChange}
-          />
           <FormTextField
             label="Street Name / Landmark"
             name="streetName"
@@ -152,7 +146,30 @@ const UpdatePropertyForm = ({
             value={values.streetName}
             handleChange={handleChange}
           />
-          <TextField label="City" color="tertiary" disabled value="Kathmandu" />
+          <FormTextField
+            label="City"
+            name="city"
+            type={"text"}
+            value={values.city}
+            handleChange={handleChange}
+          />
+          <FormTextField
+            label="State"
+            name="state"
+            type={"text"}
+            value={values.state}
+            handleChange={handleChange}
+            required={false}
+          />
+
+          <TextField
+            label="Country"
+            name="country"
+            type="text"
+            value={values.country}
+            color="tertiary"
+            disabled
+          />
         </div>
       </div>
 

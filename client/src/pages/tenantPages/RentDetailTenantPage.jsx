@@ -100,8 +100,10 @@ const RentDetailTenantPage = () => {
               <h3 className="font-semibold">{rentDetail?.realEstate?.title}</h3>
               <p className="-ml-1 text-base tracking-tight">
                 <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
-                {rentDetail?.realEstate?.address?.location},{" "}
-                {rentDetail?.realEstate?.address?.streetName} ,Kathmandu
+                {rentDetail?.realEstate?.address?.streetName}, {" "}
+                {rentDetail?.realEstate?.address?.city},{" "}
+                {rentDetail?.realEstate?.address?.state}, {" "}
+                {rentDetail?.realEstate?.address?.country}
               </p>
             </div>
             <div className="mt-4 text-primaryDark">

@@ -37,7 +37,7 @@ const SendComplaint = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate(`/tenant/rental-properties/${slug}`);
-      }, 4500);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, slug]);

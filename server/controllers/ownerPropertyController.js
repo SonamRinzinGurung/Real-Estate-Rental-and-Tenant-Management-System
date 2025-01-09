@@ -12,9 +12,12 @@ import { cloudinaryMultipleUpload } from "../utils/cloudinaryUpload.js";
  * @returns {object} realEstate
  */
 const postRealEstate = async (req, res) => {
-  const location = req.body.location;
   const streetName = req.body.streetName;
-  req.body.address = { location, streetName };
+  const city = req.body.city;
+  const state = req.body.state;
+  const country = req.body.country;
+
+  req.body.address = { streetName, city, state, country };
   req.body.propertyOwner = req.user.userId;
   req.body.propertyId = nanoid(7);
 
@@ -74,8 +77,10 @@ const getSingleProperty = async (req, res) => {
 const updatePropertyDetails = async (req, res) => {
   const {
     price,
-    location,
     streetName,
+    city,
+    state,
+    country,
     description,
     area,
     floors,
@@ -85,8 +90,9 @@ const updatePropertyDetails = async (req, res) => {
 
   if (
     !price ||
-    !location ||
     !streetName ||
+    !city ||
+    !state ||
     !description ||
     !area ||
     !floors ||
@@ -118,7 +124,7 @@ const updatePropertyDetails = async (req, res) => {
       floors,
       facing,
       category,
-      address: { location, streetName },
+      address: { streetName, city, state, country },
     },
     { new: true, runValidators: true }
   );

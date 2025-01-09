@@ -53,8 +53,10 @@ const RentalPropertyDetail = () => {
                 </div>
                 <p className="-ml-1 text-base tracking-tight">
                   <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
-                  {realEstate?.address?.location},{" "}
-                  {realEstate?.address?.streetName} ,Kathmandu
+                  {realEstate?.address?.streetName}, {" "}
+                  {realEstate?.address?.city},{" "}
+                  {realEstate?.address?.state}, {" "}
+                  {realEstate?.address?.country}
                 </p>
                 <div className="">
                   <p className="font-robotoNormal text-xs font-semibold tracking-tight">

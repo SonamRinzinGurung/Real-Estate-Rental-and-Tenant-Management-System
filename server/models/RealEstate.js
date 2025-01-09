@@ -28,16 +28,23 @@ const RealEstateSchema = new mongoose.Schema(
       max: [100000000, "Price cannot be more than 100000000"],
     },
     address: {
-      location: {
-        type: String,
-        required: [true, "Please provide the location of the property"],
-      },
       streetName: {
         type: String,
         required: [
           true,
           "Please provide a street name or landmark for the property",
         ],
+      },
+      city: {
+        type: String,
+        required: [true, "Please provide the city of the property"],
+      },
+      state: {
+        type: String,
+      },
+      country: {
+        type: String,
+        required: [true, "Please provide the country of the property"],
       },
     },
     description: {

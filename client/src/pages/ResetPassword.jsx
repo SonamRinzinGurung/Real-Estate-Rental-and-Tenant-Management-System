@@ -34,7 +34,7 @@ const ResetPassword = () => {
       const timer = setTimeout(() => {
         navigate(`/login/${param.role}`);
         dispatch(stateClear());
-      }, 4500);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, param.role, dispatch]);

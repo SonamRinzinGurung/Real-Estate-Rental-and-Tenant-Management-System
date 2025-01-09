@@ -54,7 +54,7 @@ const CreateContractPage = () => {
     if (success) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${slug}`);
-      }, 3000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [success, navigate, slug]);

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { FormTextField, FormSelectField, AlertToast } from "../../components";
+import { FormTextField, FormSelectField, AlertToast, CountrySelectField } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,7 +17,6 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import { locationNames } from "../../utils/locationNames";
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -31,8 +30,10 @@ const PostRealEstate = () => {
     title: "",
     price: "",
     description: "",
-    location: "",
     streetName: "",
+    city: "",
+    state: "",
+    country: "",
     category: "",
     area: "",
     floors: "",
@@ -94,14 +95,14 @@ const PostRealEstate = () => {
     if (postSuccess) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${realEstate?.slug}`);
-      }, 2000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [postSuccess, navigate, realEstate]);
 
   return (
     <div>
-      <main className="px-6 h-full mt-7">
+      <main className="px-6 h-full mt-10">
         <div className="flex lg:justify-between justify-center flex-wrap h-full g-6">
           <div className="lg:w-5/12 md:w-8/12 mb-12">
             <form onSubmit={handleSubmit} id="form">
@@ -220,13 +221,6 @@ const PostRealEstate = () => {
                   <h5 className="mb-1">
                     <LocationOnIcon /> Address
                   </h5>
-                  <FormSelectField
-                    label="Location"
-                    name="location"
-                    options={locationNames}
-                    value={values.location}
-                    handleChange={handleChange}
-                  />
                   <FormTextField
                     label="Street Name / Landmark"
                     name="streetName"
@@ -234,11 +228,25 @@ const PostRealEstate = () => {
                     value={values.streetName}
                     handleChange={handleChange}
                   />
-                  <TextField
+                  <FormTextField
                     label="City"
-                    color="tertiary"
-                    disabled
-                    value="Kathmandu"
+                    name="city"
+                    type={"text"}
+                    value={values.city}
+                    handleChange={handleChange}
+                  />
+                  <FormTextField
+                    label="State"
+                    name="state"
+                    type={"text"}
+                    value={values.state}
+                    handleChange={handleChange}
+                  />
+
+                  <CountrySelectField
+                    value={values.country}
+                    setFormValues={setFormValues}
+                    handleChange={handleChange}
                   />
                 </div>
                 <div className="flex flex-col my-2">

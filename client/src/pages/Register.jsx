@@ -6,6 +6,7 @@ import {
   FormSelectField,
   AlertToast,
   DatePicker,
+  CountrySelectField,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,10 +19,6 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
 import { Button, CircularProgress } from "@mui/material";
 import moment from "moment";
-import Autocomplete from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { countries } from "../utils/countryList";
 
 const Register = () => {
   const { success, userType, errorFlag, errorMsg, isLoading, alertType } =
@@ -154,50 +151,10 @@ const Register = () => {
                   value={values.city}
                   handleChange={handleChange}
                 />
-                <Autocomplete
-                  options={countries}
-                  autoHighlight
-                  getOptionLabel={(option) => option.label}
-                  onChange={(e, value) => {
-                    setFormValues({ ...values, "country": value?.label || "" });
-                  }
-                  }
-                  renderOption={(props, option) => {
-                    const { key, ...optionProps } = props;
-                    return (
-                      <Box
-                        key={key}
-                        component="li"
-                        sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                        {...optionProps}
-                      >
-                        <img
-                          loading="lazy"
-                          width="20"
-                          srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                          src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                          alt=""
-                        />
-                        {option.label} ({option.code}) +{option.phone}
-                      </Box>
-                    );
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Country"
-                      name="country"
-                      onChange={handleChange}
-                      value={values.country}
-                      required
-                      slotProps={{
-                        htmlInput: {
-                          ...params.inputProps,
-                          autoComplete: 'new-password', // disable autocomplete and autofill
-                        },
-                      }}
-                    />
-                  )}
+                <CountrySelectField
+                  value={values.country}
+                  setFormValues={setFormValues}
+                  handleChange={handleChange}
                 />
 
                 <FormTextField

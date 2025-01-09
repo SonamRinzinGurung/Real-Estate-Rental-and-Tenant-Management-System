@@ -92,8 +92,8 @@ const AllRentalProperties = () => {
                         NPR. <span className="">{format(price)}</span> / month
                       </p>
                       <p className="text-base">
-                        <LocationOnOutlinedIcon color="secondary" />{" "}
-                        {address?.location}, {address?.streetName}
+                        <LocationOnOutlinedIcon color="secondary" />
+                        {address?.streetName}, {address?.city}
                       </p>
                     </CardContent>
                   </CardActionArea>

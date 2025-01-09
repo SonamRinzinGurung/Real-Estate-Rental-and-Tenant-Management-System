@@ -22,14 +22,13 @@ const RealEstateDetailCard = ({
 }) => {
   const dispatch = useDispatch();
   return (
-    <>
       <section className="flex flex-col gap-4 rounded-md ">
         <div className="flex justify-between rounded-md">
           <div className="flex flex-col gap-2">
             <h3 className="font-semibold">{title}</h3>
             <p className="-ml-1 text-base tracking-tight">
               <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
-              {address?.location}, {address?.streetName} ,Kathmandu
+            {address?.streetName}, {address?.city} ,{address?.state}, {address?.country}
             </p>
             <div className="">
               <p className="font-robotoNormal text-xs font-semibold tracking-tight">
@@ -107,8 +106,7 @@ const RealEstateDetailCard = ({
           </div>
         </div>
         <ImageCarousal realEstateImages={realEstateImages} />
-      </section>
-    </>
+    </section>
   );
 };
 
