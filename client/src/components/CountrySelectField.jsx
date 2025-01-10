@@ -16,7 +16,7 @@ const CountrySelectField = ({
             autoHighlight
             getOptionLabel={(option) => option.label}
             onChange={(e, value) => {
-                setFormValues(prev => ({ ...prev, "country": value?.label || "" }));
+                setFormValues(prev => ({ ...prev, "country": value?.label || "", "countryCode": value?.code || "" }));
             }
             }
             renderOption={(props, option) => {

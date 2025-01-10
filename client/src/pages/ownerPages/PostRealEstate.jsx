@@ -21,6 +21,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
+import countryToCurrency from "country-to-currency";
 
 const PostRealEstate = () => {
   const { alertFlag, alertMsg, alertType, isLoading, postSuccess, realEstate } =
@@ -34,6 +35,7 @@ const PostRealEstate = () => {
     city: "",
     state: "",
     country: "",
+    countryCode: "",
     category: "",
     area: "",
     floors: "",
@@ -139,6 +141,38 @@ const PostRealEstate = () => {
                 </div>
                 <div className="flex flex-col gap-4 my-2">
                   <h5 className="mb-1">
+                    <LocationOnIcon /> Address
+                  </h5>
+                  <FormTextField
+                    label="Street Name / Landmark"
+                    name="streetName"
+                    type={"text"}
+                    value={values.streetName}
+                    handleChange={handleChange}
+                  />
+                  <FormTextField
+                    label="City"
+                    name="city"
+                    type={"text"}
+                    value={values.city}
+                    handleChange={handleChange}
+                  />
+                  <FormTextField
+                    label="State"
+                    name="state"
+                    type={"text"}
+                    value={values.state}
+                    handleChange={handleChange}
+                  />
+
+                  <CountrySelectField
+                    value={values.country}
+                    setFormValues={setFormValues}
+                    handleChange={handleChange}
+                  />
+                </div>
+                <div className="flex flex-col gap-4 my-2">
+                  <h5 className="mb-1">
                     <BungalowIcon /> Property Info
                   </h5>
                   <TextField
@@ -152,7 +186,7 @@ const PostRealEstate = () => {
                     onChange={handleChange}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">Rs.</InputAdornment>
+                        <InputAdornment position="start">{countryToCurrency[values.countryCode]}</InputAdornment>
                       ),
                     }}
                   />
@@ -214,38 +248,6 @@ const PostRealEstate = () => {
                       "South-West",
                     ]}
                     value={values.facing}
-                    handleChange={handleChange}
-                  />
-                </div>
-                <div className="flex flex-col gap-4 my-2">
-                  <h5 className="mb-1">
-                    <LocationOnIcon /> Address
-                  </h5>
-                  <FormTextField
-                    label="Street Name / Landmark"
-                    name="streetName"
-                    type={"text"}
-                    value={values.streetName}
-                    handleChange={handleChange}
-                  />
-                  <FormTextField
-                    label="City"
-                    name="city"
-                    type={"text"}
-                    value={values.city}
-                    handleChange={handleChange}
-                  />
-                  <FormTextField
-                    label="State"
-                    name="state"
-                    type={"text"}
-                    value={values.state}
-                    handleChange={handleChange}
-                  />
-
-                  <CountrySelectField
-                    value={values.country}
-                    setFormValues={setFormValues}
                     handleChange={handleChange}
                   />
                 </div>
