@@ -168,6 +168,11 @@ const authSlice = createSlice({
       state.errorFlag = false;
       state.errorMsg = "";
     },
+    createAlert: (state, action) => {
+      state.errorFlag = true;
+      state.errorMsg = action.payload;
+      state.alertType = "error";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -314,6 +319,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { stateClear, clearAlert } = authSlice.actions;
+export const { stateClear, clearAlert, createAlert } = authSlice.actions;
 
 export default authSlice.reducer;

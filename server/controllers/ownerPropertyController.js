@@ -5,7 +5,10 @@ import {
   ForbiddenRequestError,
   BadRequestError,
 } from "../request-errors/index.js";
-import { cloudinaryMultipleUpload } from "../utils/cloudinaryUpload.js";
+import {
+  cloudinaryMultipleUpload,
+  cloudinaryDeleteImage,
+} from "../utils/cloudinaryUpload.js";
 
 /**
  * @description Post Real Estate
@@ -163,6 +166,21 @@ const deleteProperty = async (req, res) => {
     propertyOwner: req.user.userId,
     status: true,
   });
+
+  const realEstateImages = realEstate.realEstateImages;
+  const publicIds = realEstateImages
+    .map((imageURL) => {
+      const parts = imageURL.split("real-estate-system");
+      if (parts.length > 1) {
+        return "real-estate-system" + parts[1].split(".")[0];
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  for (const publicId of publicIds) {
+    await cloudinaryDeleteImage(publicId);
+  }
 
   res.json({ success: true, message: "Property deleted successfully" });
 };

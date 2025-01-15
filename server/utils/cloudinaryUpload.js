@@ -56,3 +56,12 @@ export const cloudinaryMultipleUpload = async (req) => {
 
     return realEstateImages;
 };
+
+export const cloudinaryDeleteImage = async (publicId) => {
+    await cloudinary.v2.uploader.destroy(publicId, { resource_type: "image" }, (err, result) => {
+        if (err) {
+            throw new BadRequestError("Error deleting image");
+        }
+    });
+    return true;
+}

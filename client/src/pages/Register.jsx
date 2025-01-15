@@ -14,11 +14,13 @@ import {
   registerTenant,
   clearAlert,
   stateClear,
+  createAlert,
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import registerImg from "../assets/images/registerImg.svg";
 import { Button, CircularProgress } from "@mui/material";
 import moment from "moment";
+import { ageCalculator } from "../utils/valueFormatter";
 
 const Register = () => {
   const { success, userType, errorFlag, errorMsg, isLoading, alertType } =
@@ -76,6 +78,13 @@ const Register = () => {
     const form = document.getElementById("form");
     const formData = new FormData(form);
     formData.append("role", param.role);
+    const dob = moment(date).format("YYYY-MM-DD");
+    const age = ageCalculator(dob);
+    if (age < 18) {
+      dispatch(
+        createAlert("You must be 18 years or older to register"))
+      return;
+    }
     formData.append("dateOfBirth", moment(date).format("YYYY-MM-DD"));
 
     if (param.role === "owner") {
