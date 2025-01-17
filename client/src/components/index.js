@@ -25,6 +25,7 @@ import ChatUsers from "./ChatUsersComponent";
 import ChatMessages from "./ChatMessagesComponent";
 import ChatInput from "./ChatInput";
 import CountrySelectField from "./CountrySelectField";
+import ProfilePageComponent from "./ProfilePageComponent";
 
 export {
   SharedLayout,
@@ -55,4 +56,5 @@ export {
   ChatMessages,
   ChatInput,
   CountrySelectField,
+  ProfilePageComponent
 };

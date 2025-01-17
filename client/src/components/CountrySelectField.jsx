@@ -14,11 +14,13 @@ const CountrySelectField = ({
         <Autocomplete
             options={countries}
             autoHighlight
+            inputValue={value}
             getOptionLabel={(option) => option.label}
             onChange={(e, value) => {
                 setFormValues(prev => ({ ...prev, "country": value?.label || "", "countryCode": value?.code || "" }));
             }
             }
+
             renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
                 return (

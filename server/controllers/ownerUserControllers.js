@@ -46,7 +46,7 @@ const getSelfDetail = async (req, res) => {
  * @returns {object} 200 - An object containing the user
  */
 const updateProfile = async (req, res) => {
-  const { phoneNumber, address, gender } = req.body;
+  const { phoneNumber, address, gender, city, country } = req.body;
 
   if (!address || !phoneNumber || !gender) {
     throw new BadRequestError("Please fill in all fields");
@@ -57,6 +57,8 @@ const updateProfile = async (req, res) => {
       gender,
       address,
       phoneNumber,
+      city,
+      country
     },
     { new: true, runValidators: true }
   );
