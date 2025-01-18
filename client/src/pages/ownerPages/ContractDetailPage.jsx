@@ -13,7 +13,12 @@ import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-import { dateFormatter, format } from "../../utils/valueFormatter";
+import {
+  createNumberFormatter,
+  dateFormatter,
+} from "../../utils/valueFormatter";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const ContractDetailPage = () => {
   const dispatch = useDispatch();
@@ -58,6 +63,11 @@ const ContractDetailPage = () => {
   const [open, setOpen] = useState(false);
   const handleModalOpen = useCallback(() => setOpen(true), []);
   const handleModalClose = useCallback(() => setOpen(false), []);
+
+  const currentCountry = countries.find(
+    (country) => country.label === contractDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   const handleDeleteContract = useCallback(() => {
     dispatch(deleteContract({ contractId: contractDetail?._id }));
@@ -142,7 +152,8 @@ const ContractDetailPage = () => {
         </div>
         <div>
           <h5 className="font-robotoNormal">
-            <span className="font-medium">Rent Amount</span>: NRS.{" "}
+            <span className="font-medium">Rent Amount</span>:{" "}
+            {countryToCurrency[currentCountry.code]}{" "}
             {format(contractDetail?.rentAmount)} per month
           </h5>
         </div>
@@ -173,12 +184,19 @@ const ContractDetailPage = () => {
         <h5>1. Payment of Rent</h5>
         <p>
           Tenant shall pay rent in the amount of{" "}
-          <strong>NPR {format(contractDetail?.rentAmount)}</strong> per month.
-          Total Rent amount of{" "}
-          <strong>NPR {format(calculateTotalRent())}</strong> shall be due and
-          payable <strong>{contractDetail?.paymentPlan}</strong> on the first
-          day of the calendar month and shall be considered late if not received
-          by the Landlord on or before the 7th day of the month.
+          <strong>
+            {countryToCurrency[currentCountry.code]}{" "}
+            {format(contractDetail?.rentAmount)}
+          </strong>{" "}
+          per month. Total Rent amount of{" "}
+          <strong>
+            {countryToCurrency[currentCountry.code]}{" "}
+            {format(calculateTotalRent())}
+          </strong>{" "}
+          shall be due and payable{" "}
+          <strong>{contractDetail?.paymentPlan}</strong> on the first day of the
+          calendar month and shall be considered late if not received by the
+          Landlord on or before the 7th day of the month.
         </p>
         <br />
         <h5>2. Late Fees</h5>

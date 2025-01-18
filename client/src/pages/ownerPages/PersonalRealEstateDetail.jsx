@@ -13,7 +13,7 @@ import {
   ConfirmModal,
   AlertToast,
 } from "../../components";
-import { format, dateFormatter } from "../../utils/valueFormatter";
+import { dateFormatter, createNumberFormatter } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
 import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
@@ -23,6 +23,8 @@ import GavelIcon from "@mui/icons-material/Gavel";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import ArticleIcon from "@mui/icons-material/Article";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import countryToCurrency from "country-to-currency";
+import { countries } from "../../utils/countryList";
 
 const PersonalRealEstateDetail = () => {
   const { slug } = useParams();
@@ -42,6 +44,11 @@ const PersonalRealEstateDetail = () => {
     alertType,
     postSuccess,
   } = useSelector((store) => store.realEstateOwner);
+
+  const currentCountry = countries.find(
+    (country) => country.label === realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   // Redirect to detail page of the property after successful contract creation
   useEffect(() => {
@@ -118,7 +125,7 @@ const PersonalRealEstateDetail = () => {
                     RENT per month
                   </p>
                   <span className="font-semibold text-lg text-primaryDark">
-                    NPR. {format(realEstate?.price)}
+                    {countryToCurrency[currentCountry.code]} {format(realEstate?.price)}
                   </span>
                 </div>
               </div>

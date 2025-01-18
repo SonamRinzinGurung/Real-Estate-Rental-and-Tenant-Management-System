@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { FormTextField, FormSelectField } from "../../components";
+import { FormTextField, FormSelectField, CountrySelectField } from "../../components";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -7,7 +7,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import countryToCurrency from "country-to-currency";
+import { countries } from "../../utils/countryList";
 const UpdatePropertyForm = ({
   title,
   description,
@@ -32,6 +33,10 @@ const UpdatePropertyForm = ({
     facing,
   };
   const [values, setFormValues] = useState(initialFormValues);
+
+  const currentCountry = countries.find(
+    (country) => country.label === values.country
+  );
 
   const handleChange = useCallback(
     (e) => {
@@ -72,7 +77,7 @@ const UpdatePropertyForm = ({
             onChange={handleChange}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">Rs.</InputAdornment>
+                <InputAdornment position="start">{countryToCurrency[currentCountry?.code]}</InputAdornment>
               ),
             }}
           />
@@ -162,13 +167,10 @@ const UpdatePropertyForm = ({
             required={false}
           />
 
-          <TextField
-            label="Country"
-            name="country"
-            type="text"
+          <CountrySelectField
             value={values.country}
-            color="tertiary"
-            disabled
+            setFormValues={setFormValues}
+            handleChange={handleChange}
           />
         </div>
       </div>

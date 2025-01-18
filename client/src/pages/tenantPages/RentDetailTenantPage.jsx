@@ -14,8 +14,8 @@ import {
 import { CardActionArea, Avatar, Button } from "@mui/material";
 import {
   dateFormatter,
-  format,
   calculateNextDueDate,
+  createNumberFormatter,
 } from "../../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ContactsRoundedIcon from "@mui/icons-material/ContactsRounded";
@@ -25,6 +25,8 @@ import moment from "moment";
 import DoneRoundedIcon from "@mui/icons-material/DoneRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import HistoryIcon from "@mui/icons-material/History";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const RentDetailTenantPage = () => {
   const { slug, realEstateId } = useParams();
@@ -44,6 +46,11 @@ const RentDetailTenantPage = () => {
 
   // state to store page for payment history
   const [page, setPage] = useState(1);
+
+  const currentCountry = countries.find(
+    (country) => country.label === rentDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   useEffect(() => {
     dispatch(getSingleRentDetailTenantView({ realEstateId }));
@@ -109,7 +116,7 @@ const RentDetailTenantPage = () => {
             <div className="mt-4 text-primaryDark">
               <p className="font-roboto leading-4 ">Rent per month</p>
               <span className="font-semibold text-lg">
-                NPR. {format(rentDetail?.realEstate?.price)}
+                {countryToCurrency[currentCountry.code]} {format(rentDetail?.realEstate?.price)}
               </span>
             </div>
             <div className="mt-4">
@@ -192,6 +199,7 @@ const RentDetailTenantPage = () => {
               numberOfPages={numberOfPages}
               page={page}
               handlePageChange={handlePageChange}
+              currentCountryCode={currentCountry?.code}
             />
           )}
         </div>

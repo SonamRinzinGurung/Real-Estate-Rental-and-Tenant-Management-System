@@ -1,4 +1,5 @@
-import { dateFormatter, format } from "../utils/valueFormatter";
+import countryToCurrency from "country-to-currency";
+import { createNumberFormatter, dateFormatter } from "../utils/valueFormatter";
 import { CircularProgress, Pagination } from "@mui/material";
 
 const PaymentHistoryComponent = ({
@@ -7,7 +8,11 @@ const PaymentHistoryComponent = ({
   numberOfPages,
   page,
   handlePageChange,
+  currentCountryCode,
 }) => {
+
+  const format = createNumberFormatter(currentCountryCode);
+
   if (isProcessing)
     return (
       <div className="flex justify-center items-center mt-12">
@@ -80,7 +85,7 @@ const PaymentHistoryComponent = ({
                         {dateFormatter(payment.currentRentDate.to)}
                       </td>
                       <td className="text-xs md:text-sm font-light px-6 py-4 whitespace-nowrap">
-                        NPR. {format(payment.amountPaid)}
+                        {countryToCurrency[currentCountryCode]} {format(payment.amountPaid)}
                       </td>
                       <td className="text-xs md:text-sm font-light px-6 py-4 whitespace-nowrap">
                         {payment.paymentMethod}

@@ -11,9 +11,11 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import { dateFormatter, format } from "../../utils/valueFormatter";
+import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
 import contractApprovedImg from "../../assets/images/contractApproved.svg";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const ContractAgreementPage = () => {
   const { contractId } = useParams();
@@ -32,6 +34,11 @@ const ContractAgreementPage = () => {
     alertType,
     alertMsg,
   } = useSelector((state) => state.tenantUser);
+
+  const currentCountry = countries.find(
+    (country) => country.label === contractDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   const handleAlertClose = useCallback(
     (event, reason) => {
@@ -135,7 +142,7 @@ const ContractAgreementPage = () => {
             </div>
             <div>
               <h5 className="font-robotoNormal">
-                <span className="font-medium">Rent Amount</span>: NRS.{" "}
+                <span className="font-medium">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
                 {format(contractDetail?.rentAmount)} per month
               </h5>
             </div>
@@ -166,9 +173,9 @@ const ContractAgreementPage = () => {
             <h5>1. Payment of Rent</h5>
             <p>
               Tenant shall pay rent in the amount of{" "}
-              <strong>NPR {format(contractDetail?.rentAmount)}</strong> per
+              <strong>{countryToCurrency[currentCountry.code]} {format(contractDetail?.rentAmount)}</strong> per
               month. Total Rent amount of{" "}
-              <strong>NPR {format(calculateTotalRent())}</strong> shall be due
+              <strong>{countryToCurrency[currentCountry.code]} {format(calculateTotalRent())}</strong> shall be due
               and payable <strong>{contractDetail?.paymentPlan}</strong> on the
               first day of the calendar month and shall be considered late if
               not received by the Landlord on or before the 7th day of the

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { getSingleRealEstate } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { PageLoading, Footer, ImageCarousal } from "../../components";
-import { format, dateFormatter } from "../../utils/valueFormatter";
+import { format, dateFormatter, createNumberFormatter } from "../../utils/valueFormatter";
 import { CardActionArea, Avatar, Button } from "@mui/material";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
@@ -15,6 +15,8 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ArticleIcon from "@mui/icons-material/Article";
 import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
 import MailIcon from "@mui/icons-material/Mail";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const RentalPropertyDetail = () => {
   const { realEstate, isLoading } = useSelector(
@@ -24,6 +26,11 @@ const RentalPropertyDetail = () => {
   const dispatch = useDispatch();
 
   const { slug } = useParams();
+
+  const currentCountry = countries.find(
+    (country) => country.label === realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   useEffect(() => {
     dispatch(getSingleRealEstate({ slug }));
@@ -73,7 +80,7 @@ const RentalPropertyDetail = () => {
                     RENT per month
                   </p>
                   <span className="font-semibold text-lg text-primaryDark">
-                    NPR. {format(realEstate?.price)}
+                    {countryToCurrency[currentCountry.code]} {format(realEstate?.price)}
                   </span>
                 </div>
               </div>

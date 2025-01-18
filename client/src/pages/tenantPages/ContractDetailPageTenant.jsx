@@ -6,7 +6,9 @@ import { PageLoading } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
-import { dateFormatter, format } from "../../utils/valueFormatter";
+import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const ContractDetailPageTenant = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,11 @@ const ContractDetailPageTenant = () => {
   const { contractDetail, isLoading } = useSelector(
     (state) => state.tenantUser
   );
+
+  const currentCountry = countries.find(
+    (country) => country.label === contractDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   // calculate the total rent amount according to payment plan
   const calculateTotalRent = useCallback(() => {
@@ -98,7 +105,7 @@ const ContractDetailPageTenant = () => {
         </div>
         <div>
           <h5 className="font-robotoNormal">
-            <span className="font-medium">Rent Amount</span>: NRS.{" "}
+            <span className="font-medium">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
             {format(contractDetail?.rentAmount)} per month
           </h5>
         </div>
@@ -128,9 +135,9 @@ const ContractDetailPageTenant = () => {
         <h5>1. Payment of Rent</h5>
         <p>
           Tenant shall pay rent in the amount of{" "}
-          <strong>NPR {format(contractDetail?.rentAmount)}</strong> per month.
+          <strong>{countryToCurrency[currentCountry.code]} {format(contractDetail?.rentAmount)}</strong> per month.
           Total Rent amount of{" "}
-          <strong>NPR {format(calculateTotalRent())}</strong> shall be due and
+          <strong>{countryToCurrency[currentCountry.code]} {format(calculateTotalRent())}</strong> shall be due and
           payable every <strong>{contractDetail?.paymentPlan}</strong> on the
           first day of the calendar month and shall be considered late if not
           received by the Landlord on or before the 7th day of the month.

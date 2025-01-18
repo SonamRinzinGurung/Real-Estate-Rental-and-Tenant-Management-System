@@ -1,4 +1,4 @@
-import { format, dateFormatter } from "../utils/valueFormatter";
+import { format, dateFormatter, createNumberFormatter } from "../utils/valueFormatter";
 import { ImageCarousal } from "../components";
 import { useDispatch } from "react-redux";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -6,6 +6,8 @@ import BookmarkRoundedIcon from "@mui/icons-material/BookmarkRounded";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import { saveOrUnSaveRealEstate } from "../features/realEstateTenant/realEstateTenantSlice";
 import { Button, CircularProgress } from "@mui/material";
+import { countries } from "../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const RealEstateDetailCard = ({
   _id,
@@ -21,6 +23,11 @@ const RealEstateDetailCard = ({
   isProcessing,
 }) => {
   const dispatch = useDispatch();
+
+  const currentCountry = countries.find(
+    (country) => country.label === address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
   return (
       <section className="flex flex-col gap-4 rounded-md ">
         <div className="flex justify-between rounded-md">
@@ -45,7 +52,7 @@ const RealEstateDetailCard = ({
                 RENT per month
               </p>
               <span className="font-semibold text-lg text-primaryDark">
-                NPR. {format(price)}
+              {countryToCurrency[currentCountry.code]} {format(price)}
               </span>
               <div>
                 <p className="font-roboto text-gray-500">{category}</p>

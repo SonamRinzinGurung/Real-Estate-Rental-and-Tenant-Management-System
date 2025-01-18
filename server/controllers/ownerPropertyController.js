@@ -96,6 +96,7 @@ const updatePropertyDetails = async (req, res) => {
     !streetName ||
     !city ||
     !state ||
+    !country ||
     !description ||
     !area ||
     !floors ||

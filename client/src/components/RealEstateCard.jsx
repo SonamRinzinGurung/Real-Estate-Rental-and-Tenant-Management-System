@@ -7,8 +7,10 @@ import {
   CardMedia,
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import { format } from "../utils/valueFormatter";
+import { createNumberFormatter } from "../utils/valueFormatter";
 import { Link } from "react-router-dom";
+import countryToCurrency from "country-to-currency";
+import { countries } from "../utils/countryList";
 
 const RealEstateCard = ({
   title,
@@ -21,6 +23,10 @@ const RealEstateCard = ({
   fromOwnerUser,
   fromUserProfile,
 }) => {
+  const currentCountry = countries.find(
+    (country) => country.label === address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
   return (
       <Card
         sx={{
@@ -56,7 +62,7 @@ const RealEstateCard = ({
               </h4>
               <p className="text-sm text-gray-400">{category}</p>
               <p className="font-semibold">
-                NPR. <span className="">{format(price)}</span> / month
+              {countryToCurrency[currentCountry.code]} <span className="">{format(price)}</span> / month
               </p>
               <p className="text-base">
               <LocationOnOutlinedIcon color="secondary" />{address?.streetName}, {address?.city}

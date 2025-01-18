@@ -11,16 +11,17 @@ import { useDispatch, useSelector } from "react-redux";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import DateRangeRoundedIcon from "@mui/icons-material/DateRangeRounded";
-import CurrencyRupeeRoundedIcon from "@mui/icons-material/CurrencyRupeeRounded";
 import {
   dateFormatter,
-  format,
   calculateTotalRent,
   calculateNumberOfMonths,
   calculateNextDueDate,
   calculateAddedDate,
+  createNumberFormatter,
 } from "../../utils/valueFormatter";
 import paymentImg from "../../assets/images/payment.svg";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const CreatePaymentHistory = () => {
   const { rentDetailId } = useParams();
@@ -37,6 +38,11 @@ const CreatePaymentHistory = () => {
     alertType,
     isLoading,
   } = useSelector((state) => state.rentDetailOwner);
+
+  const currentCountry = countries.find(
+    (country) => country.label === rentDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
@@ -142,7 +148,7 @@ const CreatePaymentHistory = () => {
               </div>
               <div className="flex mb-3 gap-4">
                 <h5 className="text-gray-700">
-                  <CurrencyRupeeRoundedIcon />{" "}
+                  {countryToCurrency[currentCountry.code]}{" "}
                   {format(
                     calculateTotalRent(
                       rentDetail?.paymentPlan,

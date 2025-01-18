@@ -1,8 +1,15 @@
 import moment from "moment";
 
+export const createNumberFormatter = (locale) => {
+  return new Intl.NumberFormat(locale ? `en-${locale}` : "en-US", {
+    style: "decimal"
+  }).format
+}
+
 export const { format } = new Intl.NumberFormat("en-IN", {
   style: "decimal",
 });
+
 
 export const dateFormatter = (date) => {
   return moment(date).format("MMM Do, YYYY");

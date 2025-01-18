@@ -47,7 +47,6 @@ const UpdateRealEstateDetail = () => {
     const form = document.getElementById("form");
     const formData = new FormData(form);
     const formValues = Object.fromEntries(formData.entries());
-    formValues['country'] = realEstate.address.country;
     dispatch(updateRealEstateDetail({ slug, formValues }));
   };
 

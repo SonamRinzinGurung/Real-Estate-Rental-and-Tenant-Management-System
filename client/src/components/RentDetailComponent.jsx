@@ -8,11 +8,13 @@ import {
   Avatar,
 } from "@mui/material";
 import {
-  format,
   dateFormatter,
   calculateNextDueDate,
+  createNumberFormatter,
 } from "../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import { countries } from "../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const RentDetailComponent = ({
   _id,
@@ -21,6 +23,12 @@ const RentDetailComponent = ({
   paymentPlan,
   currentRentDate,
 }) => {
+
+  const currentCountry = countries.find(
+    (country) => country.label === realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
+
   return (
     <Card
       sx={{
@@ -51,7 +59,7 @@ const RentDetailComponent = ({
 
             <div>
               <p className="font-semibold">
-                NPR. <span className="">{format(realEstate?.price)}</span> /
+                {countryToCurrency[currentCountry.code]} <span className="">{format(realEstate?.price)}</span> /
                 month
               </p>
               <p className="">

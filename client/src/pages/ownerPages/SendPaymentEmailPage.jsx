@@ -13,9 +13,12 @@ import {
   format,
   calculateTotalRent,
   calculateNumberOfMonths,
+  createNumberFormatter,
 } from "../../utils/valueFormatter";
 import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const SendPaymentEmailPage = () => {
   const dispatch = useDispatch();
@@ -31,6 +34,11 @@ const SendPaymentEmailPage = () => {
     alertType,
     success,
   } = useSelector((state) => state.rentDetailOwner);
+
+  const currentCountry = countries.find(
+    (country) => country.label === rentDetail?.realEstate?.address?.country
+  );
+  const format = createNumberFormatter(currentCountry?.code);
 
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
@@ -86,12 +94,12 @@ const SendPaymentEmailPage = () => {
         rentDetail?.currentRentDate.to
       )} is due. As per our rental agreement, rent is to be paid within 7 days after ${dateFormatter(
         rentDetail?.currentRentDate.from
-      )}. The total rent amount is NPR ${format(
+        )}. The total rent amount is ${countryToCurrency[currentCountry.code]} ${format(
         calculateTotalRent(
           rentDetail?.paymentPlan,
           rentDetail?.realEstate.price
         )
-      )} for NPR ${format(rentDetail?.realEstate?.price)} per month.
+        )} for ${countryToCurrency[currentCountry.code]} ${format(rentDetail?.realEstate?.price)} per month.
               </p>
               <p>
                 Please note that late payment fees may apply if the rent is not
@@ -106,7 +114,7 @@ const SendPaymentEmailPage = () => {
                 Number of Months: <b>${calculateNumberOfMonths(
                   rentDetail?.paymentPlan
                 )}</b> <br />
-                Rent Amount: <b>NPR ${format(
+                Rent Amount: <b>${countryToCurrency[currentCountry?.code]} ${format(
                   calculateTotalRent(
                     rentDetail?.paymentPlan,
                     rentDetail?.realEstate.price
@@ -176,14 +184,14 @@ const SendPaymentEmailPage = () => {
                 {dateFormatter(rentDetail?.currentRentDate.to)} is due. As per
                 our rental agreement, rent is to be paid within 7 days after{" "}
                 {dateFormatter(rentDetail?.currentRentDate.from)}. The total
-                rent amount is NPR{" "}
+                rent amount is {countryToCurrency[currentCountry.code]}{" "}
                 {format(
                   calculateTotalRent(
                     rentDetail?.paymentPlan,
                     rentDetail?.realEstate.price
                   )
                 )}{" "}
-                for NPR {format(rentDetail?.realEstate?.price)} per month.
+                for {countryToCurrency[currentCountry.code]} {format(rentDetail?.realEstate?.price)} per month.
               </p>
               <br />
               <p>
@@ -201,7 +209,7 @@ const SendPaymentEmailPage = () => {
                 <b>{calculateNumberOfMonths(rentDetail?.paymentPlan)}</b> <br />
                 Rent Amount:{" "}
                 <b>
-                  NPR{" "}
+                  {countryToCurrency[currentCountry.code]}{" "}
                   {format(
                     calculateTotalRent(
                       rentDetail?.paymentPlan,

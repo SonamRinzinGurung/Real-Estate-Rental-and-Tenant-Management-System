@@ -11,8 +11,10 @@ import {
   CardActionArea,
   Avatar,
 } from "@mui/material";
-import { format } from "../../utils/valueFormatter";
+import { createNumberFormatter, format } from "../../utils/valueFormatter";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import { countries } from "../../utils/countryList";
+import countryToCurrency from "country-to-currency";
 
 const AllRentalProperties = () => {
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ const AllRentalProperties = () => {
   const { allRentalProperties, isLoading } = useSelector(
     (state) => state.realEstateTenant
   );
+
   useEffect(() => {
     dispatch(getAllTenantRentalProperties());
   }, [dispatch]);
@@ -58,6 +61,10 @@ const AllRentalProperties = () => {
               propertyOwner,
               slug,
             } = item?.realEstate;
+            const currentCountry = countries.find(
+              (country) => country.label === address?.country
+            );
+            const format = createNumberFormatter(currentCountry?.code);
             return (
               <Card
                 sx={{
@@ -89,7 +96,7 @@ const AllRentalProperties = () => {
                       </h4>
                       <p className="text-sm text-gray-400">{category}</p>
                       <p className="font-semibold">
-                        NPR. <span className="">{format(price)}</span> / month
+                        {countryToCurrency[currentCountry.code]} <span className="">{format(price)}</span> / month
                       </p>
                       <p className="text-base">
                         <LocationOnOutlinedIcon color="secondary" />
