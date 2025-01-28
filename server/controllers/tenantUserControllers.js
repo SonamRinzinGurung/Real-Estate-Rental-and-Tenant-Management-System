@@ -26,7 +26,7 @@ const getSingleOwnerUser = async (req, res) => {
   const currentTenantUser = await TenantUser.findById(userId);
   const isContact = currentTenantUser.contacts.includes(ownerId.toString());
 
-  const realEstates = await RealEstate.find({ propertyOwner: user._id });
+  const realEstates = await RealEstate.find({ propertyOwner: user._id, status: true });
 
   res.json({ user, realEstates, isContact });
 };

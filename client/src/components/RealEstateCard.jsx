@@ -28,6 +28,13 @@ const RealEstateCard = ({
   );
   const format = createNumberFormatter(currentCountry?.code);
   return (
+    <Link
+      to={
+        fromOwnerUser
+          ? `/owner/real-estate/${slug}`
+          : `/tenant/real-estate/${slug}`
+      }
+    >
       <Card
         sx={{
           width: 345,
@@ -39,13 +46,6 @@ const RealEstateCard = ({
           color: "#102a43",
         }}
       >
-        <Link
-          to={
-            fromOwnerUser
-              ? `/owner/real-estate/${slug}`
-              : `/tenant/real-estate/${slug}`
-          }
-        >
           <CardActionArea>
             <CardMedia
               component="img"
@@ -68,8 +68,7 @@ const RealEstateCard = ({
               <LocationOnOutlinedIcon color="secondary" />{address?.streetName}, {address?.city}
               </p>
             </CardContent>
-          </CardActionArea>
-        </Link>
+        </CardActionArea>
         {/*  render the contact bar only if the user is not the owner of the property */}
         {!fromOwnerUser && !fromUserProfile && (
           <div className="flex p-2">
@@ -101,6 +100,7 @@ const RealEstateCard = ({
           </div>
         )}
     </Card>
+    </Link>
   );
 };
 
