@@ -1,12 +1,11 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllContacts } from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
-import { io } from "socket.io-client";
+import { socket } from "../../socket";
 
 const TenantChat = () => {
   const dispatch = useDispatch();
-  const socket = useRef();
 
   const { contacts, isLoading } = useSelector((state) => state.tenantUser);
   const { user } = useSelector((state) => state.auth);
@@ -14,17 +13,15 @@ const TenantChat = () => {
   const [currentSelectedChatIndex, setCurrentChatIndex] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      socket.current = io(import.meta.env.VITE_APP_API_HOST);
-      socket.current.emit("addUser", user._id);
-    }
-  }, [user]);
-
-  useEffect(() => {
     dispatch(getAllContacts({ name: "" }));
   }, [dispatch]);
 
   const handleCurrentChatChange = (contact, index) => {
+    socket?.emit("markAsRead", {
+      receiverID: user?._id,
+      senderId: contact?._id,
+    });
+
     setCurrentChat(contact);
     setCurrentChatIndex(index);
   };
@@ -66,13 +63,20 @@ const TenantChat = () => {
             </div>
           ))}
         </div>
-
-        <ChatMessages
-          chat={currentChat}
-          currentUser={user.slug}
-          socket={socket}
-          fromTenant
-        />
+        {currentChat === null ? (
+          <div className="flex justify-center items-center h-64 w-full">
+            <p className="font-display text-base md:text-xl lg:text-2xl text-center">
+              Click on a chat to start messaging
+            </p>
+          </div>
+        ) : (
+          <ChatMessages
+            chat={currentChat}
+              currentUser={user}
+              socket={socket}
+              fromTenant
+            />
+        )}
       </div>
     </div>
   );

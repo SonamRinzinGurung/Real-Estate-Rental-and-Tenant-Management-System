@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { SocketContext } from "../utils/SocketContext";
 
 const NavBarLinksOwner = ({ toggleMenu }) => {
+  const { unreadMessageCount } = useContext(SocketContext);
   return (
     <>
       <Link to="/owner" onClick={toggleMenu} className="text-center">
@@ -68,7 +71,11 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
           Rent
         </Button>
       </Link>
-      <Link to="/owner/chat" onClick={toggleMenu} className="text-center">
+      <Link
+        to="/owner/chat"
+        onClick={toggleMenu}
+        className="text-center relative"
+      >
         <Button
           type="text"
           sx={{
@@ -77,9 +84,15 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
               color: "primary.dark",
             },
             width: "100%",
+            position: "relative",
           }}
         >
-          Chat
+          Chat{" "}
+          {unreadMessageCount > 0 && (
+            <div className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-red-600 text-white text-xs rounded-full">
+              {unreadMessageCount}
+            </div>
+          )}
         </Button>
       </Link>
     </>
@@ -87,6 +100,7 @@ const NavBarLinksOwner = ({ toggleMenu }) => {
 };
 
 const NavBarLinksTenant = ({ toggleMenu }) => {
+  const { unreadMessageCount } = useContext(SocketContext);
   return (
     <>
       <Link to="/tenant" onClick={toggleMenu} className="text-center">
@@ -157,7 +171,11 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
           Contacts
         </Button>
       </Link>
-      <Link to="/tenant/chat" onClick={toggleMenu} className="text-center">
+      <Link
+        to="/tenant/chat"
+        onClick={toggleMenu}
+        className="text-center relative"
+      >
         <Button
           type="text"
           sx={{
@@ -166,9 +184,15 @@ const NavBarLinksTenant = ({ toggleMenu }) => {
               color: "primary.dark",
             },
             width: "100%",
+            position: "relative",
           }}
         >
-          Chat
+          Chat{" "}
+          {unreadMessageCount > 0 && (
+            <div className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-red-600 text-white text-xs rounded-full">
+              {unreadMessageCount}
+            </div>
+          )}
         </Button>
       </Link>
     </>

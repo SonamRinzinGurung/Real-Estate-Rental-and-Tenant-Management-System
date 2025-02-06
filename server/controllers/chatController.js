@@ -31,6 +31,8 @@ const getMessages = async (req, res) => {
     return {
       fromSelf: msg.sender === from,
       message: msg.message,
+      isRead: msg.isRead,
+      createdAt: msg.createdAt,
     };
   });
   return res.status(200).json({ messages });

@@ -46,6 +46,7 @@ import {
 } from "./components";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { SocketProvider } from "./utils/SocketContext";
 
 const theme = createTheme({
     palette: {
@@ -73,9 +74,11 @@ function App() {
                     <Route
                         path="/owner"
                         element={
+                            <SocketProvider>
                             <ProtectedRoutes source={"owner"}>
                                 <SharedLayout />
                             </ProtectedRoutes>
+                            </SocketProvider>
                         }
                     >
                         <Route index element={<HomepageOwner />} />
@@ -118,9 +121,11 @@ function App() {
                     <Route
                         path="/tenant"
                         element={
+                            <SocketProvider>
                             <ProtectedRoutes source={"tenant"}>
                                 <SharedLayout />
                             </ProtectedRoutes>
+                            </SocketProvider>
                         }
                     >
                         <Route index element={<HomepageTenant />} />

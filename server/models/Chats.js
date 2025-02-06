@@ -14,6 +14,10 @@ const ChatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isRead: {
+      type: Boolean,
+      default: false, // Messages are unread by default
+    },
   },
   { timestamps: true }
 );

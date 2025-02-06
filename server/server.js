@@ -33,6 +33,7 @@ import {
   authorizeTenantUser,
 } from "./middleware/userAuthorization.js";
 import { Server } from "socket.io";
+import socketHandler from "./services/socketHandler.js";
 
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -120,19 +121,7 @@ const io = new Server(server, {
     origin: process.env.CLIENT_URL,
     credentials: true,
   },
+  connectionStateRecovery: {},
 });
 
-global.onlineUsers = new Map();
-
-io.on("connection", (socket) => {
-  global.chatSocket = socket;
-  socket.on("addUser", (userId) => {
-    onlineUsers.set(userId, socket.id);
-  });
-  socket.on("sendMsg", (data) => {
-    const sendUserSocketId = onlineUsers.get(data.to);
-    if (sendUserSocketId) {
-      socket.to(sendUserSocketId).emit("receiveMsg", data.message);
-    }
-  });
-});
+socketHandler(io);

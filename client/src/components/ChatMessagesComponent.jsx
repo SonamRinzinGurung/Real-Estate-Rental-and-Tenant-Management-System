@@ -1,13 +1,15 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useContext } from "react";
 import axiosFetch from "../utils/axiosCreate";
 import { ChatInput } from "../components";
 import { Link } from "react-router-dom";
+import { SocketContext } from "../utils/SocketContext";
 
-const ChatMessages = ({ chat, currentUser, socket, fromTenant }) => {
+const ChatMessages = ({ chat, currentUser, fromTenant }) => {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
-  const [socketMessage, setSocketMessage] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { socketMessage, sendMessage } =
+    useContext(SocketContext);
 
   const getMessage = useCallback(
     async (chatId) => {
@@ -44,11 +46,7 @@ const ChatMessages = ({ chat, currentUser, socket, fromTenant }) => {
         }
       );
 
-      socket.current.emit("sendMsg", {
-        to: chat?._id,
-        from: currentUser?._id,
-        message: msgInput,
-      });
+      sendMessage(currentUser?._id, chat?._id, msgInput);
 
       const oldMessages = [...messages];
       oldMessages.push({ fromSelf: true, message: msgInput });
@@ -57,17 +55,6 @@ const ChatMessages = ({ chat, currentUser, socket, fromTenant }) => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (socket?.current) {
-      socket.current.on("receiveMsg", (msg) => {
-        setSocketMessage({
-          fromSelf: false,
-          message: msg,
-        });
-      });
-    }
-  }, [socketMessage]);
 
   useEffect(() => {
     socketMessage && setMessages((prev) => [...prev, socketMessage]);
@@ -87,15 +74,15 @@ const ChatMessages = ({ chat, currentUser, socket, fromTenant }) => {
     );
   }
 
-  if (!chat) {
-    return (
-      <div className="flex justify-center items-center h-64 w-full">
-        <p className="font-display text-base md:text-xl lg:text-2xl text-center">
-          Click on a chat to start messaging
-        </p>
-      </div>
-    );
-  }
+  // if (!chat) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64 w-full">
+  //       <p className="font-display text-base md:text-xl lg:text-2xl text-center">
+  //         Click on a chat to start messaging
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div
