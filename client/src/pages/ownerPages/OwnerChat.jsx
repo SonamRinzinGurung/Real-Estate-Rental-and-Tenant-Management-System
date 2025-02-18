@@ -14,7 +14,7 @@ const OwnerChat = () => {
     dispatch(getOwnerChats());
   }, [dispatch]);
 
-  const handleCurrentChatChange = (chat, index) => {
+  const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
       receiverID: user?._id,
       senderId: chat?._id,
@@ -46,10 +46,10 @@ const OwnerChat = () => {
         }}
       >
         <div className="flex flex-col gap-4 md:w-1/4 min-w-fit overflow-y-auto overflow-x-hidden">
-          {chats?.map((chat, index) => (
+          {chats?.map((chat) => (
             <div
               key={chat?._id}
-              onClick={() => handleCurrentChatChange(chat, index)}
+              onClick={() => handleCurrentChatChange(chat)}
             >
               <div
                 className={`${

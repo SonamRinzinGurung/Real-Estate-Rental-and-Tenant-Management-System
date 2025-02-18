@@ -16,14 +16,14 @@ const TenantChat = () => {
     dispatch(getTenantChats());
   }, [dispatch]);
 
-  const handleCurrentChatChange = (chat, index) => {
+  const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
       receiverID: user?._id,
       senderId: chat?._id,
     });
 
     setCurrentChat(chat);
-    setCurrentChatIndex(index);
+    setCurrentChatIndex(chat?._id);
   };
 
   if (isLoading) {
@@ -48,14 +48,14 @@ const TenantChat = () => {
         }}
       >
         <div className="flex flex-col gap-4 w-1/3 overflow-y-auto overflow-x-hidden">
-          {chats?.map((chat, index) => (
+          {chats?.map((chat) => (
             <div
               key={chat?._id}
-              onClick={() => handleCurrentChatChange(chat, index)}
+              onClick={() => handleCurrentChatChange(chat)}
             >
               <div
                 className={`${
-                  currentSelectedChatIndex === index && "bg-slate-300"
+                  currentSelectedChatIndex === chat?._id && "bg-slate-300"
                 } rounded-md`}
               >
                 <ChatUsers chat={chat} currentUser={user} />
@@ -75,6 +75,7 @@ const TenantChat = () => {
               currentUser={user}
               socket={socket}
               fromTenant
+              handleCurrentChatChange={handleCurrentChatChange}
             />
         )}
       </div>
