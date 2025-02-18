@@ -118,6 +118,18 @@ export const getOwnerAllContracts = createAsyncThunk(
   }
 );
 
+export const getOwnerChats = createAsyncThunk(
+  "getOwnerChats",
+  async (arg, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get("/chat/owner/get-chats")
+      return await data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
 const ownerUserSlice = createSlice({
   name: "ownerUser",
   initialState: {
@@ -132,11 +144,22 @@ const ownerUserSlice = createSlice({
     contractDetail: null,
     success: null,
     allContracts: null,
+    chats: null,
   },
   reducers: {
     clearAlert: (state) => {
       state.alertFlag = false;
       state.alertMsg = "";
+    },
+    addOwnerRecentMessage: (state, action) => {
+      const { chatId, message } = action.payload;
+      const chatIndex = state.chats.findIndex((chat) => chat._id === chatId);
+      if (chatIndex !== -1) {
+        state.chats[chatIndex].message = message;
+        state.chats[chatIndex].createdAt = new Date().toISOString();
+        const updatedChat = state.chats.splice(chatIndex, 1)[0];
+        state.chats.unshift(updatedChat);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -277,10 +300,25 @@ const ownerUserSlice = createSlice({
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
-      });
+      })
+      .addCase(getOwnerChats.pending, (state) => {
+        state.isLoading = true;
+        state.success = null;
+      })
+      .addCase(getOwnerChats.fulfilled, (state, action) => {
+        state.chats = action.payload.chats;
+        state.isLoading = false;
+        state.alertFlag = false;
+      })
+      .addCase(getOwnerChats.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
   },
 });
 
-export const { clearAlert } = ownerUserSlice.actions;
+export const { clearAlert, addOwnerRecentMessage } = ownerUserSlice.actions;
 
 export default ownerUserSlice.reducer;

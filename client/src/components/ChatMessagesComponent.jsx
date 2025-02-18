@@ -3,14 +3,17 @@ import axiosFetch from "../utils/axiosCreate";
 import { ChatInput } from "../components";
 import { Link } from "react-router-dom";
 import { SocketContext } from "../utils/SocketContext";
+import { useDispatch } from "react-redux";
+import { addOwnerRecentMessage } from "../features/ownerUser/ownerUserSlice";
+import { addTenantRecentMessage } from "../features/tenantUser/tenantUserSlice";
 
-const ChatMessages = ({ chat, currentUser, fromTenant }) => {
+const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }) => {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [isLoaded, setIsLoaded] = useState(false);
   const { socketMessage, sendMessage } =
     useContext(SocketContext);
-
+  const dispatch = useDispatch();
   const getMessage = useCallback(
     async (chatId) => {
       try {
@@ -51,17 +54,35 @@ const ChatMessages = ({ chat, currentUser, fromTenant }) => {
       const oldMessages = [...messages];
       oldMessages.push({ fromSelf: true, message: msgInput });
       setMessages(oldMessages);
+
+      if (fromTenant) {
+        dispatch(addTenantRecentMessage({ chatId: chat?._id, message: msgInput }));
+      } else {
+        dispatch(addOwnerRecentMessage({ chatId: chat?._id, message: msgInput }));
+      }
+
+      handleCurrentChatChange(chat, chat?._id);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    socketMessage && setMessages((prev) => [...prev, socketMessage]);
+
+    if (socketMessage && socketMessage.to === currentUser?._id && socketMessage.from === chat?._id) {
+      setMessages((prev) => [...prev, socketMessage]);
+    }
+
+    if (fromTenant) {
+      dispatch(addTenantRecentMessage({ chatId: socketMessage?.from, message: socketMessage?.message }));
+    } else {
+      dispatch(addOwnerRecentMessage({ chatId: socketMessage?.from, message: socketMessage?.message }));
+    }
+
   }, [socketMessage]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef.current?.scrollIntoView();
   }, [messages]);
 
   if (!isLoaded) {
@@ -120,13 +141,13 @@ const ChatMessages = ({ chat, currentUser, fromTenant }) => {
         {messages?.map((message, index) => (
           <div
             className={`flex ${
-              message.fromSelf ? "justify-end" : "justify-start"
+              message.fromSelf ? "justify-end ml-5" : "justify-start mr-5"
             }`}
             key={index}
             ref={scrollRef}
           >
             <div
-              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl my-1 ${
+              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl my-1 max-w-xl ${
                 !message.fromSelf ? "bg-primary text-white" : "bg-white"
               }`}
             >

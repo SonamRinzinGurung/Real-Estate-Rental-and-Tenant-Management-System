@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllContacts } from "../../features/tenantUser/tenantUserSlice";
+import { getTenantChats } from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
 import { socket } from "../../socket";
 
 const TenantChat = () => {
   const dispatch = useDispatch();
 
-  const { contacts, isLoading } = useSelector((state) => state.tenantUser);
+  const { chats, isLoading } = useSelector((state) => state.tenantUser);
   const { user } = useSelector((state) => state.auth);
   const [currentChat, setCurrentChat] = useState(null);
   const [currentSelectedChatIndex, setCurrentChatIndex] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllContacts({ name: "" }));
+    dispatch(getTenantChats());
   }, [dispatch]);
 
-  const handleCurrentChatChange = (contact, index) => {
+  const handleCurrentChatChange = (chat, index) => {
     socket?.emit("markAsRead", {
       receiverID: user?._id,
-      senderId: contact?._id,
+      senderId: chat?._id,
     });
 
-    setCurrentChat(contact);
+    setCurrentChat(chat);
     setCurrentChatIndex(index);
   };
 
   if (isLoading) {
     return <PageLoading />;
   }
-  if (contacts?.length === 0) {
+  if (chats?.length === 0) {
     return (
       <div className="mt-12">
         <h3 className="font-robotoNormal text-center">
@@ -48,17 +48,17 @@ const TenantChat = () => {
         }}
       >
         <div className="flex flex-col gap-4 w-1/3 overflow-y-auto overflow-x-hidden">
-          {contacts?.map((contact, index) => (
+          {chats?.map((chat, index) => (
             <div
-              key={contact?._id}
-              onClick={() => handleCurrentChatChange(contact, index)}
+              key={chat?._id}
+              onClick={() => handleCurrentChatChange(chat, index)}
             >
               <div
                 className={`${
                   currentSelectedChatIndex === index && "bg-slate-300"
                 } rounded-md`}
               >
-                <ChatUsers contact={contact} currentUser={user.slug} />
+                <ChatUsers chat={chat} currentUser={user} />
               </div>
             </div>
           ))}

@@ -25,7 +25,9 @@ export const SocketProvider = ({ children }) => {
         const handleReceiveMessage = (message) => {
             setSocketMessage({
                 fromSelf: false,
-                message: message,
+                message: message.message,
+                from: message.from,
+                to: message.to,
             });
         }
 

@@ -106,6 +106,18 @@ export const getContractWithRealEstateID = createAsyncThunk(
   }
 );
 
+export const getTenantChats = createAsyncThunk(
+  "getTenantChats",
+  async (arg, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.get("/chat/tenant/get-chats")
+      return await data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+)
+
 const tenantUserSlice = createSlice({
   name: "tenantUser",
   initialState: {
@@ -120,11 +132,22 @@ const tenantUserSlice = createSlice({
     contacts: null,
     isContact: null,
     success: null,
+    chats: null,
   },
   reducers: {
     clearAlert: (state) => {
       state.alertFlag = false;
       state.alertMsg = "";
+    },
+    addTenantRecentMessage: (state, action) => {
+      const { chatId, message } = action.payload;
+      const chatIndex = state.chats.findIndex((chat) => chat._id === chatId);
+      if (chatIndex !== -1) {
+        state.chats[chatIndex].message = message;
+        state.chats[chatIndex].createdAt = new Date().toISOString();
+        const updatedChat = state.chats.splice(chatIndex, 1)[0];
+        state.chats.unshift(updatedChat);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -249,10 +272,25 @@ const tenantUserSlice = createSlice({
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
-      });
+      })
+      .addCase(getTenantChats.pending, (state) => {
+        state.isLoading = true;
+        state.success = null;
+      })
+      .addCase(getTenantChats.fulfilled, (state, action) => {
+        state.chats = action.payload.chats;
+        state.isLoading = false;
+        state.alertFlag = false;
+      })
+      .addCase(getTenantChats.rejected, (state, action) => {
+        state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
   },
 });
 
-export const { clearAlert } = tenantUserSlice.actions;
+export const { clearAlert, addTenantRecentMessage } = tenantUserSlice.actions;
 
 export default tenantUserSlice.reducer;
