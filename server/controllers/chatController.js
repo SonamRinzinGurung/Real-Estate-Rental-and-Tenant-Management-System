@@ -95,8 +95,8 @@ const getChats = async (req, res) => {
       (contact) => contact._id.toString() === lastMessage.to
     );
     return {
-        ...lastMessage,
-      ...contact._doc,
+      ...lastMessage,
+      ...contact?._doc,
     }
   }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 

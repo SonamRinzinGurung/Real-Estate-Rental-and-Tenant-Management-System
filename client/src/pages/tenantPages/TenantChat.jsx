@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getTenantChats } from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
@@ -6,6 +7,7 @@ import { socket } from "../../socket";
 
 const TenantChat = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const { chats, isLoading } = useSelector((state) => state.tenantUser);
   const { user } = useSelector((state) => state.auth);
@@ -15,6 +17,13 @@ const TenantChat = () => {
   useEffect(() => {
     dispatch(getTenantChats());
   }, [dispatch]);
+
+  // set the current chat to location state if it exists
+  useEffect(() => {
+    if (location?.state) {
+      handleCurrentChatChange(location.state)
+    }
+  }, [location.state])
 
   const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
@@ -73,7 +82,6 @@ const TenantChat = () => {
           <ChatMessages
             chat={currentChat}
               currentUser={user}
-              socket={socket}
               fromTenant
               handleCurrentChatChange={handleCurrentChatChange}
             />

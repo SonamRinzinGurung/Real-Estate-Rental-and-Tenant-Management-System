@@ -5,7 +5,7 @@ import {
   addOrRemoveContact,
   clearAlert,
 } from "../../features/ownerUser/ownerUserSlice";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Footer, PageLoading, AlertToast } from "../../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
@@ -15,10 +15,12 @@ import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import ImageViewer from "react-simple-image-viewer";
+import MessageIcon from "@mui/icons-material/Message";
 
 const TenantUserDetailPage = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const {
     user,
@@ -92,20 +94,20 @@ const TenantUserDetailPage = () => {
               />
             )}
           </div>
-          <div className="md:ml-4">
-            <p className="mt-2 text-2xl font-robotoNormal">
+          <div className="md:ml-4 flex flex-col gap-3">
+            <p className="text-2xl font-robotoNormal">
               {user?.firstName} {user?.lastName}
             </p>
 
-            <div className="flex mt-2 gap-2 items-center">
+            <div className="flex gap-2 items-center">
               <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
               <p>{user?.address}</p>
             </div>
-            <div className="flex mt-2 gap-2 items-center">
+            <div className="flex gap-2 items-center">
               <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
               <p className="ml-3">+977 {user?.phoneNumber}</p>
             </div>
-            <div className="flex mt-2 gap-2 items-center">
+            <div className="flex gap-2 items-center">
               <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
               <p className="">{user?.email}</p>
             </div>
@@ -116,10 +118,9 @@ const TenantUserDetailPage = () => {
                 variant="contained"
                 color="error"
                 startIcon={<PersonRemoveAlt1RoundedIcon />}
-                size="medium"
+                size="small"
                 sx={{
                   color: "white",
-                  marginTop: "12px",
                 }}
               >
                 {isProcessing ? (
@@ -140,10 +141,9 @@ const TenantUserDetailPage = () => {
                 variant="contained"
                 color="secondary"
                 startIcon={<ContactPageRoundedIcon />}
-                size="medium"
+                  size="small"
                 sx={{
                   color: "white",
-                  marginTop: "12px",
                 }}
               >
                 {isProcessing ? (
@@ -158,6 +158,31 @@ const TenantUserDetailPage = () => {
                 )}
               </Button>
             )}
+
+            <div className="flex">
+              <Button
+                variant="contained"
+                size="small"
+                sx={{
+                  color: "white",
+                  width: "100%",
+                }}
+                startIcon={<MessageIcon />}
+                onClick={() =>
+                  navigate(`/owner/chat`, {
+                    state: {
+                      _id: user._id,
+                      firstName: user.firstName,
+                      lastName: user.lastName,
+                      profileImage: user.profileImage,
+                      slug: user.slug,
+                    },
+                  })
+                }
+              >
+                Chat
+              </Button>
+            </div>
           </div>
         </div>
         <AlertToast

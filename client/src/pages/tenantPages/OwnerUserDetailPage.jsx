@@ -5,7 +5,7 @@ import {
   addOrRemoveContact,
   clearAlert,
 } from "../../features/tenantUser/tenantUserSlice";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   RealEstateCard,
   Footer,
@@ -20,10 +20,12 @@ import { Button } from "@mui/material";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import CircularProgress from "@mui/material/CircularProgress";
+import MessageIcon from '@mui/icons-material/Message';
 
 const OwnerUserDetailPage = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const {
     user,
@@ -76,7 +78,7 @@ const OwnerUserDetailPage = () => {
   return (
     <>
       <main className="flex flex-col md:flex-row gap-8 md:items-start">
-        <div className="flex flex-col mt-10 mb-5 md:mb-12 md:w-1/4 items-center gap-1 md:ml-10">
+        <div className="flex flex-col mt-10 mb-5 md:mb-12 md:w-1/4 items-center gap-3 md:ml-10">
           <h3 className="font-heading font-semibold text-4xl">Profile</h3>
           <div className="w-48 h-48 mt-6 cursor-pointer">
             <img
@@ -99,19 +101,19 @@ const OwnerUserDetailPage = () => {
               />
             )}
           </div>
-          <p className="mt-2 text-lg">
+          <p className="text-lg">
             {user?.firstName} {user?.lastName}
           </p>
 
-          <div className="flex mt-2 gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <LocationOnOutlinedIcon sx={{ color: "#019149" }} />
             <p>{user?.address}</p>
           </div>
-          <div className="flex mt-2 gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
             <p className="ml-3">+977 {user?.phoneNumber}</p>
           </div>
-          <div className="flex mt-2 gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
             <p className="">{user?.email}</p>
           </div>
@@ -123,10 +125,9 @@ const OwnerUserDetailPage = () => {
               variant="contained"
               color="error"
               startIcon={<PersonRemoveAlt1RoundedIcon />}
-              size="medium"
+              size="small"
               sx={{
                 color: "white",
-                marginTop: "12px",
               }}
             >
               {isProcessing ? (
@@ -147,10 +148,9 @@ const OwnerUserDetailPage = () => {
               variant="contained"
               color="secondary"
               startIcon={<ContactPageRoundedIcon />}
-              size="medium"
+                size="small"
               sx={{
                 color: "white",
-                marginTop: "12px",
               }}
             >
               {isProcessing ? (
@@ -165,6 +165,28 @@ const OwnerUserDetailPage = () => {
               )}
             </Button>
           )}
+
+          <div className="flex">
+
+            <Button variant="contained" size="small" sx={{
+              color: "white",
+              width: "100%",
+            }}
+              startIcon={<MessageIcon />}
+              onClick={() => navigate(`/tenant/chat`, {
+                state: {
+                  _id: user._id,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  profileImage: user.profileImage,
+                  slug: user.slug
+                }
+              })}
+            >
+              Chat
+            </Button>
+          </div>
+
         </div>
         <div className="mb-12 md:w-3/4 md:mt-10">
           {realEstates?.length === 0 ? (

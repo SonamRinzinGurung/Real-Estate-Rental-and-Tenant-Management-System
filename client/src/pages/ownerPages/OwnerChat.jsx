@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOwnerChats } from "../../features/ownerUser/ownerUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
 import { socket } from "../../socket";
 const OwnerChat = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+
   const { isLoading, chats } = useSelector((state) => state.ownerUser);
   const { user } = useSelector((state) => state.auth);
   const [currentChat, setCurrentChat] = useState(null);
@@ -13,6 +16,13 @@ const OwnerChat = () => {
   useEffect(() => {
     dispatch(getOwnerChats());
   }, [dispatch]);
+
+  // set the current chat to location state if it exists
+  useEffect(() => {
+    if (location?.state) {
+      handleCurrentChatChange(location.state)
+    }
+  }, [location.state])
 
   const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
@@ -68,7 +78,7 @@ const OwnerChat = () => {
             </p>
           </div>
         ) : (
-            <ChatMessages chat={currentChat} currentUser={user} socket={socket} handleCurrentChatChange={handleCurrentChatChange} />
+            <ChatMessages chat={currentChat} currentUser={user} handleCurrentChatChange={handleCurrentChatChange} />
         )}
       </div>
     </div>
