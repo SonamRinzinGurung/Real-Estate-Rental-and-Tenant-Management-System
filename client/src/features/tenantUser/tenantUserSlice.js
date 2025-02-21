@@ -140,15 +140,24 @@ const tenantUserSlice = createSlice({
       state.alertMsg = "";
     },
     addTenantRecentMessage: (state, action) => {
-      const { chatId, message } = action.payload;
+      const { chatId, message, sender } = action.payload;
       const chatIndex = state.chats.findIndex((chat) => chat._id === chatId);
       if (chatIndex !== -1) {
         state.chats[chatIndex].message = message;
         state.chats[chatIndex].createdAt = new Date().toISOString();
+        state.chats[chatIndex].isRead = false;
+        state.chats[chatIndex].sender = sender;
         const updatedChat = state.chats.splice(chatIndex, 1)[0];
         state.chats.unshift(updatedChat);
       }
     },
+    markChatAsRead: (state, action) => {
+      const { chatId } = action.payload;
+      const chat = state?.chats?.find((chat) => chat._id === chatId);
+      if (chat) {
+        chat.isRead = true;
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -291,6 +300,6 @@ const tenantUserSlice = createSlice({
   },
 });
 
-export const { clearAlert, addTenantRecentMessage } = tenantUserSlice.actions;
+export const { clearAlert, addTenantRecentMessage, markChatAsRead } = tenantUserSlice.actions;
 
 export default tenantUserSlice.reducer;

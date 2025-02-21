@@ -1,4 +1,5 @@
 import moment from "moment";
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 const ChatUsers = ({ chat, currentUser }) => {
   const truncateMessage = (message, maxLength) => {
@@ -33,8 +34,8 @@ const ChatUsers = ({ chat, currentUser }) => {
         alt="pfp"
         className="w-8 h-8 rounded-full object-cover md:w-12 md:h-12 "
       />
-      <div className="hidden md:flex font-robotoNormal flex-col">
-        <div className="">
+      <div className={`hidden md:flex font-robotoNormal flex-col ${chat?.sender !== currentUser?._id && !chat?.isRead && "font-semibold"}`}>
+        <div>
           {chat?.firstName} {chat?.lastName}
         </div>
 
@@ -50,6 +51,13 @@ const ChatUsers = ({ chat, currentUser }) => {
           )
         }
       </div>
+      {
+        chat?.sender !== currentUser?._id && !chat?.isRead && (
+          <div className="flex ml-auto font-semibold mr-2">
+            <FiberManualRecordIcon fontSize="small" color="info" />
+          </div>
+        )
+      }
     </div>
   );
 };

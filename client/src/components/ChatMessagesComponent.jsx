@@ -56,9 +56,9 @@ const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }
       setMessages(oldMessages);
 
       if (fromTenant) {
-        dispatch(addTenantRecentMessage({ chatId: chat?._id, message: msgInput }));
+        dispatch(addTenantRecentMessage({ chatId: chat?._id, message: msgInput, sender: currentUser?._id }));
       } else {
-        dispatch(addOwnerRecentMessage({ chatId: chat?._id, message: msgInput }));
+        dispatch(addOwnerRecentMessage({ chatId: chat?._id, message: msgInput, sender: currentUser?._id }));
       }
 
       handleCurrentChatChange(chat, chat?._id);
@@ -72,13 +72,6 @@ const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }
     if (socketMessage && socketMessage.to === currentUser?._id && socketMessage.from === chat?._id) {
       setMessages((prev) => [...prev, socketMessage]);
     }
-
-    if (fromTenant) {
-      dispatch(addTenantRecentMessage({ chatId: socketMessage?.from, message: socketMessage?.message }));
-    } else {
-      dispatch(addOwnerRecentMessage({ chatId: socketMessage?.from, message: socketMessage?.message }));
-    }
-
   }, [socketMessage]);
 
   useEffect(() => {
@@ -95,16 +88,6 @@ const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }
     );
   }
 
-  // if (!chat) {
-  //   return (
-  //     <div className="flex justify-center items-center h-64 w-full">
-  //       <p className="font-display text-base md:text-xl lg:text-2xl text-center">
-  //         Click on a chat to start messaging
-  //       </p>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div
       className="flex flex-col w-full"
@@ -113,9 +96,8 @@ const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }
       }}
     >
       <Link
-        to={`${fromTenant ? "/tenant/owner-user" : "/owner/tenant-user"}/${
-          chat?.slug
-        }`}
+        to={`${fromTenant ? "/tenant/owner-user" : "/owner/tenant-user"}/${chat?.slug
+          }`}
       >
         <div className="flex items-center gap-4 py-4 cursor-pointer">
           <img
@@ -140,16 +122,14 @@ const ChatMessages = ({ chat, currentUser, fromTenant, handleCurrentChatChange }
 
         {messages?.map((message, index) => (
           <div
-            className={`flex ${
-              message.fromSelf ? "justify-end ml-5" : "justify-start mr-5"
-            }`}
+            className={`flex ${message.fromSelf ? "justify-end ml-5" : "justify-start mr-5"
+              }`}
             key={index}
             ref={scrollRef}
           >
             <div
-              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl my-1 max-w-xl ${
-                !message.fromSelf ? "bg-primary text-white" : "bg-white"
-              }`}
+              className={`flex items-center gap-4 p-1 md:p-2 rounded-2xl my-1 max-w-xl ${!message.fromSelf ? "bg-primary text-white" : "bg-white"
+                }`}
             >
               <p>{message.message}</p>
             </div>

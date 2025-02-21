@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getTenantChats } from "../../features/tenantUser/tenantUserSlice";
+import {
+  addTenantRecentMessage,
+  getTenantChats,
+  markChatAsRead,
+} from "../../features/tenantUser/tenantUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
 import { socket } from "../../socket";
+import { SocketContext } from "../../utils/SocketContext";
 
 const TenantChat = () => {
   const dispatch = useDispatch();
@@ -14,6 +19,8 @@ const TenantChat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [currentSelectedChatIndex, setCurrentChatIndex] = useState(null);
 
+  const { socketMessage } = useContext(SocketContext);
+
   useEffect(() => {
     dispatch(getTenantChats());
   }, [dispatch]);
@@ -21,9 +28,21 @@ const TenantChat = () => {
   // set the current chat to location state if it exists
   useEffect(() => {
     if (location?.state) {
-      handleCurrentChatChange(location.state)
+      handleCurrentChatChange(location.state);
     }
-  }, [location.state])
+  }, [location.state]);
+
+  useEffect(() => {
+    if (socketMessage) {
+      dispatch(
+        addTenantRecentMessage({
+          chatId: socketMessage?.from,
+          message: socketMessage?.message,
+          sender: socketMessage?.from,
+        })
+      );
+    }
+  }, [socketMessage]);
 
   const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
@@ -33,6 +52,7 @@ const TenantChat = () => {
 
     setCurrentChat(chat);
     setCurrentChatIndex(chat?._id);
+    dispatch(markChatAsRead({ chatId: chat?._id }));
   };
 
   if (isLoading) {
@@ -58,10 +78,7 @@ const TenantChat = () => {
       >
         <div className="flex flex-col gap-4 w-1/3 overflow-y-auto overflow-x-hidden">
           {chats?.map((chat) => (
-            <div
-              key={chat?._id}
-              onClick={() => handleCurrentChatChange(chat)}
-            >
+            <div key={chat?._id} onClick={() => handleCurrentChatChange(chat)}>
               <div
                 className={`${
                   currentSelectedChatIndex === chat?._id && "bg-slate-300"

@@ -152,15 +152,24 @@ const ownerUserSlice = createSlice({
       state.alertMsg = "";
     },
     addOwnerRecentMessage: (state, action) => {
-      const { chatId, message } = action.payload;
+      const { chatId, message, sender } = action.payload;
       const chatIndex = state.chats.findIndex((chat) => chat._id === chatId);
       if (chatIndex !== -1) {
         state.chats[chatIndex].message = message;
         state.chats[chatIndex].createdAt = new Date().toISOString();
+        state.chats[chatIndex].isRead = false;
+        state.chats[chatIndex].sender = sender;
         const updatedChat = state.chats.splice(chatIndex, 1)[0];
         state.chats.unshift(updatedChat);
       }
     },
+    markChatAsRead: (state, action) => {
+      const { chatId } = action.payload;
+      const chat = state?.chats?.find((chat) => chat._id === chatId);
+      if (chat) {
+        chat.isRead = true;
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -319,6 +328,6 @@ const ownerUserSlice = createSlice({
   },
 });
 
-export const { clearAlert, addOwnerRecentMessage } = ownerUserSlice.actions;
+export const { clearAlert, addOwnerRecentMessage, markChatAsRead } = ownerUserSlice.actions;
 
 export default ownerUserSlice.reducer;

@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getOwnerChats } from "../../features/ownerUser/ownerUserSlice";
+import {
+  getOwnerChats,
+  addOwnerRecentMessage,
+  markChatAsRead
+} from "../../features/ownerUser/ownerUserSlice";
 import { PageLoading, ChatUsers, ChatMessages } from "../../components";
 import { socket } from "../../socket";
+import { SocketContext } from "../../utils/SocketContext";
+
 const OwnerChat = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -13,6 +19,8 @@ const OwnerChat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   const [currentSelectedChatIndex, setCurrentChatIndex] = useState(null);
 
+  const { socketMessage } = useContext(SocketContext);
+
   useEffect(() => {
     dispatch(getOwnerChats());
   }, [dispatch]);
@@ -20,9 +28,21 @@ const OwnerChat = () => {
   // set the current chat to location state if it exists
   useEffect(() => {
     if (location?.state) {
-      handleCurrentChatChange(location.state)
+      handleCurrentChatChange(location.state);
     }
-  }, [location.state])
+  }, [location.state]);
+
+  useEffect(() => {
+    if (socketMessage) {
+      dispatch(
+        addOwnerRecentMessage({
+          chatId: socketMessage?.from,
+          message: socketMessage?.message,
+          sender: socketMessage?.from,
+        })
+      );
+    }
+  }, [socketMessage, dispatch]);
 
   const handleCurrentChatChange = (chat) => {
     socket?.emit("markAsRead", {
@@ -31,6 +51,7 @@ const OwnerChat = () => {
     });
     setCurrentChat(chat);
     setCurrentChatIndex(chat?._id);
+    dispatch(markChatAsRead({ chatId: chat?._id }));
   };
 
   if (isLoading) {
@@ -47,7 +68,7 @@ const OwnerChat = () => {
   }
 
   return (
-    <div className="flex flex-col flex-wrap justify-center gap-8 md:justify-start mt-12 mb-8 px-6 md:mx-4">
+    <div className="flex flex-col flex-wrap justify-center gap-8 md:justify-start mt-12 px-6 md:mx-4">
       <h3 className="font-heading font-bold">Chat</h3>
       <div
         className="flex gap-4"
@@ -57,10 +78,7 @@ const OwnerChat = () => {
       >
         <div className="flex flex-col gap-4 md:w-1/4 min-w-fit overflow-y-auto overflow-x-hidden">
           {chats?.map((chat) => (
-            <div
-              key={chat?._id}
-              onClick={() => handleCurrentChatChange(chat)}
-            >
+            <div key={chat?._id} onClick={() => handleCurrentChatChange(chat)}>
               <div
                 className={`${
                   currentSelectedChatIndex === chat?._id && "bg-slate-300"
@@ -78,7 +96,11 @@ const OwnerChat = () => {
             </p>
           </div>
         ) : (
-            <ChatMessages chat={currentChat} currentUser={user} handleCurrentChatChange={handleCurrentChatChange} />
+            <ChatMessages
+              chat={currentChat}
+              currentUser={user}
+              handleCurrentChatChange={handleCurrentChatChange}
+            />
         )}
       </div>
     </div>
