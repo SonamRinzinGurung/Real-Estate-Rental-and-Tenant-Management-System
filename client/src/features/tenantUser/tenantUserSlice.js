@@ -82,10 +82,11 @@ export const getContractWithID = createAsyncThunk(
 
 export const approveContract = createAsyncThunk(
   "approveContract",
-  async ({ contractId }, thunkAPI) => {
+  async ({ contractId, digitalSignature, contractSignTime }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.patch(
-        `/contract/approve/${contractId}`
+        `/contract/approve/${contractId}`,
+        { digitalSignature, contractSignTime }
       );
       return await data;
     } catch (error) {

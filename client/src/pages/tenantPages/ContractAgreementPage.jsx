@@ -54,11 +54,21 @@ const ContractAgreementPage = () => {
   const [open, setOpen] = useState(false);
   const handleModalOpen = useCallback(() => setOpen(true), []);
   const handleModalClose = useCallback(() => setOpen(false), []);
+  const [checked, setChecked] = useState(false);
+  const [digitalSignature, setDigitalSignature] = useState("");
 
   const handleApproveContract = useCallback(() => {
-    dispatch(approveContract({ contractId }));
+    if (!checked) {
+      alert("You must agree to the terms and conditions to proceed.");
+      return;
+    } else if (digitalSignature.trim() === "") {
+      alert("Please provide your digital signature to proceed.");
+      return;
+    }
+    const contractSignTime = new Date().toISOString();
+    dispatch(approveContract({ contractId, digitalSignature, contractSignTime }));
     handleModalClose();
-  }, [dispatch, contractId, handleModalClose]);
+  }, [dispatch, contractId, handleModalClose, checked, digitalSignature]);
 
   // calculate the total rent amount according to payment plan
   const calculateTotalRent = useCallback(() => {
@@ -223,6 +233,44 @@ const ContractAgreementPage = () => {
             </p>
             <br />
           </div>
+
+          {/* create a check box for agreement */}
+          <div className="flex items-center mt-4 w-11/12 mx-auto">
+            <input
+              type="checkbox"
+              id="agree"
+              onChange={(e) => {
+                setChecked(e.target.checked);
+              }}
+            />
+            <label htmlFor="agree" className="ml-2">
+              By checking this box, I agree to the terms and conditions of
+              this contract.
+            </label>
+          </div>
+
+          {/* digital signature */}
+          <div className="mt-4 w-11/12 mx-auto">
+            <h5 className="font-robotoNormal">
+              Please type your full name as a digital signature:{" "}
+              <input
+                type="text"
+                value={digitalSignature}
+                onChange={(e) => setDigitalSignature(e.target.value)}
+                className="border border-gray-300 rounded-md p-2"
+              />
+            </h5>
+          </div>
+
+          {/* {disclaimer} */}
+          <div className="w-11/12 mx-auto text-justify mt-6">
+            <p className="text-sm">
+              <strong>Disclaimer:</strong> This contract is a legally binding
+              document. By signing your name on this contract, you agree to all the terms
+              and conditions outlined herein.
+            </p>
+          </div>
+
           <div className="flex justify-center mt-6">
             <Button
               onClick={handleModalOpen}

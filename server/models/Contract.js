@@ -49,6 +49,14 @@ const ContractSchema = new mongoose.Schema(
       },
       default: "Pending",
     },
+    digitalSignature: {
+      type: String,
+      required: true,
+    },
+    contractSignTime: {
+      type: Date,
+      required: true,
+    }
   },
   { timestamps: true }
 );

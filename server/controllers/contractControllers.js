@@ -108,6 +108,7 @@ const getContractDetailTenantView = async (req, res) => {
  * @returns {object} 200 - An object containing the contract details
  */
 const approveContract = async (req, res) => {
+  const { digitalSignature, contractSignTime } = req.body;
   const contractDetail = await Contract.findOne({
     _id: req.params.contractId,
     tenant: req.user.userId,
@@ -148,6 +149,8 @@ const approveContract = async (req, res) => {
 
   //change the status of the contract to true
   contractDetail.status = "Active";
+  contractDetail.digitalSignature = digitalSignature;
+  contractDetail.contractSignTime = contractSignTime;
   await contractDetail.save();
 
   res.json({ contractDetail });
