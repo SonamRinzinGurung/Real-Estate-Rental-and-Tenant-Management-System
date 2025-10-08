@@ -1,0 +1,16 @@
+{
+  "name": "real-estate-rental-system",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "docker-compose up",
+    "dev:build": "docker-compose up --build",
+    "dev:down": "docker-compose down",
+    "prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "prod:build": "docker-compose -f docker-compose.prod.yml up -d --build",
+    "prod:down": "docker-compose -f docker-compose.prod.yml down",
+    "prod:logs": "docker-compose -f docker-compose.prod.yml logs -f",
+    "prod:restart": "docker-compose -f docker-compose.prod.yml restart",
+    "logs": "docker-compose logs -f",
+    "clean": "docker system prune -a"
+  }
+}

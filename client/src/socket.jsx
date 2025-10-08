@@ -1,3 +1,4 @@
 import { io } from 'socket.io-client';
+import config from "./config/config.js";
 
-export const socket = io(import.meta.env.VITE_APP_API_HOST);
+export const socket = io(config.SOCKET_URL);

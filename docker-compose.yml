@@ -1,0 +1,38 @@
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:latest
+    container_name: real-estate-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # Backend Server
+  server:
+    build: ./server
+    container_name: real-estate-server
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  # Frontend Client
+  client:
+    build: ./client
+    container_name: real-estate-client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+
+volumes:
+  mongo_data:

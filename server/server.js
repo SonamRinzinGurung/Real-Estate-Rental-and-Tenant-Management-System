@@ -90,6 +90,16 @@ app.use("/api/rentDetailTenant", authorizeTenantUser, tenantRentDetailRoutes);
 
 app.use("/api/chat", chatRoutes);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV
+  });
+});
+
 //serve frontend files in production mode only
 
 app.get("*", (req, res) => {

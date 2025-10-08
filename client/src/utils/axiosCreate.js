@@ -1,5 +1,6 @@
 import axios from "axios";
 import { logOut } from "../features/auth/authSlice";
+import config from "../config/config";
 
 let store;
 export const injectStore = (_store) => {
@@ -7,7 +8,7 @@ export const injectStore = (_store) => {
 };
 
 const axiosFetch = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL || "/api",
+  baseURL: config.API_BASE_URL,
   withCredentials: true,
 });
 

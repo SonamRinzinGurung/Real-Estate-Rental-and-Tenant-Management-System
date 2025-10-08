@@ -28,6 +28,7 @@ import SquareFootRoundedIcon from "@mui/icons-material/SquareFootRounded";
 import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import config from "../../config/config";
 
 const RealEstateDetail = () => {
   const {
@@ -77,7 +78,7 @@ const RealEstateDetail = () => {
       body: `<p>Hi ${realEstate?.propertyOwner?.firstName} ${realEstate?.propertyOwner?.lastName},</p>
       <p>I am interested in renting your property titled <strong>${realEstate?.title}</strong> with ID: ${realEstate?.propertyId}.</p>
       <p>Kindly contact me at ${user?.email} or +977 ${user?.phoneNumber}.</p>
-      <p>Visit my profile <a href="${import.meta.env.VITE_APP_BASE_URL}/#/owner/tenant-user/${user?.slug}"><strong>${user?.firstName} ${user?.lastName}</strong></a>.</p>
+      <p>Visit my profile <a href="${config.APP_BASE_URL}/#/owner/tenant-user/${user?.slug}"><strong>${user?.firstName} ${user?.lastName}</strong></a>.</p>
       <br><br>
       <p>Thank you,</p>
       <p>${user?.firstName} ${user?.lastName},</p>

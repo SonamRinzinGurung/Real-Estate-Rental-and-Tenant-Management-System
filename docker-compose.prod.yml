@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  # Production server (connects to your MongoDB Atlas)
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    container_name: real-estate-server-prod
+    restart: unless-stopped
+    env_file:
+      - ./server/.env # Use your existing .env with MongoDB Atlas URI
+    environment:
+      - NODE_ENV=production # Only override this for production
+    ports:
+      - "5000:5000" # Expose for client to connect
+    networks:
+      - real-estate-network
+
+  # Production client
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    container_name: real-estate-client-prod
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - real-estate-network
+
+networks:
+  real-estate-network:
+    driver: bridge
