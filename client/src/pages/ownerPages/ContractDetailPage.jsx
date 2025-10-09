@@ -240,6 +240,12 @@ const ContractDetailPage = () => {
         <br />
       </div>
 
+      <div className="w-11/12 mx-auto text-justify mt-6">
+        <h4>Digital Signature</h4>
+        <p className="font-robotoNormal">Signed By: <strong>{contractDetail?.digitalSignature}</strong></p>
+        <p className="font-robotoNormal">Date: {dateFormatter(contractDetail?.contractSignTime)}</p>
+      </div>
+
       {contractDetail?.status === "Active" && (
         <div className="flex justify-center items-center mt-6 gap-2">
           <CheckCircleRoundedIcon color="success" />

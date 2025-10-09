@@ -234,7 +234,6 @@ const ContractAgreementPage = () => {
             <br />
           </div>
 
-          {/* create a check box for agreement */}
           <div className="flex items-center mt-4 w-11/12 mx-auto">
             <input
               type="checkbox"
