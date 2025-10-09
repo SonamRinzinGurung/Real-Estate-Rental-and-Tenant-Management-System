@@ -92,6 +92,15 @@ export const getContractOwnerView = createAsyncThunk(
   }
 );
 
+export const terminatePendingContract = createAsyncThunk("terminatePendingContract", async ({ contractId }, thunkAPI) => {
+  try {
+    const { data } = await axiosFetch.patch(`/contract/terminate/${contractId}`);
+    return await data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+})
+
 export const deleteContract = createAsyncThunk(
   "deleteContract",
   async ({ contractId }, thunkAPI) => {
@@ -276,6 +285,22 @@ const ownerUserSlice = createSlice({
       })
       .addCase(getContractOwnerView.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(terminatePendingContract.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(terminatePendingContract.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.success = action.payload.success;
+        state.alertFlag = true;
+        state.alertMsg = action.payload.message;
+        state.alertType = "success";
+      })
+      .addCase(terminatePendingContract.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";

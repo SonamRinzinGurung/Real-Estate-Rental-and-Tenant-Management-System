@@ -44,7 +44,7 @@ const ContractSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ["Active", "Inactive", "Pending"],
+        values: ["Active", "Inactive", "Pending", "Terminated-pending", "Terminated"],
         message: "{VALUE} is not supported",
       },
       default: "Pending",

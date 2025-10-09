@@ -186,6 +186,60 @@ const getContractDetailOwnerView = async (req, res) => {
   res.json({ contractDetail });
 };
 
+const terminateContract = async (req, res) => {
+  const contract = await Contract.findOne({
+    _id: req.params.contractId,
+    owner: req.user.userId,
+    status: "Active",
+  });
+
+  if (!contract) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  // Terminate the contract
+  contract.status = "Terminated-pending";
+  await contract.save();
+
+  //send email to tenant user that contract has been terminated pending approval
+
+  // get the tenant user and owner user details to send email
+  const tenantUser = await TenantUser.findById(contract.tenant);
+  if (!tenantUser) {
+    throw new NotFoundError("Tenant user not found");
+  }
+
+  const realEstate = await RealEstate.findById(contract.realEstate);
+  if (!realEstate) {
+    throw new NotFoundError("Real Estate Not Found");
+  }
+
+  const ownerUser = await OwnerUser.findById(req.user.userId);
+
+  //email details
+  const to = tenantUser.email;
+  const from = ownerUser.email;
+  const subject = `Contract termination information of ${realEstate.title}`;
+  const body = `
+    <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
+    <p>I hope this email finds you well. I am writing to inform you about the termination of the rental contract of property titled <strong>${realEstate.title}</strong> 
+    located at ${realEstate.address.streetName}, ${realEstate.address.city}, ${realEstate.address.state}, ${realEstate.address.country}</p>
+    <p> Please note that the contract is now in a "Terminated-pending" status. This means that the termination process has been initiated, but it is not yet final. 
+    Please view your contract details to approve the termination of the contract.</p>
+    <p>Once you approve the termination, we will proceed with the necessary steps to finalize the termination of the contract. 
+    This may include scheduling a final inspection of the property, settling any outstanding rent payments, and returning your security deposit.</p>
+    <p>Please note that you are required to vacate the property within 7 days of approving the termination.</p>
+    <p>Thank you for your cooperation during your stay at our property.</p>
+    <br><br>
+    <p>Best regards,</p>
+    <p>${ownerUser.firstName} ${ownerUser.lastName}</p>`;
+
+  //send email to tenant user that contract has been deleted
+  await sendEmail(to, from, subject, body);
+
+  res.json({ message: "Contract updated to pending termination successfully", success: true });
+};
+
 /**
  * @description Delete contract
  * @route GET /api/contract/ownerView/:realEstateId
@@ -342,4 +396,5 @@ export {
   getOwnerAllContracts,
   getAllTenantRentalProperties,
   getTenantContractDetail,
+  terminateContract
 };

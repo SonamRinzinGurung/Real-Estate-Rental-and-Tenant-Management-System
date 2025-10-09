@@ -9,6 +9,7 @@ import {
   getOwnerAllContracts,
   getAllTenantRentalProperties,
   getTenantContractDetail,
+  terminateContract
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -45,6 +46,13 @@ router.get(
   authorizeOwnerUser,
   getContractDetailOwnerView
 );
+
+
+/**
+ * @description Terminate the contract set status to "Terminated-pending"
+ * @route PATCH /api/contract/terminate/:contractId
+ */
+router.patch("/terminate/:contractId", authorizeOwnerUser, terminateContract);
 
 /**
  * @description Delete a contract

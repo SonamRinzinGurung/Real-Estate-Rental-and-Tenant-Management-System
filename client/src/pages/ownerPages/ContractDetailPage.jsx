@@ -3,6 +3,7 @@ import {
   getContractOwnerView,
   clearAlert,
   deleteContract,
+  terminatePendingContract,
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -69,8 +70,8 @@ const ContractDetailPage = () => {
   );
   const format = createNumberFormatter(currentCountry?.code);
 
-  const handleDeleteContract = useCallback(() => {
-    dispatch(deleteContract({ contractId: contractDetail?._id }));
+  const handleTerminateContract = useCallback(() => {
+    dispatch(terminatePendingContract({ contractId: contractDetail?._id }));
     handleModalClose();
   }, [dispatch, contractDetail?._id, handleModalClose]);
 
@@ -280,8 +281,7 @@ const ContractDetailPage = () => {
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
           <h3 className="text-center">Terminate Contract</h3>
           <p className="text-center my-4">
-            Are you sure you want to terminate this contract? This will delete
-            the contract and all the data associated with it.
+            Are you sure you want to terminate this contract? This action will change the contract status to "Terminated-pending" and the tenant user will be notified to approve the termination.
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <Button onClick={handleModalClose} color="warning">
@@ -289,11 +289,11 @@ const ContractDetailPage = () => {
             </Button>
 
             <Button
-              onClick={handleDeleteContract}
+              onClick={handleTerminateContract}
               color="error"
               variant="contained"
             >
-              Delete
+              Terminate
             </Button>
           </div>
         </ConfirmModal>
