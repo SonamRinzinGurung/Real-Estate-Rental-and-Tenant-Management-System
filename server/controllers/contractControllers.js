@@ -165,6 +165,7 @@ const getContractDetailOwnerView = async (req, res) => {
   const contractDetail = await Contract.findOne({
     owner: req.user.userId,
     realEstate: req.params.realEstateId,
+    status: { $in: ["Active", "Pending", "Terminated-pending", "Terminated-approved"] }
   })
     .populate({
       path: "realEstate",
@@ -238,6 +239,57 @@ const terminateContract = async (req, res) => {
   await sendEmail(to, from, subject, body);
 
   res.json({ message: "Contract updated to pending termination successfully", success: true });
+};
+
+const terminateContractApprove = async (req, res) => {
+  const contract = await Contract.findOne({
+    _id: req.params.contractId,
+    tenant: req.user.userId,
+    status: "Terminated-pending",
+  });
+
+  if (!contract) {
+    throw new NotFoundError("Contract not found");
+  }
+
+  // approve the termination of the contract
+  contract.status = "Terminated-approved";
+  await contract.save();
+
+  //send email to owner user that contract has been approved for termination
+
+  // get the tenant user and owner user details to send email
+  const ownerUser = await OwnerUser.findById(contract.owner);
+  if (!ownerUser) {
+    throw new NotFoundError("Owner user not found");
+  }
+
+  const realEstate = await RealEstate.findById(contract.realEstate);
+  if (!realEstate) {
+    throw new NotFoundError("Real Estate Not Found");
+  }
+
+  const tenantUser = await TenantUser.findById(req.user.userId);
+
+  //email details
+  const to = ownerUser.email;
+  const from = tenantUser.email;
+  const subject = `Contract termination approved of ${realEstate.title}`;
+  const body = `
+    <p> Dear ${ownerUser.firstName} ${ownerUser.lastName},</p>    
+    <p>I hope this email finds you well. This email is to inform you that the rental contract of property titled <strong>${realEstate.title}</strong> 
+    located at ${realEstate.address.streetName}, ${realEstate.address.city}, ${realEstate.address.state}, ${realEstate.address.country} has been approved for termination.</p>
+    <p> Please note that the contract is now in a "Terminated-approved" status. This means that the termination process has been finalized. 
+    Please view your contract details for more information and to take the next steps to finalize the contract termination.</p>
+    <p>Thank you for your cooperation.</p>
+    <br><br>
+    <p>Best regards,</p>
+    <p>${tenantUser.firstName} ${tenantUser.lastName}</p>`;
+
+  //send email to tenant user that contract has been deleted
+  await sendEmail(to, from, subject, body);
+
+  res.json({ message: "Contract updated to approved termination successfully", success: true });
 };
 
 /**
@@ -342,7 +394,7 @@ const getOwnerAllContracts = async (req, res) => {
 const getAllTenantRentalProperties = async (req, res) => {
   const allRentalProperties = await Contract.find({
     tenant: req.user.userId,
-    status: "Active",
+    status: { $in: ["Active", "Terminated-pending", "Terminated-approved"] },
   }).populate({
     path: "realEstate",
     select: "title address category slug realEstateImages price",
@@ -365,7 +417,7 @@ const getTenantContractDetail = async (req, res) => {
   const contractDetail = await Contract.findOne({
     realEstate: req.params.realEstateId,
     tenant: req.user.userId,
-    status: "Active",
+    status: { $in: ["Active", "Terminated-pending", "Terminated-approved"] }
   })
     .populate({
       path: "realEstate",
@@ -396,5 +448,6 @@ export {
   getOwnerAllContracts,
   getAllTenantRentalProperties,
   getTenantContractDetail,
-  terminateContract
+  terminateContract,
+  terminateContractApprove,
 };

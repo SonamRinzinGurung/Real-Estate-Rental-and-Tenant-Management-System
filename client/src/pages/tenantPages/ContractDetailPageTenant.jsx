@@ -1,14 +1,25 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getContractWithRealEstateID } from "../../features/tenantUser/tenantUserSlice";
-import { PageLoading } from "../../components";
+import {
+  getContractWithRealEstateID,
+  approveContractTermination,
+  clearAlert,
+} from "../../features/tenantUser/tenantUserSlice";
+import { PageLoading, AlertToast, ConfirmModal } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
-import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
+import {
+  createNumberFormatter,
+  dateFormatter,
+  format,
+} from "../../utils/valueFormatter";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
+import { Button, CircularProgress } from "@mui/material";
 
 const ContractDetailPageTenant = () => {
   const dispatch = useDispatch();
@@ -18,9 +29,15 @@ const ContractDetailPageTenant = () => {
     dispatch(getContractWithRealEstateID({ realEstateId }));
   }, [dispatch, realEstateId]);
 
-  const { contractDetail, isLoading } = useSelector(
-    (state) => state.tenantUser
-  );
+  const {
+    contractDetail,
+    isLoading,
+    isProcessing,
+    alertFlag,
+    alertType,
+    alertMsg,
+    success,
+  } = useSelector((state) => state.tenantUser);
 
   const currentCountry = countries.find(
     (country) => country.label === contractDetail?.realEstate?.address?.country
@@ -36,6 +53,25 @@ const ContractDetailPageTenant = () => {
     if (paymentPlan === "Every 6 Months") return rentAmount * 6;
     if (paymentPlan === "Every 12 Months") return rentAmount * 12;
   }, [contractDetail]);
+
+  const [open, setOpen] = useState(false);
+  const handleModalOpen = useCallback(() => setOpen(true), []);
+  const handleModalClose = useCallback(() => setOpen(false), []);
+
+  const handleApproveTermination = useCallback(() => {
+    dispatch(approveContractTermination({ contractId: contractDetail?._id }));
+    handleModalClose();
+  }, [dispatch, contractDetail?._id]);
+
+  const handleAlertClose = useCallback(
+    (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      dispatch(clearAlert());
+    },
+    [dispatch]
+  );
 
   if (isLoading) return <PageLoading />;
 
@@ -62,9 +98,9 @@ const ContractDetailPageTenant = () => {
           <p>{contractDetail?.realEstate?.category}</p>
           <p className="">
             <LocationOnOutlinedIcon color="success" />{" "}
-            {contractDetail?.realEstate?.address?.streetName}, {" "}
+            {contractDetail?.realEstate?.address?.streetName},{" "}
             {contractDetail?.realEstate?.address?.city},{" "}
-            {contractDetail?.realEstate?.address?.state}, {" "}
+            {contractDetail?.realEstate?.address?.state},{" "}
             {contractDetail?.realEstate?.address?.country}
           </p>
         </div>
@@ -105,7 +141,8 @@ const ContractDetailPageTenant = () => {
         </div>
         <div>
           <h5 className="font-robotoNormal">
-            <span className="font-medium">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
+            <span className="font-medium">Rent Amount</span>:{" "}
+            {countryToCurrency[currentCountry.code]}{" "}
             {format(contractDetail?.rentAmount)} per month
           </h5>
         </div>
@@ -135,12 +172,19 @@ const ContractDetailPageTenant = () => {
         <h5>1. Payment of Rent</h5>
         <p>
           Tenant shall pay rent in the amount of{" "}
-          <strong>{countryToCurrency[currentCountry.code]} {format(contractDetail?.rentAmount)}</strong> per month.
-          Total Rent amount of{" "}
-          <strong>{countryToCurrency[currentCountry.code]} {format(calculateTotalRent())}</strong> shall be due and
-          payable every <strong>{contractDetail?.paymentPlan}</strong> on the
-          first day of the calendar month and shall be considered late if not
-          received by the Landlord on or before the 7th day of the month.
+          <strong>
+            {countryToCurrency[currentCountry.code]}{" "}
+            {format(contractDetail?.rentAmount)}
+          </strong>{" "}
+          per month. Total Rent amount of{" "}
+          <strong>
+            {countryToCurrency[currentCountry.code]}{" "}
+            {format(calculateTotalRent())}
+          </strong>{" "}
+          shall be due and payable every{" "}
+          <strong>{contractDetail?.paymentPlan}</strong> on the first day of the
+          calendar month and shall be considered late if not received by the
+          Landlord on or before the 7th day of the month.
         </p>
         <br />
         <h5>2. Late Fees</h5>
@@ -185,9 +229,90 @@ const ContractDetailPageTenant = () => {
       </div>
       <div className="w-11/12 mx-auto text-justify mt-6">
         <h4>Digital Signature</h4>
-        <p className="font-robotoNormal">Signed By: <strong>{contractDetail?.digitalSignature}</strong></p>
-        <p className="font-robotoNormal">Date: {dateFormatter(contractDetail?.contractSignTime)}</p>
+        <p className="font-robotoNormal">
+          Signed By: <strong>{contractDetail?.digitalSignature}</strong>
+        </p>
+        <p className="font-robotoNormal">
+          Date: {dateFormatter(contractDetail?.contractSignTime)}
+        </p>
       </div>
+
+      {contractDetail?.status === "Active" && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <CheckCircleRoundedIcon color="success" />
+          <p className="font-bold">Active Contract</p>
+        </div>
+      )}
+
+      {contractDetail?.status === "Terminated-pending" && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <RemoveCircleRoundedIcon color="error" />
+          <p className="font-bold">Terminated (Pending Approval)</p>
+        </div>
+      )}
+
+      {contractDetail?.status === "Terminated-approved" && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <RemoveCircleRoundedIcon color="error" />
+          <p className="font-bold">Terminated (Approved)</p>
+        </div>
+      )}
+
+      {contractDetail?.status === "Terminated-pending" && (
+        <div className="flex justify-center mt-6">
+          <Button
+            onClick={handleModalOpen}
+            variant="contained"
+            size="medium"
+            color="error"
+            sx={{ color: "#fff" }}
+            disabled={isProcessing || (alertFlag && alertType === "success")}
+            startIcon={<RemoveCircleRoundedIcon />}
+          >
+            {isProcessing ? (
+              <CircularProgress
+                size={26}
+                sx={{
+                  color: "#fff",
+                }}
+              />
+            ) : (
+              "Approve Termination of Contract"
+            )}
+          </Button>
+        </div>
+      )}
+
+      <div>
+        <ConfirmModal open={open} handleModalClose={handleModalClose}>
+          <h3 className="text-center">Approve Contract Termination</h3>
+          <p className="text-center my-4">
+            Are you sure you want to approve the termination of this contract?
+            This action will change the contract status to "Terminated-approve".
+            This action cannot be undone.
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <Button onClick={handleModalClose} color="warning">
+              Close
+            </Button>
+
+            <Button
+              onClick={handleApproveTermination}
+              color="error"
+              variant="contained"
+            >
+              Terminate
+            </Button>
+          </div>
+        </ConfirmModal>
+      </div>
+
+      <AlertToast
+        alertFlag={alertFlag}
+        alertMsg={alertMsg}
+        alertType={alertType}
+        handleClose={handleAlertClose}
+      />
     </main>
   );
 };

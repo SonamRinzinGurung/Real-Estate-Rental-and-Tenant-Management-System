@@ -9,7 +9,8 @@ import {
   getOwnerAllContracts,
   getAllTenantRentalProperties,
   getTenantContractDetail,
-  terminateContract
+  terminateContract,
+  terminateContractApprove
 } from "../controllers/contractControllers.js";
 import {
   authorizeOwnerUser,
@@ -22,7 +23,7 @@ import {
 router.post("/", authorizeOwnerUser, createContract);
 
 /**
- * @description Get the contract details for the tenant user
+ * @description Get the contract details for the tenant user (used only for contract agreement view)
  * @route GET /api/contract/tenantView/:contractId
  */
 router.get(
@@ -53,6 +54,12 @@ router.get(
  * @route PATCH /api/contract/terminate/:contractId
  */
 router.patch("/terminate/:contractId", authorizeOwnerUser, terminateContract);
+
+/**
+ * @description Terminate the contract set status to "Terminated-approved"
+ * @route PATCH /api/contract/terminate-approve/:contractId
+ */
+router.patch("/terminate-approve/:contractId", authorizeTenantUser, terminateContractApprove);
 
 /**
  * @description Delete a contract

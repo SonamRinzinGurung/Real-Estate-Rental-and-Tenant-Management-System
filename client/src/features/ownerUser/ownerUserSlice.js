@@ -294,7 +294,7 @@ const ownerUserSlice = createSlice({
       })
       .addCase(terminatePendingContract.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.success = action.payload.success;
+        state.contractDetail.status = "Terminated-pending";
         state.alertFlag = true;
         state.alertMsg = action.payload.message;
         state.alertType = "success";

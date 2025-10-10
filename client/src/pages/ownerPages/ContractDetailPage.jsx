@@ -75,6 +75,11 @@ const ContractDetailPage = () => {
     handleModalClose();
   }, [dispatch, contractDetail?._id, handleModalClose]);
 
+  const handleDeleteContract = useCallback(() => {
+    dispatch(deleteContract({ contractId: contractDetail?._id }));
+    handleModalClose();
+  }, [dispatch, contractDetail?._id, handleModalClose]);
+
   // calculate the total rent amount according to payment plan
   const calculateTotalRent = useCallback(() => {
     const { paymentPlan, rentAmount } = contractDetail;
@@ -253,8 +258,24 @@ const ContractDetailPage = () => {
           <p className="font-bold">Active Contract</p>
         </div>
       )}
+      {contractDetail?.status === "Terminated-pending" && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <RemoveCircleRoundedIcon color="error" />
+          <p className="font-bold">Terminated (Pending Approval)</p>
+        </div>
+      )}
 
-      <div className="flex justify-center mt-6">
+      {contractDetail?.status === "Terminated-approved" && (
+        <div className="flex justify-center items-center mt-6 gap-2">
+          <RemoveCircleRoundedIcon color="error" />
+          <p className="font-bold">Terminated (Approved)</p>
+        </div>
+      )}
+
+      {
+        (contractDetail?.status === "Active" || contractDetail?.status === "Terminated-approved") && (
+
+          <div className="flex justify-center mt-6">
         <Button
           onClick={handleModalOpen}
           variant="contained"
@@ -263,25 +284,27 @@ const ContractDetailPage = () => {
           sx={{ color: "#fff" }}
           disabled={isProcessing || (alertFlag && alertType === "success")}
           startIcon={<RemoveCircleRoundedIcon />}
-        >
+            >
           {isProcessing ? (
             <CircularProgress
-              size={26}
-              sx={{
-                color: "#fff",
-              }}
+                  size={26}
+                  sx={{
+                    color: "#fff",
+                  }}
             />
           ) : (
-            "Terminate Contract"
+                  <>{contractDetail?.status === "Active" ? "Terminate Contract" : "Delete Contract"}</>
           )}
         </Button>
       </div>
+        )}
 
       <div>
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
-          <h3 className="text-center">Terminate Contract</h3>
+          <h3 className="text-center">{contractDetail?.status === "Active" ? "Terminate Contract" : "Delete Contract"}</h3>
           <p className="text-center my-4">
-            Are you sure you want to terminate this contract? This action will change the contract status to "Terminated-pending" and the tenant user will be notified to approve the termination.
+            {contractDetail?.status === "Active" ? 'Are you sure you want to terminate this contract? This action will change the contract status to "Terminated-pending" and the tenant user will be notified to approve the termination.' : "Are you sure you want to delete this contract? This action is irreversible. This will also delete the associated Rent Details and Payment Records."}
+
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <Button onClick={handleModalClose} color="warning">
@@ -289,11 +312,11 @@ const ContractDetailPage = () => {
             </Button>
 
             <Button
-              onClick={handleTerminateContract}
+              onClick={contractDetail?.status === "Active" ? handleTerminateContract : handleDeleteContract}
               color="error"
               variant="contained"
             >
-              Terminate
+              {contractDetail?.status === "Active" ? "Terminate" : "Delete"}
             </Button>
           </div>
         </ConfirmModal>

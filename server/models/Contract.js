@@ -44,18 +44,18 @@ const ContractSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ["Active", "Inactive", "Pending", "Terminated-pending", "Terminated"],
+        values: ["Active", "Inactive", "Pending", "Terminated-pending", "Terminated-approved", "Terminated"],
         message: "{VALUE} is not supported",
       },
       default: "Pending",
     },
     digitalSignature: {
       type: String,
-      required: true,
+      required: false,
     },
     contractSignTime: {
       type: Date,
-      required: true,
+      required: false,
     }
   },
   { timestamps: true }

@@ -107,6 +107,15 @@ export const getContractWithRealEstateID = createAsyncThunk(
   }
 );
 
+export const approveContractTermination = createAsyncThunk("approveContractTermination", async ({ contractId }, thunkAPI) => {
+  try {
+    const { data } = await axiosFetch.patch(`/contract/terminate-approve/${contractId}`);
+    return await data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+})
+
 export const getTenantChats = createAsyncThunk(
   "getTenantChats",
   async (arg, thunkAPI) => {
@@ -279,6 +288,22 @@ const tenantUserSlice = createSlice({
       })
       .addCase(getContractWithRealEstateID.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(approveContractTermination.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(approveContractTermination.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.contractDetail.status = "Terminated-approved";
+        state.alertFlag = true;
+        state.alertMsg = "Contract termination approved successfully";
+        state.alertType = "success";
+      })
+      .addCase(approveContractTermination.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
