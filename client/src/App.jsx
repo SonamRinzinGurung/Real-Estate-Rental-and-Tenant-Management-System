@@ -16,8 +16,7 @@ import {
     SavedRealEstate,
     ProfilePageTenant,
     ProfilePageOwner,
-    OwnerUserDetailPage,
-    TenantUserDetailPage,
+    UserDetailPage,
     UpdateRealEstateDetail,
     AllContacts,
     CreateContractPage,
@@ -35,7 +34,6 @@ import {
     SendComplaint,
     VerifyEmailPage,
     VerificationMessagePage,
-    AllContactsTenant,
     OwnerChat,
     TenantChat,
 } from "./pages";
@@ -94,9 +92,9 @@ function App() {
                         <Route path="profile" element={<ProfilePageOwner />} />
                         <Route
                             path="tenant-user/:slug"
-                            element={<TenantUserDetailPage />}
+                            element={<UserDetailPage userType={"owner"} />}
                         />
-                        <Route path="contacts/all" element={<AllContacts />} />
+                        <Route path="contacts/all" element={<AllContacts userType={"owner"} />} />
                         <Route path="contract/create" element={<CreateContractPage />} />
                         <Route
                             path="contract/:realEstateId/:slug"
@@ -132,7 +130,7 @@ function App() {
                         <Route path="real-estate/:slug" element={<RealEstateDetail />} />
                         <Route path="real-estate/saved/all" element={<SavedRealEstate />} />
                         <Route path="profile" element={<ProfilePageTenant />} />
-                        <Route path="owner-user/:slug" element={<OwnerUserDetailPage />} />
+                        <Route path="owner-user/:slug" element={<UserDetailPage userType={"tenant"} />} />
                         <Route
                             path="contract-agreement/:contractId"
                             element={<ContractAgreementPage />}
@@ -154,7 +152,7 @@ function App() {
                             element={<RentDetailTenantPage />}
                         />
                         <Route path="send-complaint/:slug" element={<SendComplaint />} />
-                        <Route path="contacts/all" element={<AllContactsTenant />} />
+                        <Route path="contacts/all" element={<AllContacts userType={"tenant"} />} />
                         <Route path="chat" element={<TenantChat />} />
                     </Route>
                     <Route path="/login/:role" element={<Login />} />

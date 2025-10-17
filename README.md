@@ -91,6 +91,22 @@ $ cd server
 $ npm run dev
 ```
 *** 
+
+## Using Docker (Optional)
+1. Make sure you have [Docker](https://www.docker.com/get-started/) installed on your machine.
+2. Run the following command to build the containers in development mode:
+
+```bash
+$ npm run dev:build
+```
+3. Run the following command to start the containers:
+
+```bash
+$ npm run dev
+```
+3. The backend server will be running on `http://localhost:5000` and the frontend will be running on `http://localhost:3000`.
+***
+
 ### Author
 
 [Sonam Rinzin Gurung](https://www.linkedin.com/in/sonam-rinzin-gurung-59060b211/)

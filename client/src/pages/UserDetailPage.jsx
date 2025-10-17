@@ -1,67 +1,71 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOwnerUserDetails,
-  addOrRemoveContact,
-  clearAlert,
-} from "../../features/tenantUser/tenantUserSlice";
-import { useParams, useNavigate } from "react-router-dom";
+  // addOrRemoveContact,
+  // clearAlert as clearTenantAlert,
+} from "../features/tenantUser/tenantUserSlice";
 import {
-  RealEstateCard,
-  Footer,
-  PageLoading,
-  AlertToast,
-} from "../../components";
+  getTenantUserDetails,
+  // addOrRemoveContact,
+  // clearAlert,
+} from "../features/ownerUser/ownerUserSlice";
+
+import { useParams, useNavigate } from "react-router-dom";
+import { Footer, PageLoading, AlertToast } from "../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import ImageViewer from "react-simple-image-viewer";
 import { Button } from "@mui/material";
 import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import CircularProgress from "@mui/material/CircularProgress";
-import MessageIcon from '@mui/icons-material/Message';
+import ImageViewer from "react-simple-image-viewer";
+import MessageIcon from "@mui/icons-material/Message";
+import { RealEstateCard } from "../components";
 
-const OwnerUserDetailPage = () => {
+const UserDetailPage = ({ userType }) => {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const navigate = useNavigate();
 
   const {
     user,
-    realEstates,
     isLoading,
-    isContact,
     isProcessing,
     alertFlag,
     alertMsg,
     alertType,
-  } = useSelector((state) => state.tenantUser);
-
-  useEffect(() => {
-    dispatch(getOwnerUserDetails({ slug }));
-  }, [dispatch, slug]);
-
-  // close the alert
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
+    isContact,
+    realEstates,
+  } = useSelector((state) =>
+    userType === "owner" ? state.ownerUser : state.tenantUser
   );
 
-  // toggle open and close of ImageViewer
+  useEffect(() => {
+    if (userType === "tenant") {
+      dispatch(getOwnerUserDetails({ slug }));
+    } else {
+      dispatch(getTenantUserDetails({ slug }));
+    }
+  }, [dispatch, slug, userType]);
+
+  // const handleClose = useCallback(
+  //   (event, reason) => {
+  //     if (reason === "clickaway") {
+  //       return;
+  //     }
+  //     dispatch(clearAlert());
+  //   },
+  //   [dispatch]
+  // );
+
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
-  // open the ImageViewer and set the currentImageIndex to the index of the image that was clicked
-  const openImageViewer = useCallback((index) => {
+  const openImageViewer = useCallback(() => {
     setIsViewerOpen(true);
   }, []);
 
-  // close the ImageViewer
   const closeImageViewer = () => {
     setIsViewerOpen(false);
   };
@@ -85,9 +89,8 @@ const OwnerUserDetailPage = () => {
               src={user?.profileImage}
               alt="profile"
               className="rounded-full w-full h-full object-cover"
-              onClick={() => openImageViewer(0)}
+              onClick={openImageViewer}
             />
-            {/* Open and View the Image */}
             {isViewerOpen && (
               <ImageViewer
                 src={[user?.profileImage]}
@@ -118,7 +121,7 @@ const OwnerUserDetailPage = () => {
             <p className="">{user?.email}</p>
           </div>
 
-          {isContact ? (
+          {/* {isContact ? (
             <Button
               disabled={isProcessing}
               onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
@@ -164,60 +167,70 @@ const OwnerUserDetailPage = () => {
                 "Add"
               )}
             </Button>
-          )}
+          )} */}
 
           <div className="flex">
-
-            <Button variant="contained" size="small" sx={{
-              color: "white",
-              width: "100%",
-            }}
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                color: "white",
+                width: "100%",
+              }}
               startIcon={<MessageIcon />}
-              onClick={() => navigate(`/tenant/chat`, {
-                state: {
-                  _id: user._id,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  profileImage: user.profileImage,
-                  slug: user.slug
-                }
-              })}
+              onClick={() =>
+                navigate(`/${userType}/chat`, {
+                  state: {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    profileImage: user.profileImage,
+                    slug: user.slug,
+                  },
+                })
+              }
             >
               Chat
             </Button>
           </div>
+        </div>
 
-        </div>
-        <div className="mb-12 md:w-3/4 md:mt-10">
-          {realEstates?.length === 0 ? (
-            <div>
-              <h4 className="text-center">No Real Estate Properties</h4>
-            </div>
-          ) : (
-            <>
-              <h3 className="text-center font-heading font-semibold text-4xl">
-                {realEstates?.length > 1 ? "Properties" : "Property"}
-              </h3>
-              <div className="justify-center flex flex-wrap gap-8 mt-6 mx-4 md:mx-0">
-                {realEstates?.map((item) => {
-                  return (
-                    <RealEstateCard key={item._id} {...item} fromUserProfile />
-                  );
-                })}
+        {userType === "tenant" && (
+          <div className="mb-12 md:w-3/4 md:mt-10">
+            {realEstates?.length === 0 ? (
+              <div>
+                <h4 className="text-center">No Real Estate Properties</h4>
               </div>
-            </>
-          )}
-        </div>
-        <AlertToast
+            ) : (
+              <>
+                <h3 className="text-center font-heading font-semibold text-4xl">
+                  {realEstates?.length > 1 ? "Properties" : "Property"}
+                </h3>
+                <div className="justify-center flex flex-wrap gap-8 mt-6 mx-4 md:mx-0">
+                  {realEstates?.map((item) => {
+                    return (
+                      <RealEstateCard
+                        key={item._id}
+                        {...item}
+                        fromUserProfile
+                      />
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+        {/* <AlertToast
           alertFlag={alertFlag}
           alertMsg={alertMsg}
           alertType={alertType}
           handleClose={handleClose}
-        />
+        /> */}
       </main>
       <Footer />
     </>
   );
 };
 
-export default OwnerUserDetailPage;
+export default UserDetailPage;

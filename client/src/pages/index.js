@@ -14,10 +14,9 @@ import PersonalRealEstateDetail from "./ownerPages/PersonalRealEstateDetail";
 import SavedRealEstate from "./tenantPages/SavedRealEstate";
 import ProfilePageTenant from "./tenantPages/ProfilePage-Tenant";
 import ProfilePageOwner from "./ownerPages/ProfilePage-Owner";
-import OwnerUserDetailPage from "./tenantPages/OwnerUserDetailPage";
-import TenantUserDetailPage from "./ownerPages/TenantUserDetailPage";
+import UserDetailPage from "./UserDetailPage";
 import UpdateRealEstateDetail from "./ownerPages/UpdateRealEstateDetail";
-import AllContacts from "./ownerPages/AllContacts";
+import AllContacts from "./AllContacts";
 import CreateContractPage from "./ownerPages/CreateContractPage";
 import ContractAgreementPage from "./tenantPages/ContractAgreementPage";
 import ContractDetailPage from "./ownerPages/ContractDetailPage";
@@ -33,7 +32,6 @@ import RentDetailTenantPage from "./tenantPages/RentDetailTenantPage";
 import SendComplaint from "./tenantPages/SendComplaint";
 import VerifyEmailPage from "./VerifyEmailPage";
 import VerificationMessagePage from "./VerificationMessagePage";
-import AllContactsTenant from "./tenantPages/AllContactsTenant";
 import OwnerChat from "./ownerPages/OwnerChat";
 import TenantChat from "./tenantPages/TenantChat";
 export {
@@ -53,8 +51,7 @@ export {
   SavedRealEstate,
   ProfilePageTenant,
   ProfilePageOwner,
-  OwnerUserDetailPage,
-  TenantUserDetailPage,
+  UserDetailPage,
   UpdateRealEstateDetail,
   AllContacts,
   CreateContractPage,
@@ -72,7 +69,6 @@ export {
   SendComplaint,
   VerifyEmailPage,
   VerificationMessagePage,
-  AllContactsTenant,
   OwnerChat,
   TenantChat,
 };

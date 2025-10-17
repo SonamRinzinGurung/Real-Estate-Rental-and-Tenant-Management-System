@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllContacts } from "../../features/ownerUser/ownerUserSlice";
+import { getAllContacts } from "../features/ownerUser/ownerUserSlice"; // Adjust import based on user type
+import { getAllContacts as getAllTenantContacts } from "../features/tenantUser/tenantUserSlice"; // Adjust import based on user type
 import { useDispatch, useSelector } from "react-redux";
-import { Footer, ContactsCard } from "../../components";
+import { Footer, ContactsCard } from "../components";
 import {
   FormControl,
   OutlinedInput,
@@ -11,15 +12,21 @@ import {
 } from "@mui/material";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
-const AllContacts = () => {
+const AllContacts = ({ userType }) => {
   const dispatch = useDispatch();
-  const { contacts, isLoading } = useSelector((state) => state.ownerUser);
+  const { contacts, isLoading } = useSelector((state) =>
+    userType === "owner" ? state.ownerUser : state.tenantUser
+  );
 
   const [name, setName] = useState("");
 
   useEffect(() => {
-    dispatch(getAllContacts({ name: "" }));
-  }, [dispatch]);
+    if (userType === "owner") {
+      dispatch(getAllContacts({ name: "" }));
+    } else {
+      dispatch(getAllTenantContacts({ name: "" }));
+    }
+  }, [dispatch, userType]);
 
   const handleSearchChange = (e) => {
     setName(e.target.value);
@@ -27,7 +34,11 @@ const AllContacts = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    dispatch(getAllContacts({ name }));
+    if (userType === "owner") {
+      dispatch(getAllContacts({ name }));
+    } else {
+      dispatch(getAllTenantContacts({ name }));
+    }
   };
 
   return (
@@ -72,7 +83,7 @@ const AllContacts = () => {
               ) : (
                 <>
                   {contacts?.map((user) => {
-                    return <ContactsCard key={user._id} {...user} />;
+                    return <ContactsCard key={user._id} {...user} tenant={userType === "tenant"} />;
                   })}
                 </>
               )}
