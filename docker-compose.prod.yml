@@ -9,7 +9,7 @@ services:
     container_name: real-estate-server-prod
     restart: unless-stopped
     env_file:
-      - ./server/.env # Use your existing .env with MongoDB Atlas URI
+      - ./server/.env
     environment:
       - NODE_ENV=production # Only override this for production
     ports:
