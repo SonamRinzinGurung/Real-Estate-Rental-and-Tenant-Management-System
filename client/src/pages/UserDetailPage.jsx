@@ -2,12 +2,12 @@ import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getOwnerUserDetails,
-  // addOrRemoveContact,
+  addOrRemoveContact as addOrRemoveTenantContact,
   // clearAlert as clearTenantAlert,
 } from "../features/tenantUser/tenantUserSlice";
 import {
   getTenantUserDetails,
-  // addOrRemoveContact,
+  addOrRemoveContact as addOrRemoveOwnerContact,
   // clearAlert,
 } from "../features/ownerUser/ownerUserSlice";
 
@@ -59,6 +59,14 @@ const UserDetailPage = ({ userType }) => {
   //   },
   //   [dispatch]
   // );
+
+  const addOrRemoveContact = (id) => {
+    if (userType === "tenant") {
+      dispatch(addOrRemoveTenantContact({ id }));
+    } else {
+      dispatch(addOrRemoveOwnerContact({ id }));
+    }
+  }
 
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -120,11 +128,12 @@ const UserDetailPage = ({ userType }) => {
             <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
             <p className="">{user?.email}</p>
           </div>
+          <div className="flex gap-4 mt-4">
 
-          {/* {isContact ? (
+            {isContact ? (
             <Button
               disabled={isProcessing}
-              onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
+                onClick={() => addOrRemoveContact(user?._id)}
               variant="contained"
               color="error"
               startIcon={<PersonRemoveAlt1RoundedIcon />}
@@ -132,13 +141,13 @@ const UserDetailPage = ({ userType }) => {
               sx={{
                 color: "white",
               }}
-            >
+              >
               {isProcessing ? (
                 <CircularProgress
-                  size={26}
-                  sx={{
-                    color: "#fff",
-                  }}
+                    size={26}
+                    sx={{
+                      color: "#fff",
+                    }}
                 />
               ) : (
                 "Remove"
@@ -146,28 +155,28 @@ const UserDetailPage = ({ userType }) => {
             </Button>
           ) : (
             <Button
-              disabled={isProcessing}
-              onClick={() => dispatch(addOrRemoveContact({ id: user?._id }))}
-              variant="contained"
-              color="secondary"
-              startIcon={<ContactPageRoundedIcon />}
-                size="small"
-              sx={{
-                color: "white",
-              }}
+                  disabled={isProcessing}
+                  onClick={() => addOrRemoveContact(user?._id)}
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<ContactPageRoundedIcon />}
+                  size="small"
+                  sx={{
+                    color: "white",
+                  }}
             >
               {isProcessing ? (
                 <CircularProgress
-                  size={26}
-                  sx={{
-                    color: "#fff",
-                  }}
+                      size={26}
+                      sx={{
+                        color: "#fff",
+                      }}
                 />
               ) : (
                 "Add"
               )}
             </Button>
-          )} */}
+            )} 
 
           <div className="flex">
             <Button
@@ -189,10 +198,11 @@ const UserDetailPage = ({ userType }) => {
                   },
                 })
               }
-            >
+              >
               Chat
             </Button>
           </div>
+        </div>
         </div>
 
         {userType === "tenant" && (
