@@ -10,9 +10,9 @@ import {
 
 /**
  * @description Get Single Tenant User
- * @route GET /api/owner/tenant-user/:slug
+ * @route GET /api/owner/tenant-user?email={email}&slug={slug}
  */
-router.get("/tenant-user/:slug", getSingleTenantUser); // Only the tenant user can access this route
+router.get("/tenant-user", getSingleTenantUser); // Only the tenant user can access this route
 
 /**
  * @description Get the current user's details

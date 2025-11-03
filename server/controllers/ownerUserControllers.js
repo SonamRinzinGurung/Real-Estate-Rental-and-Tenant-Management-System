@@ -5,16 +5,27 @@ import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 
 /**
  * @description Get Single Tenant User
- * @route GET /api/owner/tenant-user/:slug
+ * @route GET /api/owner/tenant-user?email={email}&slug={slug}
  * @returns {object} 200 - An object containing the tenant user
  */
 const getSingleTenantUser = async (req, res) => {
-  const { slug } = req.params;
   const { userId } = req.user;
+  const email = req.query?.email;
+  const slug = req.query?.slug;
 
-  const user = await TenantUser.findOne({ slug }).select(
-    "-savedProperties -contacts -accountVerificationToken"
-  );
+  let user;
+  if (email) {
+    user = await TenantUser.findOne({ email }).select(
+      "-savedProperties -contacts -accountVerificationToken -password"
+    );
+  }
+  else if (slug) {
+    user = await TenantUser.findOne({ slug }).select(
+      "-savedProperties -contacts -accountVerificationToken -password"
+    );
+  } else {
+    throw new BadRequestError("Please provide email or slug");
+  }
 
   if (!user) {
     throw new NotFoundError("User not found");
@@ -145,6 +156,7 @@ const getAllContacts = async (req, res) => {
 
   res.json({ contacts });
 };
+
 
 export {
   getSingleTenantUser,

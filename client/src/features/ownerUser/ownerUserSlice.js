@@ -29,7 +29,7 @@ export const getTenantUserDetails = createAsyncThunk(
   "getTenantUserDetails",
   async ({ slug }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/owner/tenant-user/${slug}`);
+      const { data } = await axiosFetch.get(`/owner/tenant-user?slug=${slug}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
