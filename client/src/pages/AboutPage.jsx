@@ -24,7 +24,7 @@ const AboutPageComponent = () => {
             <div>
               <p>
                 The Property Owner has various functionalities such as posting
-                and managing their property, creating rental contracts and rent
+                and managing their property, creating rental leases and rent
                 details, managing tenants, registering rent payments, and
                 viewing rental payment history. Additionally, they can send
                 payment notices to their tenants to ensure timely payments.
@@ -47,7 +47,7 @@ const AboutPageComponent = () => {
                 property owners for rental inquiries. They can save properties
                 to view later and view the details of potential properties. Once
                 they agree to rent a property, they can view and sign the rental
-                contract sent to them by the property owner. They can also view
+                lease sent to them by the property owner. They can also view
                 the payment details, due dates, payment history and receive
                 payment reminders from the owner.
               </p>

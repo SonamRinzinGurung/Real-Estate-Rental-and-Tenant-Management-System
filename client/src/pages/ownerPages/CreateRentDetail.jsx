@@ -4,7 +4,7 @@ import {
   createRentDetail,
   clearAlert,
 } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
-import { getOwnerAllContracts } from "../../features/ownerUser/ownerUserSlice";
+import { getOwnerAllLeases } from "../../features/ownerUser/ownerUserSlice";
 import { AlertToast, ConfirmModal, PageLoading } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,14 +22,14 @@ const CreateRentDetail = () => {
     (state) => state.rentDetailOwner
   );
 
-  const { allContracts, isLoading } = useSelector((state) => state.ownerUser);
+  const { allLeases, isLoading } = useSelector((state) => state.ownerUser);
 
   // get all real estate
   useEffect(() => {
-    dispatch(getOwnerAllContracts());
+    dispatch(getOwnerAllLeases());
   }, [dispatch]);
 
-  const [contractForm, setContractFrom] = useState({
+  const [leaseForm, setLeaseFrom] = useState({
     tenant: "",
     realEstate: "",
     rentAmount: "",
@@ -41,41 +41,41 @@ const CreateRentDetail = () => {
   // handle change in the form
   const handleChange = useCallback(
     (e) => {
-      setContractFrom({ ...contractForm, [e.target.name]: e.target.value });
+      setLeaseFrom({ ...leaseForm, [e.target.name]: e.target.value });
     },
-    [contractForm]
+    [leaseForm]
   );
 
   // set rent amount to the price of the property when the property is selected
   useEffect(() => {
-    if (contractForm.realEstate) {
-      setContractFrom({
-        ...contractForm,
-        tenant: allContracts?.find(
-          (contract) => contract.realEstate._id === contractForm.realEstate
+    if (leaseForm.realEstate) {
+      setLeaseFrom({
+        ...leaseForm,
+        tenant: allLeases?.find(
+          (lease) => lease.realEstate._id === leaseForm.realEstate
         ).tenant._id,
-        rentAmount: allContracts?.find(
-          (contract) => contract.realEstate._id === contractForm.realEstate
+        rentAmount: allLeases?.find(
+          (lease) => lease.realEstate._id === leaseForm.realEstate
         ).rentAmount,
-        startDate: allContracts?.find(
-          (contract) => contract.realEstate._id === contractForm.realEstate
+        startDate: allLeases?.find(
+          (lease) => lease.realEstate._id === leaseForm.realEstate
         ).startDate,
-        paymentPlan: allContracts?.find(
-          (contract) => contract.realEstate._id === contractForm.realEstate
+        paymentPlan: allLeases?.find(
+          (lease) => lease.realEstate._id === leaseForm.realEstate
         ).paymentPlan,
-        tenantName: allContracts
+        tenantName: allLeases
           ?.find(
-            (contract) => contract.realEstate._id === contractForm.realEstate
+            (lease) => lease.realEstate._id === leaseForm.realEstate
           )
           .tenant.firstName.concat(
             " ",
-            allContracts?.find(
-              (contract) => contract.realEstate._id === contractForm.realEstate
+            allLeases?.find(
+              (lease) => lease.realEstate._id === leaseForm.realEstate
             ).tenant.lastName
           ),
       });
     }
-  }, [contractForm.realEstate, allContracts, setContractFrom, contractForm]);
+  }, [leaseForm.realEstate, allLeases, setLeaseFrom, leaseForm]);
 
   // Redirect to all rent details page
   useEffect(() => {
@@ -105,7 +105,7 @@ const CreateRentDetail = () => {
   const [formData, setFormData] = useState({});
   const handleConfirmation = (e) => {
     e.preventDefault();
-    const { tenant, realEstate, paymentPlan, startDate } = contractForm;
+    const { tenant, realEstate, paymentPlan, startDate } = leaseForm;
     setFormData({
       tenant,
       realEstate,
@@ -148,38 +148,38 @@ const CreateRentDetail = () => {
                   select
                   required
                   label="Real Estate"
-                  value={contractForm.realEstate}
+                  value={leaseForm.realEstate}
                   onChange={handleChange}
                   sx={{ width: "300px" }}
                   name="realEstate"
                   color="tertiary"
                 >
-                  {allContracts?.map((contract) => (
+                  {allLeases?.map((lease) => (
                     <MenuItem
-                      key={contract._id}
-                      value={contract.realEstate._id}
+                      key={lease._id}
+                      value={lease.realEstate._id}
                       className=""
                     >
-                      {contract.realEstate.title}
+                      {lease.realEstate.title}
                     </MenuItem>
                   ))}
                 </TextField>
               </div>
               <div className="flex flex-col items-center md:items-start">
                 <h5 className="text-gray-700 mb-3">
-                  <InfoRoundedIcon /> Contract Details
+                  <InfoRoundedIcon /> Lease Details
                 </h5>
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                   <TextField
                     label="Tenant"
-                    value={contractForm.tenantName}
+                    value={leaseForm.tenantName}
                     color="tertiary"
                     sx={{ width: "300px" }}
                   />
 
                   <TextField
-                    label="Contract Start Date"
-                    value={contractForm.startDate}
+                    label="Lease Start Date"
+                    value={leaseForm.startDate}
                     name="startDate"
                     color="tertiary"
                     sx={{ width: "300px" }}
@@ -187,7 +187,7 @@ const CreateRentDetail = () => {
 
                   <TextField
                     label="Payment Plan"
-                    value={contractForm.paymentPlan}
+                    value={leaseForm.paymentPlan}
                     name="paymentPlan"
                     color="tertiary"
                     sx={{ width: "300px" }}
@@ -195,7 +195,7 @@ const CreateRentDetail = () => {
 
                   <TextField
                     label="Rent Amount"
-                    value={contractForm.rentAmount}
+                    value={leaseForm.rentAmount}
                     name="rentAmount"
                     color="tertiary"
                     sx={{ width: "300px" }}
@@ -240,7 +240,7 @@ const CreateRentDetail = () => {
             <p className="text-center my-4">
               Are you sure you want to create this rent detail? You won't be
               able to undo this action. The rent detail can only be deleted by
-              the owner when the contract is terminated.
+              the owner when the lease is terminated.
             </p>
             <div className="flex flex-wrap justify-center gap-8 mt-8">
               <Button onClick={handleModalClose} color="error">

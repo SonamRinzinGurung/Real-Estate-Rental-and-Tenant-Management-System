@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ContractSchema = new mongoose.Schema(
+const LeaseSchema = new mongoose.Schema(
   {
     owner: {
       type: mongoose.Types.ObjectId,
@@ -53,7 +53,7 @@ const ContractSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    contractSignTime: {
+    leaseSignTime: {
       type: Date,
       required: false,
     }
@@ -61,4 +61,4 @@ const ContractSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Contract", ContractSchema);
+export default mongoose.model("Lease", LeaseSchema);

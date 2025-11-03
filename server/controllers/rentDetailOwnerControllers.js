@@ -5,7 +5,7 @@ import PaymentHistory from "../models/PaymentHistory.js";
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 
 /**
- * @description Create Contract
+ * @description Create Lease
  * @route POST /api/rentDetail/createDetail
  * @returns {object} rent detail object
  */

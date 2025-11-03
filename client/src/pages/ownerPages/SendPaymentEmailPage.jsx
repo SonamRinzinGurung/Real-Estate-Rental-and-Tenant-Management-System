@@ -44,7 +44,7 @@ const SendPaymentEmailPage = () => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
   }, [dispatch, rentDetailId]);
 
-  // Redirect to detail page of the property after successful contract creation
+  // Redirect to detail page of the property after successful lease creation
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {

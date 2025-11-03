@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
-  getContractWithID,
+  getLeaseWithID,
   clearAlert,
-  approveContract,
+  approveLease,
 } from "../../features/tenantUser/tenantUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, AlertToast, ConfirmModal } from "../../components";
@@ -13,21 +13,21 @@ import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
-import contractApprovedImg from "../../assets/images/contractApproved.svg";
+import leaseApprovedImg from "../../assets/images/leaseApproved.svg";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 
-const ContractAgreementPage = () => {
-  const { contractId } = useParams();
+const LeaseAgreementPage = () => {
+  const { leaseId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getContractWithID({ contractId }));
-  }, [dispatch, contractId]);
+    dispatch(getLeaseWithID({ leaseId }));
+  }, [dispatch, leaseId]);
 
   const {
-    contractDetail,
+    leaseDetail,
     isLoading,
     isProcessing,
     alertFlag,
@@ -36,7 +36,7 @@ const ContractAgreementPage = () => {
   } = useSelector((state) => state.tenantUser);
 
   const currentCountry = countries.find(
-    (country) => country.label === contractDetail?.realEstate?.address?.country
+    (country) => country.label === leaseDetail?.realEstate?.address?.country
   );
   const format = createNumberFormatter(currentCountry?.code);
 
@@ -57,7 +57,7 @@ const ContractAgreementPage = () => {
   const [checked, setChecked] = useState(false);
   const [digitalSignature, setDigitalSignature] = useState("");
 
-  const handleApproveContract = useCallback(() => {
+  const handleApproveLease = useCallback(() => {
     if (!checked) {
       alert("You must agree to the terms and conditions to proceed.");
       return;
@@ -65,117 +65,117 @@ const ContractAgreementPage = () => {
       alert("Please provide your digital signature to proceed.");
       return;
     }
-    const contractSignTime = new Date().toISOString();
-    dispatch(approveContract({ contractId, digitalSignature, contractSignTime }));
+    const leaseSignTime = new Date().toISOString();
+    dispatch(approveLease({ leaseId, digitalSignature, leaseSignTime }));
     handleModalClose();
-  }, [dispatch, contractId, handleModalClose, checked, digitalSignature]);
+  }, [dispatch, leaseId, handleModalClose, checked, digitalSignature]);
 
   // calculate the total rent amount according to payment plan
   const calculateTotalRent = useCallback(() => {
-    const { paymentPlan, rentAmount } = contractDetail;
+    const { paymentPlan, rentAmount } = leaseDetail;
     if (paymentPlan === "Monthly") return rentAmount;
     if (paymentPlan === "Every 2 Months") return rentAmount * 2;
     if (paymentPlan === "Every 3 Months") return rentAmount * 3;
     if (paymentPlan === "Every 6 Months") return rentAmount * 6;
     if (paymentPlan === "Every 12 Months") return rentAmount * 12;
-  }, [contractDetail]);
+  }, [leaseDetail]);
 
   if (isLoading) return <PageLoading />;
 
-  if (!contractDetail)
+  if (!leaseDetail)
     return (
       <div className="flex justify-center items-start h-screen mt-10">
-        <h1>Contract Does not Exists!</h1>
+        <h1>Lease Does not Exists!</h1>
       </div>
     );
 
   return (
     <main className="mb-12">
-      {contractDetail?.status === "Pending" && (
+      {leaseDetail?.status === "Pending" && (
         <>
           <h3 className="my-4 font-heading font-bold text-center">
-            Contract Agreement Page
+            Lease Agreement Page
           </h3>
           <div className="flex flex-col w-11/12 mx-auto items-center gap-4 sm:flex-row sm:justify-center sm:items-start">
             <div className="flex flex-col gap-2 w-3/5  p-4 items-center text-center">
               <h4 className="font-bold">Real Estate</h4>
               <Link
-                to={`/tenant/real-estate/${contractDetail?.realEstate?.slug}`}
+                to={`/tenant/real-estate/${leaseDetail?.realEstate?.slug}`}
               >
                 <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
-                  {contractDetail?.realEstate?.title}
+                  {leaseDetail?.realEstate?.title}
                 </h5>
               </Link>
-              <p>{contractDetail?.realEstate?.category}</p>
+              <p>{leaseDetail?.realEstate?.category}</p>
               <p className="">
                 <LocationOnOutlinedIcon color="success" />{" "}
-                {contractDetail?.realEstate?.address.streetName},{" "}
-                {contractDetail?.realEstate?.address?.city},{" "}
-                {contractDetail?.realEstate?.address?.state},{" "}
-                {contractDetail?.realEstate?.address?.country}
+                {leaseDetail?.realEstate?.address.streetName},{" "}
+                {leaseDetail?.realEstate?.address?.city},{" "}
+                {leaseDetail?.realEstate?.address?.state},{" "}
+                {leaseDetail?.realEstate?.address?.country}
               </p>
             </div>
 
             <div className="flex flex-col gap-2 w-3/5  p-4 items-center text-center">
               <h4 className="font-bold">Property Owner</h4>
-              <Link to={`/tenant/owner-user/${contractDetail?.owner?.slug}`}>
+              <Link to={`/tenant/owner-user/${leaseDetail?.owner?.slug}`}>
                 <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
-                  {contractDetail?.owner?.firstName}{" "}
-                  {contractDetail?.owner?.lastName}
+                  {leaseDetail?.owner?.firstName}{" "}
+                  {leaseDetail?.owner?.lastName}
                 </h5>
               </Link>
               <div className="flex gap-2 items-center">
                 <LocalPhoneRoundedIcon sx={{ color: "#6D9886" }} />
-                <p className="">{contractDetail?.owner?.phoneNumber}</p>
+                <p className="">{leaseDetail?.owner?.phoneNumber}</p>
               </div>
               <div className="flex gap-2 items-center">
                 <EmailRoundedIcon sx={{ color: "#E7AB79" }} />
                 <p className="lowercase overflow-clip">
-                  {contractDetail?.owner?.email}
+                  {leaseDetail?.owner?.email}
                 </p>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-2 items-center mt-4 text-center">
-            <h4 className="font-bold">Contract Details</h4>
+            <h4 className="font-bold">Lease Details</h4>
             <div>
               <h5 className="font-robotoNormal">
-                <span className="font-medium">Contract Start Date</span>:{" "}
-                {dateFormatter(contractDetail?.startDate)}
+                <span className="font-medium">Lease Start Date</span>:{" "}
+                {dateFormatter(leaseDetail?.startDate)}
               </h5>
             </div>
             <div>
               <h5 className="font-robotoNormal">
                 <span className="font-medium">Payment Plan</span>:{" "}
-                {contractDetail?.paymentPlan}
+                {leaseDetail?.paymentPlan}
               </h5>
             </div>
             <div>
               <h5 className="font-robotoNormal">
                 <span className="font-medium">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
-                {format(contractDetail?.rentAmount)} per month
+                {format(leaseDetail?.rentAmount)} per month
               </h5>
             </div>
           </div>
           <div className="w-11/12 mx-auto text-justify mt-6">
-            <h4>Rental Agreement Contract</h4>
+            <h4>Rental Agreement Lease</h4>
             <p>
-              This Rental Agreement Contract is applicable from{" "}
-              <strong>{dateFormatter(contractDetail?.startDate)}</strong>,
+              This Rental Agreement Lease is applicable from{" "}
+              <strong>{dateFormatter(leaseDetail?.startDate)}</strong>,
               created by the property owner{" "}
               <strong>
-                {contractDetail?.owner?.firstName}{" "}
-                {contractDetail?.owner?.lastName}
+                {leaseDetail?.owner?.firstName}{" "}
+                {leaseDetail?.owner?.lastName}
               </strong>
               , for the rental of the property located at{" "}
               <strong>
-                {contractDetail?.realEstate?.address?.location},{" "}
-                {contractDetail?.realEstate?.address?.streetName}
+                {leaseDetail?.realEstate?.address?.location},{" "}
+                {leaseDetail?.realEstate?.address?.streetName}
               </strong>{" "}
               with the tenant{" "}
               <strong>
-                {contractDetail?.tenant?.firstName}{" "}
-                {contractDetail?.tenant?.lastName}
+                {leaseDetail?.tenant?.firstName}{" "}
+                {leaseDetail?.tenant?.lastName}
               </strong>
               .
             </p>
@@ -183,10 +183,10 @@ const ContractAgreementPage = () => {
             <h5>1. Payment of Rent</h5>
             <p>
               Tenant shall pay rent in the amount of{" "}
-              <strong>{countryToCurrency[currentCountry.code]} {format(contractDetail?.rentAmount)}</strong> per
+              <strong>{countryToCurrency[currentCountry.code]} {format(leaseDetail?.rentAmount)}</strong> per
               month. Total Rent amount of{" "}
               <strong>{countryToCurrency[currentCountry.code]} {format(calculateTotalRent())}</strong> shall be due
-              and payable <strong>{contractDetail?.paymentPlan}</strong> on the
+              and payable <strong>{leaseDetail?.paymentPlan}</strong> on the
               first day of the calendar month and shall be considered late if
               not received by the Landlord on or before the 7th day of the
               month.
@@ -244,7 +244,7 @@ const ContractAgreementPage = () => {
             />
             <label htmlFor="agree" className="ml-2">
               By checking this box, I agree to the terms and conditions of
-              this contract.
+              this lease.
             </label>
           </div>
 
@@ -264,8 +264,8 @@ const ContractAgreementPage = () => {
           {/* {disclaimer} */}
           <div className="w-11/12 mx-auto text-justify mt-6">
             <p className="text-sm">
-              <strong>Disclaimer:</strong> This contract is a legally binding
-              document. By signing your name on this contract, you agree to all the terms
+              <strong>Disclaimer:</strong> This lease is a legally binding
+              document. By signing your name on this lease, you agree to all the terms
               and conditions outlined herein.
             </p>
           </div>
@@ -288,16 +288,16 @@ const ContractAgreementPage = () => {
                   }}
                 />
               ) : (
-                "Accept Contract"
+                  "Accept Lease"
               )}
             </Button>
           </div>
         </>
       )}
 
-      {contractDetail?.status === "Active" && (
+      {leaseDetail?.status === "Active" && (
         <div className="flex flex-col items-center mt-10 gap-2">
-          <h1 className="text-center">Contract is active</h1>
+          <h1 className="text-center">Lease is active</h1>
           <Button
             onClick={() => navigate("/tenant")}
             variant="text"
@@ -308,7 +308,7 @@ const ContractAgreementPage = () => {
           </Button>
           <div className="w-56">
             <img
-              src={contractApprovedImg}
+              src={leaseApprovedImg}
               className="w-full"
               alt="login banner"
             />
@@ -318,11 +318,11 @@ const ContractAgreementPage = () => {
 
       <div>
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
-          <h3 className="text-center">Agree to Contract?</h3>
+          <h3 className="text-center">Agree to Lease?</h3>
           <p className="text-center my-4">
-            Are you sure you want to agree to this contract? Once you agree to
-            this contract, you will not be able to cancel it. You will be
-            agreeing to the terms and conditions of this contract.
+            Are you sure you want to agree to this lease? Once you agree to
+            this lease, you will not be able to cancel it. You will be
+            agreeing to the terms and conditions of this lease.
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <Button onClick={handleModalClose} color="error">
@@ -330,7 +330,7 @@ const ContractAgreementPage = () => {
             </Button>
 
             <Button
-              onClick={handleApproveContract}
+              onClick={handleApproveLease}
               color="success"
               variant="contained"
             >
@@ -350,4 +350,4 @@ const ContractAgreementPage = () => {
   );
 };
 
-export default ContractAgreementPage;
+export default LeaseAgreementPage;

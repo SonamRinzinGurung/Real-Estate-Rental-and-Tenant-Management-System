@@ -21,7 +21,7 @@ import tenantPropertyRoutes from "./routes/tenantPropertyRoutes.js";
 import ownerUserRoutes from "./routes/ownerUserRoutes.js";
 import tenantUserRoutes from "./routes/tenantUserRoutes.js";
 import emailSenderRoutes from "./routes/emailSenderRoutes.js";
-import contractRoutes from "./routes/contractRoutes.js";
+import leaseRoutes from "./routes/leaseRoutes.js";
 import ownerRentDetailRoutes from "./routes/rentDetailOwnerRoutes.js";
 import tenantRentDetailRoutes from "./routes/rentDetailTenantRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
@@ -83,7 +83,7 @@ app.use("/api/tenant", authorizeTenantUser, tenantUserRoutes);
 
 app.use("/api/sendEmail", emailSenderRoutes); //send email
 
-app.use("/api/contract", contractRoutes);
+app.use("/api/lease", leaseRoutes);
 
 app.use("/api/rentDetail", authorizeOwnerUser, ownerRentDetailRoutes);
 app.use("/api/rentDetailTenant", authorizeTenantUser, tenantRentDetailRoutes);

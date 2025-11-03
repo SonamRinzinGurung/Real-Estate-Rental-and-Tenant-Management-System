@@ -66,11 +66,11 @@ export const getAllContacts = createAsyncThunk(
   }
 );
 
-export const createContract = createAsyncThunk(
-  "createContract",
+export const createLease = createAsyncThunk(
+  "createLease",
   async ({ formData }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.post("/contract", formData);
+      const { data } = await axiosFetch.post("/lease", formData);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -78,12 +78,12 @@ export const createContract = createAsyncThunk(
   }
 );
 
-export const getContractOwnerView = createAsyncThunk(
-  "getContractOwnerView",
+export const getLeaseOwnerView = createAsyncThunk(
+  "getLeaseOwnerView",
   async ({ realEstateId }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.get(
-        `/contract/ownerView/${realEstateId}`
+        `/lease/ownerView/${realEstateId}`
       );
       return await data;
     } catch (error) {
@@ -92,21 +92,21 @@ export const getContractOwnerView = createAsyncThunk(
   }
 );
 
-export const terminatePendingContract = createAsyncThunk("terminatePendingContract", async ({ contractId }, thunkAPI) => {
+export const terminatePendingLease = createAsyncThunk("terminatePendingLease", async ({ leaseId }, thunkAPI) => {
   try {
-    const { data } = await axiosFetch.patch(`/contract/terminate/${contractId}`);
+    const { data } = await axiosFetch.patch(`/lease/terminate/${leaseId}`);
     return await data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 })
 
-export const deleteContract = createAsyncThunk(
-  "deleteContract",
-  async ({ contractId }, thunkAPI) => {
+export const deleteLease = createAsyncThunk(
+  "deleteLease",
+  async ({ leaseId }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.delete(
-        `/contract/delete/${contractId}`
+        `/lease/delete/${leaseId}`
       );
       return await data;
     } catch (error) {
@@ -115,11 +115,11 @@ export const deleteContract = createAsyncThunk(
   }
 );
 
-export const getOwnerAllContracts = createAsyncThunk(
-  "getOwnerAllContracts",
+export const getOwnerAllLeases = createAsyncThunk(
+  "getOwnerAllLeases",
   async (arg, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get("/contract/owner/allContracts");
+      const { data } = await axiosFetch.get("/lease/owner/allLeases");
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -150,9 +150,9 @@ const ownerUserSlice = createSlice({
     isProcessing: false,
     isContact: null,
     contacts: null,
-    contractDetail: null,
+    leaseDetail: null,
     success: null,
-    allContracts: null,
+    allLeases: null,
     chats: null,
   },
   reducers: {
@@ -258,78 +258,78 @@ const ownerUserSlice = createSlice({
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(createContract.pending, (state, action) => {
+      .addCase(createLease.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(createContract.fulfilled, (state, action) => {
+      .addCase(createLease.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.success = true;
         state.alertFlag = true;
-        state.alertMsg = "Contract created and sent to tenant";
+        state.alertMsg = "Lease created and sent to tenant";
         state.alertType = "success";
       })
-      .addCase(createContract.rejected, (state, action) => {
+      .addCase(createLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(getContractOwnerView.pending, (state, action) => {
+      .addCase(getLeaseOwnerView.pending, (state, action) => {
         state.isLoading = true;
         state.success = null;
       })
-      .addCase(getContractOwnerView.fulfilled, (state, action) => {
+      .addCase(getLeaseOwnerView.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contractDetail = action.payload.contractDetail;
+        state.leaseDetail = action.payload.leaseDetail;
         state.alertFlag = false;
       })
-      .addCase(getContractOwnerView.rejected, (state, action) => {
+      .addCase(getLeaseOwnerView.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(terminatePendingContract.pending, (state, action) => {
+      .addCase(terminatePendingLease.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(terminatePendingContract.fulfilled, (state, action) => {
+      .addCase(terminatePendingLease.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.contractDetail.status = "Terminated-pending";
+        state.leaseDetail.status = "Terminated-pending";
         state.alertFlag = true;
         state.alertMsg = action.payload.message;
         state.alertType = "success";
       })
-      .addCase(terminatePendingContract.rejected, (state, action) => {
+      .addCase(terminatePendingLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(deleteContract.pending, (state, action) => {
+      .addCase(deleteLease.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(deleteContract.fulfilled, (state, action) => {
+      .addCase(deleteLease.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.success = action.payload.success;
         state.alertFlag = true;
         state.alertMsg = action.payload.message;
         state.alertType = "success";
       })
-      .addCase(deleteContract.rejected, (state, action) => {
+      .addCase(deleteLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(getOwnerAllContracts.pending, (state) => {
+      .addCase(getOwnerAllLeases.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOwnerAllContracts.fulfilled, (state, action) => {
-        state.allContracts = action.payload.allContracts;
+      .addCase(getOwnerAllLeases.fulfilled, (state, action) => {
+        state.allLeases = action.payload.allLeases;
         state.isLoading = false;
         state.alertFlag = false;
       })
-      .addCase(getOwnerAllContracts.rejected, (state, action) => {
+      .addCase(getOwnerAllLeases.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

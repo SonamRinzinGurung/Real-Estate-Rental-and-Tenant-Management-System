@@ -17,15 +17,15 @@ import ProfilePageOwner from "./ownerPages/ProfilePage-Owner";
 import UserDetailPage from "./UserDetailPage";
 import UpdateRealEstateDetail from "./ownerPages/UpdateRealEstateDetail";
 import AllContacts from "./AllContacts";
-import CreateContractPage from "./ownerPages/CreateContractPage";
-import ContractAgreementPage from "./tenantPages/ContractAgreementPage";
-import ContractDetailPage from "./ownerPages/ContractDetailPage";
+import CreateLeasePage from "./ownerPages/CreateLeasePage";
+import LeaseAgreementPage from "./tenantPages/LeaseAgreementPage";
+import LeaseDetailPage from "./ownerPages/LeaseDetailPage";
 import AllRentDetailPage from "./ownerPages/AllRentDetailPage";
 import CreateRentDetail from "./ownerPages/CreateRentDetail";
 import SingleRentDetail from "./ownerPages/SingleRentDetail";
 import AllRentalProperties from "./tenantPages/AllRentalProperties";
 import RentalPropertyDetail from "./tenantPages/RentalPropertyDetail";
-import ContractDetailPageTenant from "./tenantPages/ContractDetailPageTenant";
+import LeaseDetailPageTenant from "./tenantPages/LeaseDetailPageTenant";
 import SendPaymentEmailPage from "./ownerPages/SendPaymentEmailPage";
 import CreatePaymentHistory from "./ownerPages/CreatePaymentHistory";
 import RentDetailTenantPage from "./tenantPages/RentDetailTenantPage";
@@ -54,15 +54,15 @@ export {
   UserDetailPage,
   UpdateRealEstateDetail,
   AllContacts,
-  CreateContractPage,
-  ContractAgreementPage,
-  ContractDetailPage,
+  CreateLeasePage,
+  LeaseAgreementPage,
+  LeaseDetailPage,
   AllRentDetailPage,
   CreateRentDetail,
   SingleRentDetail,
   AllRentalProperties,
   RentalPropertyDetail,
-  ContractDetailPageTenant,
+  LeaseDetailPageTenant,
   SendPaymentEmailPage,
   CreatePaymentHistory,
   RentDetailTenantPage,

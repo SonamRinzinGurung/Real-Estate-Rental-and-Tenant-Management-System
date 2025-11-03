@@ -19,15 +19,15 @@ import {
     UserDetailPage,
     UpdateRealEstateDetail,
     AllContacts,
-    CreateContractPage,
-    ContractAgreementPage,
-    ContractDetailPage,
+    CreateLeasePage,
+    LeaseAgreementPage,
+    LeaseDetailPage,
     AllRentDetailPage,
     CreateRentDetail,
     SingleRentDetail,
     AllRentalProperties,
     RentalPropertyDetail,
-    ContractDetailPageTenant,
+    LeaseDetailPageTenant,
     SendPaymentEmailPage,
     CreatePaymentHistory,
     RentDetailTenantPage,
@@ -95,10 +95,10 @@ function App() {
                             element={<UserDetailPage userType={"owner"} />}
                         />
                         <Route path="contacts/all" element={<AllContacts userType={"owner"} />} />
-                        <Route path="contract/create" element={<CreateContractPage />} />
+                        <Route path="lease/create" element={<CreateLeasePage />} />
                         <Route
-                            path="contract/:realEstateId/:slug"
-                            element={<ContractDetailPage />}
+                            path="lease/:realEstateId/:slug"
+                            element={<LeaseDetailPage />}
                         />
                         <Route path="rentDetail" element={<AllRentDetailPage />} />
                         <Route path="rentDetail/create" element={<CreateRentDetail />} />
@@ -132,8 +132,8 @@ function App() {
                         <Route path="profile" element={<ProfilePageTenant />} />
                         <Route path="owner-user/:slug" element={<UserDetailPage userType={"tenant"} />} />
                         <Route
-                            path="contract-agreement/:contractId"
-                            element={<ContractAgreementPage />}
+                            path="lease-agreement/:leaseId"
+                            element={<LeaseAgreementPage />}
                         />
                         <Route
                             path="rental-properties/all"
@@ -144,8 +144,8 @@ function App() {
                             element={<RentalPropertyDetail />}
                         />
                         <Route
-                            path="contract/:realEstateId/:slug"
-                            element={<ContractDetailPageTenant />}
+                            path="lease/:realEstateId/:slug"
+                            element={<LeaseDetailPageTenant />}
                         />
                         <Route
                             path="rentDetail/:realEstateId/:slug"

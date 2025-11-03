@@ -50,7 +50,7 @@ const PersonalRealEstateDetail = () => {
   );
   const format = createNumberFormatter(currentCountry?.code);
 
-  // Redirect to detail page of the property after successful contract creation
+  // Redirect to detail page of the property after successful lease creation
   useEffect(() => {
     if (postSuccess) {
       const timer = setTimeout(() => {
@@ -129,7 +129,7 @@ const PersonalRealEstateDetail = () => {
                   </span>
                 </div>
               </div>
-              {/* Render the edit and create contract if the real estate property is available for rental */}
+              {/* Render the edit and create lease if the real estate property is available for rental */}
               {realEstate?.status === true ? (
                 <div className="flex flex-wrap gap-4 mt-2 text-center">
                   <Button
@@ -145,7 +145,7 @@ const PersonalRealEstateDetail = () => {
                     Edit
                   </Button>
                   <Link
-                    to={`/owner/contract/create`}
+                    to={`/owner/lease/create`}
                     state={{
                       realEstateId: realEstate?._id,
                       title: realEstate?.title,
@@ -159,7 +159,7 @@ const PersonalRealEstateDetail = () => {
                       size="small"
                       startIcon={<GavelIcon />}
                     >
-                      Create Contract
+                      Create Lease
                     </Button>
                   </Link>
                   <Button
@@ -187,7 +187,7 @@ const PersonalRealEstateDetail = () => {
                 </div>
               ) : (
                 <div className="">
-                  <Link to={`/owner/contract/${realEstate?._id}/${slug}`}>
+                    <Link to={`/owner/lease/${realEstate?._id}/${slug}`}>
                     <Button
                       variant="contained"
                       color="secondary"
@@ -195,7 +195,7 @@ const PersonalRealEstateDetail = () => {
                       sx={{ color: "#fff" }}
                       startIcon={<ArticleIcon />}
                     >
-                      View Contract
+                        View Lease
                     </Button>
                   </Link>
                 </div>

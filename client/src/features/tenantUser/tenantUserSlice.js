@@ -66,12 +66,12 @@ export const getAllContacts = createAsyncThunk(
   }
 );
 
-export const getContractWithID = createAsyncThunk(
-  "getContractWithID",
-  async ({ contractId }, thunkAPI) => {
+export const getLeaseWithID = createAsyncThunk(
+  "getLeaseWithID",
+  async ({ leaseId }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.get(
-        `/contract/tenantView/${contractId}`
+        `/lease/tenantView/${leaseId}`
       );
       return await data;
     } catch (error) {
@@ -80,13 +80,13 @@ export const getContractWithID = createAsyncThunk(
   }
 );
 
-export const approveContract = createAsyncThunk(
-  "approveContract",
-  async ({ contractId, digitalSignature, contractSignTime }, thunkAPI) => {
+export const approveLease = createAsyncThunk(
+  "approveLease",
+  async ({ leaseId, digitalSignature, leaseSignTime }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.patch(
-        `/contract/approve/${contractId}`,
-        { digitalSignature, contractSignTime }
+        `/lease/approve/${leaseId}`,
+        { digitalSignature, leaseSignTime }
       );
       return await data;
     } catch (error) {
@@ -95,11 +95,11 @@ export const approveContract = createAsyncThunk(
   }
 );
 
-export const getContractWithRealEstateID = createAsyncThunk(
-  "getContractWithRealEstateID",
+export const getLeaseWithRealEstateID = createAsyncThunk(
+  "getLeaseWithRealEstateID",
   async ({ realEstateId }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/contract/tenant/${realEstateId}`);
+      const { data } = await axiosFetch.get(`/lease/tenant/${realEstateId}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -107,9 +107,9 @@ export const getContractWithRealEstateID = createAsyncThunk(
   }
 );
 
-export const approveContractTermination = createAsyncThunk("approveContractTermination", async ({ contractId }, thunkAPI) => {
+export const approveLeaseTermination = createAsyncThunk("approveLeaseTermination", async ({ leaseId }, thunkAPI) => {
   try {
-    const { data } = await axiosFetch.patch(`/contract/terminate-approve/${contractId}`);
+    const { data } = await axiosFetch.patch(`/lease/terminate-approve/${leaseId}`);
     return await data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -133,7 +133,7 @@ const tenantUserSlice = createSlice({
   initialState: {
     user: null,
     realEstates: null,
-    contractDetail: null,
+    leaseDetail: null,
     isLoading: false,
     alertFlag: false,
     alertMsg: "",
@@ -248,61 +248,61 @@ const tenantUserSlice = createSlice({
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(getContractWithID.pending, (state, action) => {
+      .addCase(getLeaseWithID.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(getContractWithID.fulfilled, (state, action) => {
+      .addCase(getLeaseWithID.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contractDetail = action.payload.contractDetail;
+        state.leaseDetail = action.payload.leaseDetail;
         state.alertFlag = false;
       })
-      .addCase(getContractWithID.rejected, (state, action) => {
+      .addCase(getLeaseWithID.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(approveContract.pending, (state, action) => {
+      .addCase(approveLease.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(approveContract.fulfilled, (state, action) => {
+      .addCase(approveLease.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.contractDetail = action.payload.contractDetail;
+        state.leaseDetail = action.payload.leaseDetail;
         state.alertFlag = true;
-        state.alertMsg = "Contract approved successfully";
+        state.alertMsg = "Lease approved successfully";
         state.alertType = "success";
       })
-      .addCase(approveContract.rejected, (state, action) => {
+      .addCase(approveLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(getContractWithRealEstateID.pending, (state, action) => {
+      .addCase(getLeaseWithRealEstateID.pending, (state, action) => {
         state.isLoading = true;
       })
-      .addCase(getContractWithRealEstateID.fulfilled, (state, action) => {
+      .addCase(getLeaseWithRealEstateID.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contractDetail = action.payload.contractDetail;
+        state.leaseDetail = action.payload.leaseDetail;
         state.alertFlag = false;
       })
-      .addCase(getContractWithRealEstateID.rejected, (state, action) => {
+      .addCase(getLeaseWithRealEstateID.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(approveContractTermination.pending, (state, action) => {
+      .addCase(approveLeaseTermination.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(approveContractTermination.fulfilled, (state, action) => {
+      .addCase(approveLeaseTermination.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.contractDetail.status = "Terminated-approved";
+        state.leaseDetail.status = "Terminated-approved";
         state.alertFlag = true;
-        state.alertMsg = "Contract termination approved successfully";
+        state.alertMsg = "Lease termination approved successfully";
         state.alertType = "success";
       })
-      .addCase(approveContractTermination.rejected, (state, action) => {
+      .addCase(approveLeaseTermination.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

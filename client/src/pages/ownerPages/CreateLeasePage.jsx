@@ -2,17 +2,17 @@ import { useState, useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAllContacts,
-  createContract,
+  createLease,
   clearAlert,
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, AlertToast, ConfirmModal } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import moment from "moment";
-import contractImage from "../../assets/images/createContract.svg";
+import leaseImage from "../../assets/images/createLease.svg";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
 
-const CreateContractPage = () => {
+const CreateLeasePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,7 +25,7 @@ const CreateContractPage = () => {
     dispatch(getAllContacts({ name: "" }));
   }, [dispatch]);
 
-  const [contractForm, setContractFrom] = useState({
+  const [leaseForm, setLeaseFrom] = useState({
     tenant: "",
     realEstate: realEstateId,
     rentAmount: price,
@@ -36,9 +36,9 @@ const CreateContractPage = () => {
 
   const handleChange = useCallback(
     (e) => {
-      setContractFrom({ ...contractForm, [e.target.name]: e.target.value });
+      setLeaseFrom({ ...leaseForm, [e.target.name]: e.target.value });
     },
-    [contractForm]
+    [leaseForm]
   );
 
   const paymentPlans = [
@@ -49,7 +49,7 @@ const CreateContractPage = () => {
     "Every 12 Months",
   ];
 
-  // Redirect to detail page of the property after successful contract creation
+  // Redirect to detail page of the property after successful lease creation
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => {
@@ -77,7 +77,7 @@ const CreateContractPage = () => {
   const [formData, setFormData] = useState({});
   const handleConfirmation = (e) => {
     e.preventDefault();
-    const { tenant, realEstate, rentAmount, paymentPlan } = contractForm;
+    const { tenant, realEstate, rentAmount, paymentPlan } = leaseForm;
     setFormData({
       tenant,
       realEstate,
@@ -89,8 +89,8 @@ const CreateContractPage = () => {
     handleModalOpen();
   };
 
-  const handleCreateContract = useCallback(() => {
-    dispatch(createContract({ formData }));
+  const handleCreateLease = useCallback(() => {
+    dispatch(createLease({ formData }));
     handleModalClose();
   }, [dispatch, formData, handleModalClose]);
 
@@ -98,9 +98,9 @@ const CreateContractPage = () => {
     <main className="flex flex-row mb-8 md:mb-0">
       <div className="mt-10 flex flex-col items-center md:ml-14 md:items-start">
         <div className="mb-6">
-          <h3 className="font-heading font-bold">Create Contract</h3>
+          <h3 className="font-heading font-bold">Create Lease</h3>
           <p className="text-gray-400 -mt-2 font-robotoNormal">
-            Fill in the form below to create a contract
+            Fill in the form below to create a lease
           </p>
         </div>
         <div className="mb-4 flex items-center">
@@ -114,7 +114,7 @@ const CreateContractPage = () => {
                 select
                 required
                 label="Tenant User"
-                value={contractForm.tenant}
+                value={leaseForm.tenant}
                 onChange={handleChange}
                 sx={{ width: "300px" }}
                 name="tenant"
@@ -127,7 +127,7 @@ const CreateContractPage = () => {
                 ))}
               </TextField>
               <DatePicker
-                label="Contract Start Date"
+                label="Lease Start Date"
                 value={date}
                 views={["year", "month"]}
                 handleChange={useCallback(
@@ -142,7 +142,7 @@ const CreateContractPage = () => {
                 select
                 required
                 label="Payment Plan"
-                value={contractForm.paymentPlan}
+                value={leaseForm.paymentPlan}
                 onChange={handleChange}
                 sx={{ width: "300px" }}
                 name="paymentPlan"
@@ -157,7 +157,7 @@ const CreateContractPage = () => {
 
               <TextField
                 label="Rent Amount"
-                value={contractForm.rentAmount}
+                value={leaseForm.rentAmount}
                 name="rentAmount"
                 color="tertiary"
                 sx={{ width: "300px" }}
@@ -199,11 +199,11 @@ const CreateContractPage = () => {
 
         <div>
           <ConfirmModal open={open} handleModalClose={handleModalClose}>
-            <h3 className="text-center">Confirm Contract?</h3>
+            <h3 className="text-center">Confirm Lease?</h3>
             <p className="text-center my-4">
-              Are you sure you want to create this contract? Once the contract
+              Are you sure you want to create this lease? Once the lease
               is created, you will not be able to edit it. You can only delete
-              it. The tenant will be notified of the contract creation.
+              it. The tenant will be notified of the lease creation.
             </p>
             <div className="flex flex-wrap justify-center gap-8 mt-8">
               <Button onClick={handleModalClose} color="error">
@@ -211,7 +211,7 @@ const CreateContractPage = () => {
               </Button>
 
               <Button
-                onClick={handleCreateContract}
+                onClick={handleCreateLease}
                 color="success"
                 variant="contained"
               >
@@ -223,7 +223,7 @@ const CreateContractPage = () => {
       </div>
 
       <div className="hidden md:block mx-auto mt-10 mb-6 md:mb-0">
-        <img src={contractImage} alt="" />
+        <img src={leaseImage} alt="" />
       </div>
 
       <AlertToast
@@ -236,4 +236,4 @@ const CreateContractPage = () => {
   );
 };
 
-export default CreateContractPage;
+export default CreateLeasePage;

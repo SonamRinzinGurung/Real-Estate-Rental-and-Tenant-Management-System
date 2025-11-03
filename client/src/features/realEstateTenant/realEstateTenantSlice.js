@@ -74,7 +74,7 @@ export const getAllTenantRentalProperties = createAsyncThunk(
   async (arg, thunkAPI) => {
     try {
       const { data } = await axiosFetch.get(
-        "/contract/tenantUser/allRentalProperties"
+        "/lease/tenantUser/allRentalProperties"
       );
       return await data;
     } catch (error) {
