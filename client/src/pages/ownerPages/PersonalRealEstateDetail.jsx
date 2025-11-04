@@ -50,7 +50,7 @@ const PersonalRealEstateDetail = () => {
   );
   const format = createNumberFormatter(currentCountry?.code);
 
-  // Redirect to detail page of the property after successful lease creation
+  // Redirect to detail page of the property after successful update
   useEffect(() => {
     if (postSuccess) {
       const timer = setTimeout(() => {
@@ -145,13 +145,7 @@ const PersonalRealEstateDetail = () => {
                     Edit
                   </Button>
                   <Link
-                    to={`/owner/lease/create`}
-                    state={{
-                      realEstateId: realEstate?._id,
-                      title: realEstate?.title,
-                      price: realEstate?.price,
-                      slug: slug,
-                    }}
+                    to={`/owner/lease/create/${slug}`}
                   >
                     <Button
                       variant="contained"

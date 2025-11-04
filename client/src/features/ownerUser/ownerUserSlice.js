@@ -27,9 +27,9 @@ export const updateProfile = createAsyncThunk(
 
 export const getTenantUserDetails = createAsyncThunk(
   "getTenantUserDetails",
-  async ({ slug }, thunkAPI) => {
+  async ({ slug, email }, thunkAPI) => {
     try {
-      const { data } = await axiosFetch.get(`/owner/tenant-user?slug=${slug}`);
+      const { data } = await axiosFetch.get(`/owner/tenant-user?slug=${slug}&email=${email}`);
       return await data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);

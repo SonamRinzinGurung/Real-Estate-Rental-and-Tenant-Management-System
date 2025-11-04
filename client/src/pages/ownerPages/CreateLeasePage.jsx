@@ -1,38 +1,70 @@
 import { useState, useCallback, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   getAllContacts,
   createLease,
   clearAlert,
+  getTenantUserDetails
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { DatePicker, AlertToast, ConfirmModal } from "../../components";
-import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
+import { DatePicker, AlertToast, ConfirmModal, RealEstateCard } from "../../components";
+import { Button, CircularProgress, TextField, MenuItem, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
 import moment from "moment";
 import leaseImage from "../../assets/images/createLease.svg";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import SearchIcon from '@mui/icons-material/Search';
+import {
+  getRealEstateDetail,
+} from "../../features/realEstateOwner/realEstateOwnerSlice";
+import { calculateTotalRent } from "../../utils/valueFormatter";
 
 const CreateLeasePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { realEstateId, title, price, slug } = location?.state; // state is passed from the previous page
+  const param = useParams();
+  const { slug } = param;
 
   const { contacts, isProcessing, success, alertFlag, alertMsg, alertType } =
     useSelector((state) => state.ownerUser);
 
+  const {
+    realEstate
+  } = useSelector((store) => store.realEstateOwner);
+
   useEffect(() => {
-    dispatch(getAllContacts({ name: "" }));
-  }, [dispatch]);
+    dispatch(getRealEstateDetail({ slug }));
+  }, [slug, dispatch]);
+
 
   const [leaseForm, setLeaseFrom] = useState({
-    tenant: "",
-    realEstate: realEstateId,
-    rentAmount: price,
+    tenant: null,
+    realEstate: "",
+    rentAmount: "",
     paymentPlan: "",
   });
 
+  const [formData, setFormData] = useState({});
+
+  // keep leaseForm in sync when realEstate is loaded/updated
+  useEffect(() => {
+    if (!realEstate) return;
+    setLeaseFrom((prev) => ({
+      ...prev,
+      realEstate: realEstate._id ?? prev.realEstate,
+      rentAmount: realEstate.price ?? prev.rentAmount,
+    }));
+  }, [realEstate]);
+
   const [date, setDate] = useState(null);
+  const [email, setEmail] = useState("");
+
+  const handleFindTenant = useCallback(() => {
+    dispatch(getTenantUserDetails({ email })).then((res) => {
+      if (res.payload) {
+        setLeaseFrom({ ...leaseForm, tenant: res.payload.user });
+      }
+    });
+  }, [contacts, email, leaseForm]);
 
   const handleChange = useCallback(
     (e) => {
@@ -74,12 +106,11 @@ const CreateLeasePage = () => {
   const handleModalOpen = useCallback(() => setOpen(true), []);
   const handleModalClose = useCallback(() => setOpen(false), []);
 
-  const [formData, setFormData] = useState({});
   const handleConfirmation = (e) => {
     e.preventDefault();
     const { tenant, realEstate, rentAmount, paymentPlan } = leaseForm;
     setFormData({
-      tenant,
+      tenant: tenant._id,
       realEstate,
       rentAmount,
       paymentPlan,
@@ -95,39 +126,68 @@ const CreateLeasePage = () => {
   }, [dispatch, formData, handleModalClose]);
 
   return (
-    <main className="flex flex-row mb-8 md:mb-0">
-      <div className="mt-10 flex flex-col items-center md:ml-14 md:items-start">
-        <div className="mb-6">
+    <main className="flex flex-row">
+      <div className="mt-10 flex flex-col items-center justify-center mx-auto md:items-start gap-4">
+        <div className="flex flex-col items-center md:items-start gap-1">
           <h3 className="font-heading font-bold">Create Lease</h3>
           <p className="text-gray-400 -mt-2 font-robotoNormal">
             Fill in the form below to create a lease
           </p>
         </div>
-        <div className="mb-4 flex items-center">
-          <h5 className="font-semibold">Real Estate Title: </h5>
-          <h5 className="ml-2">{title}</h5>
-        </div>
+        {realEstate && <RealEstateCard key={realEstate._id} {...realEstate} fromOwnerUser />}
         <div className="">
           <form id="form" onSubmit={handleConfirmation}>
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-              <TextField
-                select
-                required
-                label="Tenant User"
-                value={leaseForm.tenant}
-                onChange={handleChange}
+            <div className="flex flex-col gap-4 justify-center md:justify-start">
+              <OutlinedInput
+                id="find-tenant"
+                type='text'
+                placeholder="Enter Tenant Email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 sx={{ width: "300px" }}
-                name="tenant"
                 color="tertiary"
-              >
-                {contacts?.map((user) => (
-                  <MenuItem key={user._id} value={user._id} className="">
-                    {user.firstName} {user.lastName}
-                  </MenuItem>
-                ))}
-              </TextField>
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleFindTenant}
+                      edge="end"
+                    >
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+
+              {leaseForm.tenant && (
+                <div>
+                  <div className="flex  items-center gap-2">
+                    <p className="font-robotoNormal font-semibold">
+                      Selected Tenant:
+                    </p>
+                    <div>
+                      <img className="w-10 h-10 object-cover rounded-full" src={leaseForm?.tenant?.profileImage} alt="" />
+                    </div>
+                    <div>
+                      {leaseForm?.tenant.firstName} {leaseForm?.tenant.lastName}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <DatePicker
                 label="Lease Start Date"
+                value={date}
+                views={["year", "month"]}
+                handleChange={useCallback(
+                  (date) => {
+                    setDate(date);
+                  },
+                  [setDate]
+                )}
+              />
+              <DatePicker
+                label="Lease End Date"
                 value={date}
                 views={["year", "month"]}
                 handleChange={useCallback(
@@ -157,7 +217,7 @@ const CreateLeasePage = () => {
 
               <TextField
                 label="Rent Amount"
-                value={leaseForm.rentAmount}
+                value={calculateTotalRent(leaseForm.paymentPlan, leaseForm.rentAmount) || ""}
                 name="rentAmount"
                 color="tertiary"
                 sx={{ width: "300px" }}
@@ -222,8 +282,8 @@ const CreateLeasePage = () => {
         </div>
       </div>
 
-      <div className="hidden md:block mx-auto mt-10 mb-6 md:mb-0">
-        <img src={leaseImage} alt="" />
+      <div className="hidden md:block mx-auto mt-10 w-1/3 h-1/2">
+        <img className="h-full w-full" src={leaseImage} alt="" />
       </div>
 
       <AlertToast

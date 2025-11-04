@@ -95,7 +95,7 @@ function App() {
                             element={<UserDetailPage userType={"owner"} />}
                         />
                         <Route path="contacts/all" element={<AllContacts userType={"owner"} />} />
-                        <Route path="lease/create" element={<CreateLeasePage />} />
+                        <Route path="lease/create/:slug" element={<CreateLeasePage />} />
                         <Route
                             path="lease/:realEstateId/:slug"
                             element={<LeaseDetailPage />}
