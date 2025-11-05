@@ -6,7 +6,7 @@ import {
   getTenantUserDetails
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { DatePicker, AlertToast, ConfirmModal, RealEstateCard } from "../../components";
+import { DatePicker, ConfirmModal, RealEstateCard } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
 import moment from "moment";
 import leaseImage from "../../assets/images/createLease.svg";
@@ -16,6 +16,7 @@ import {
   getRealEstateDetail,
 } from "../../features/realEstateOwner/realEstateOwnerSlice";
 import { calculateTotalRent } from "../../utils/valueFormatter";
+import useToast from "../../hooks/useToast"
 
 const CreateLeasePage = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,13 @@ const CreateLeasePage = () => {
   const {
     realEstate
   } = useSelector((store) => store.realEstateOwner);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
 
   useEffect(() => {
     dispatch(getRealEstateDetail({ slug }));
@@ -92,16 +100,6 @@ const CreateLeasePage = () => {
       return () => clearTimeout(timer);
     }
   }, [success, navigate, slug]);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal
   const [open, setOpen] = useState(false);
@@ -295,13 +293,6 @@ const CreateLeasePage = () => {
       <div className="hidden md:block mx-auto mt-10 w-1/3 h-1/2">
         <img className="h-full w-full" src={leaseImage} alt="" />
       </div>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

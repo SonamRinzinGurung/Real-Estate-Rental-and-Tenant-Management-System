@@ -139,7 +139,7 @@ const getLeaseDetailOwnerView = async (req, res) => {
   })
     .populate({
       path: "realEstate",
-      select: "title address category slug",
+      select: "title address category slug price",
     })
     .populate({
       path: "tenant",
@@ -390,7 +390,7 @@ const getTenantLeaseDetail = async (req, res) => {
   })
     .populate({
       path: "realEstate",
-      select: "title address category slug",
+      select: "title address category slug price",
     })
     .populate({
       path: "owner",

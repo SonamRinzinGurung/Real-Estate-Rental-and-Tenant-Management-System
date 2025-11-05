@@ -6,7 +6,7 @@ import {
   clearAlert,
 } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoading, ConfirmModal, AlertToast } from "../../components";
+import { PageLoading, ConfirmModal } from "../../components";
 import { Button, CircularProgress } from "@mui/material";
 import {
   dateFormatter,
@@ -19,6 +19,7 @@ import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
+import useToast from "../../hooks/useToast";
 
 const SendPaymentEmailPage = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,13 @@ const SendPaymentEmailPage = () => {
   );
   const format = createNumberFormatter(currentCountry?.code);
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
   }, [dispatch, rentDetailId]);
@@ -55,16 +63,6 @@ const SendPaymentEmailPage = () => {
       return () => clearTimeout(timer);
     }
   }, [success, navigate, rentDetailId, rentDetail?.realEstate.slug]);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal state and handlers
   const [open, setOpen] = useState(false);
@@ -267,12 +265,6 @@ const SendPaymentEmailPage = () => {
           </Button>
         </div>
       </ConfirmModal>
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

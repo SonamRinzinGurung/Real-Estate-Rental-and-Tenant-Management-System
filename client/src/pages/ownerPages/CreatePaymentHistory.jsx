@@ -5,7 +5,7 @@ import {
   createPaymentHistory,
   clearAlert,
 } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
-import { AlertToast, ConfirmModal, PageLoading } from "../../components";
+import { ConfirmModal, PageLoading } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
@@ -22,6 +22,7 @@ import {
 import paymentImg from "../../assets/images/payment.svg";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
+import useToast from "../../hooks/useToast";
 
 const CreatePaymentHistory = () => {
   const { rentDetailId } = useParams();
@@ -43,6 +44,13 @@ const CreatePaymentHistory = () => {
     (country) => country.label === rentDetail?.realEstate?.address?.country
   );
   const format = createNumberFormatter(currentCountry?.code);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  })
 
   useEffect(() => {
     dispatch(getSingleRentDetailOwnerView({ rentDetailId }));
@@ -73,16 +81,6 @@ const CreatePaymentHistory = () => {
       return () => clearTimeout(timer);
     }
   }, [success, navigate, rentDetailId, rentDetail?.realEstate.slug]);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal state and handlers
   const [open, setOpen] = useState(false);
@@ -241,12 +239,6 @@ const CreatePaymentHistory = () => {
       <div className="hidden pl-4 self-center md:block">
         <img src={paymentImg} alt="" />
       </div>
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

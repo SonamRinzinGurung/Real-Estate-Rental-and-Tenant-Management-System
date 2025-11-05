@@ -6,20 +6,20 @@ import {
   approveLeaseTermination,
   clearAlert,
 } from "../../features/tenantUser/tenantUserSlice";
-import { PageLoading, AlertToast, ConfirmModal } from "../../components";
+import { PageLoading, ConfirmModal } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import {
   createNumberFormatter,
   dateFormatter,
-  format,
 } from "../../utils/valueFormatter";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import { Button, CircularProgress } from "@mui/material";
+import useToast from "../../hooks/useToast";
 
 const LeaseDetailPageTenant = () => {
   const dispatch = useDispatch();
@@ -36,8 +36,14 @@ const LeaseDetailPageTenant = () => {
     alertFlag,
     alertType,
     alertMsg,
-    success,
   } = useSelector((state) => state.tenantUser);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
 
   const currentCountry = countries.find(
     (country) => country.label === leaseDetail?.realEstate?.address?.country
@@ -306,13 +312,6 @@ const LeaseDetailPageTenant = () => {
           </div>
         </ConfirmModal>
       </div>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

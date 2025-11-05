@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from "react";
-import { Logo, AlertToast } from "../components";
+import { Logo } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resendVerificationEmail,
@@ -9,6 +9,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import useToast from "../hooks/useToast";
 
 const VerificationMessagePage = () => {
   const { user, userType, errorMsg, errorFlag, alertType, isLoading } =
@@ -19,6 +20,13 @@ const VerificationMessagePage = () => {
   const dispatch = useDispatch();
 
   const email = localStorage.getItem("email");
+
+  useToast({
+    alertFlag: errorFlag,
+    alertType: alertType,
+    message: errorMsg,
+    clearAlertAction: clearAlert,
+  });
 
   useEffect(() => {
     if (user) {
@@ -33,17 +41,6 @@ const VerificationMessagePage = () => {
     };
     dispatch(resendVerificationEmail({ resendInfo }));
   }, [dispatch, email, param.role]);
-
-  //handle alert toast close
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   return (
     <div>
@@ -111,12 +108,6 @@ const VerificationMessagePage = () => {
           </div>
         </div>
       </main>
-      <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

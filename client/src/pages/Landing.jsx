@@ -1,20 +1,16 @@
 import { useEffect, useCallback, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Logo, AlertToast, Footer } from "../components";
+import { Logo, Footer } from "../components";
 import landingImg from "../assets/images/landing1.svg";
 import landingImg2 from "../assets/images/landing2.svg";
 import landingTitle from "../assets/images/landingTitle.svg";
-
 import { Button } from "@mui/material";
-import { clearAlert } from "../features/auth/authSlice";
-
 const Landing = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const ref = useRef(null);
 
-  const { user, userType, errorFlag, alertType, errorMsg } = useSelector(
+  const { user, userType } = useSelector(
     (store) => store.auth
   );
 
@@ -24,17 +20,6 @@ const Landing = () => {
       navigate(`/${userType}`);
     }
   }, [user, navigate, userType]);
-
-  // function to handle alert close
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   return (
     <div>
@@ -196,12 +181,6 @@ const Landing = () => {
         </main>
       </main>
       <Footer />
-      <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </div>
   );
 };

@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getOwnerUserDetails,
   addOrRemoveContact as addOrRemoveTenantContact,
-  // clearAlert as clearTenantAlert,
+  clearAlert as clearTenantAlert,
 } from "../features/tenantUser/tenantUserSlice";
 import {
   getTenantUserDetails,
   addOrRemoveContact as addOrRemoveOwnerContact,
-  // clearAlert,
+  clearAlert,
 } from "../features/ownerUser/ownerUserSlice";
 
 import { useParams, useNavigate } from "react-router-dom";
-import { Footer, PageLoading, AlertToast } from "../components";
+import { Footer, PageLoading } from "../components";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
@@ -23,6 +23,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ImageViewer from "react-simple-image-viewer";
 import MessageIcon from "@mui/icons-material/Message";
 import { RealEstateCard } from "../components";
+import useToast from "../hooks/useToast";
 
 const UserDetailPage = ({ userType }) => {
   const dispatch = useDispatch();
@@ -42,6 +43,13 @@ const UserDetailPage = ({ userType }) => {
     userType === "owner" ? state.ownerUser : state.tenantUser
   );
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: userType === "owner" ? clearAlert : clearTenantAlert,
+  });
+
   useEffect(() => {
     if (userType === "tenant") {
       dispatch(getOwnerUserDetails({ slug }));
@@ -49,16 +57,6 @@ const UserDetailPage = ({ userType }) => {
       dispatch(getTenantUserDetails({ slug }));
     }
   }, [dispatch, slug, userType]);
-
-  // const handleClose = useCallback(
-  //   (event, reason) => {
-  //     if (reason === "clickaway") {
-  //       return;
-  //     }
-  //     dispatch(clearAlert());
-  //   },
-  //   [dispatch]
-  // );
 
   const addOrRemoveContact = (id) => {
     if (userType === "tenant") {
@@ -231,12 +229,6 @@ const UserDetailPage = ({ userType }) => {
             )}
           </div>
         )}
-        {/* <AlertToast
-          alertFlag={alertFlag}
-          alertMsg={alertMsg}
-          alertType={alertType}
-          handleClose={handleClose}
-        /> */}
       </main>
       <Footer />
     </>

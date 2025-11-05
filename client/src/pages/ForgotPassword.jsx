@@ -1,21 +1,29 @@
 import { useEffect, useState, useCallback } from "react";
-import { Logo, FormTextField, AlertToast } from "../components";
+import { Logo, FormTextField } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  clearAlert,
   forgotPassword,
   stateClear,
+  clearAlert
 } from "../features/auth/authSlice";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import HttpsRoundedIcon from "@mui/icons-material/HttpsRounded";
+import useToast from "../hooks/useToast";
 
 const ForgotPassword = () => {
   const { user, userType, errorMsg, errorFlag, alertType, isLoading, success } =
     useSelector((store) => store.auth);
   const navigate = useNavigate();
   const param = useParams();
+
+  useToast({
+    alertFlag: errorFlag,
+    alertType,
+    message: errorMsg,
+    clearAlertAction: clearAlert,
+  });
 
   const dispatch = useDispatch();
   const [values, setFormValues] = useState({ email: "" });
@@ -55,17 +63,6 @@ const ForgotPassword = () => {
 
     dispatch(forgotPassword({ userInfo }));
   };
-
-  //handle alert toast close
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   return (
     <div>
@@ -155,12 +152,6 @@ const ForgotPassword = () => {
           </form>
         </div>
       </main>
-      <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

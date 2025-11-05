@@ -6,10 +6,11 @@ import {
   clearAlert,
 } from "../../features/realEstateTenant/realEstateTenantSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoading, ConfirmModal, AlertToast } from "../../components";
+import { PageLoading, ConfirmModal } from "../../components";
 import { Button, CircularProgress, TextField } from "@mui/material";
 import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import useToast from "../../hooks/useToast";
 
 const SendComplaint = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,13 @@ const SendComplaint = () => {
   } = useSelector((state) => state.realEstateTenant);
 
   const { user } = useSelector((state) => state.auth);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
 
   useEffect(() => {
     dispatch(getSingleRealEstate({ slug }));
@@ -203,12 +211,6 @@ const SendComplaint = () => {
           </Button>
         </div>
       </ConfirmModal>
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

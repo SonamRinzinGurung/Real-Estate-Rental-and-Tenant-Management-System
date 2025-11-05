@@ -10,7 +10,6 @@ import {
   RealEstateDetailCard,
   PageLoading,
   Footer,
-  AlertToast,
   ConfirmModal,
 } from "../../components";
 import { format } from "../../utils/valueFormatter";
@@ -29,6 +28,7 @@ import ExploreRoundedIcon from "@mui/icons-material/ExploreRounded";
 import HorizontalSplitRoundedIcon from "@mui/icons-material/HorizontalSplitRounded";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import config from "../../config/config";
+import useToast from "../../hooks/useToast";
 
 const RealEstateDetail = () => {
   const {
@@ -47,19 +47,16 @@ const RealEstateDetail = () => {
 
   const { slug } = useParams();
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertFunc: clearAlert,
+  });
+
   useEffect(() => {
     dispatch(getSingleRealEstate({ slug }));
   }, [slug, dispatch]);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal
   const [open, setOpen] = useState(false);
@@ -278,12 +275,6 @@ const RealEstateDetail = () => {
             </Button>
           </div>
         </ConfirmModal>
-        <AlertToast
-          alertFlag={alertFlag}
-          alertMsg={alertMsg}
-          alertType={alertType}
-          handleClose={handleAlertClose}
-        />
       </main>
       <Footer />
     </>

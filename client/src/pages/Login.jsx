@@ -3,7 +3,6 @@ import {
   Logo,
   FormPasswordField,
   FormTextField,
-  AlertToast,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,6 +15,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import loginImg from "../assets/images/loginImg.svg";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import useToast from "../hooks/useToast";
 
 const Login = () => {
   const {
@@ -33,6 +33,13 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const [values, setFormValues] = useState({ email: "", password: "" });
+
+  useToast({
+    alertFlag: errorFlag,
+    alertType,
+    message: errorMsg,
+    clearAlertAction: clearAlert,
+  });
 
   useEffect(() => {
     if (user) {
@@ -63,16 +70,6 @@ const Login = () => {
       dispatch(loginTenant({ userInfo }));
     }
   };
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   const handleChange = useCallback(
     (e) => {
@@ -194,12 +191,6 @@ const Login = () => {
           </div>
         </div>
       </main>
-      <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

@@ -23,6 +23,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.5.0",
     "react-simple-image-viewer": "^1.2.2",
+    "react-toastify": "^11.0.5",
     "socket.io-client": "^4.6.2",
     "vite": "^5.2.11",
     "web-vitals": "^2.1.4"

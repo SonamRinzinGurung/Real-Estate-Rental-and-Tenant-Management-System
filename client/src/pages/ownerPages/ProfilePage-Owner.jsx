@@ -6,28 +6,26 @@ import {
   updateProfile,
 } from "../../features/ownerUser/ownerUserSlice";
 import {
-  AlertToast,
   PageLoading,
   ProfilePageComponent
 } from "../../components";
+import useToast from "../../hooks/useToast";
+
 const ProfilePageOwner = () => {
   const dispatch = useDispatch();
   const { user, isLoading, alertFlag, alertType, alertMsg, isProcessing } =
     useSelector((store) => store.ownerUser);
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   useEffect(() => {
     dispatch(getProfileDetails());
   }, [dispatch]);
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,12 +47,6 @@ const ProfilePageOwner = () => {
         user={user}
         handleSubmit={handleSubmit}
         isProcessing={isProcessing}
-      />
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleClose}
       />
     </>
   );

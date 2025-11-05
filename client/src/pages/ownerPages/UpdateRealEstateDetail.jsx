@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { AlertToast, PageLoading, UpdatePropertyForm } from "../../components";
+import { useEffect } from "react";
+import { PageLoading, UpdatePropertyForm } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
 import postRealEstateImg from "../../assets/images/postRealEstateImg.svg";
 import postRealEstateImg2 from "../../assets/images/postRealEstateImg2.svg";
 import postRealEstateImg3 from "../../assets/images/postRealEstateImg3.svg";
+import useToast from "../../hooks/useToast";
 
 const UpdateRealEstateDetail = () => {
   const {
@@ -27,6 +28,13 @@ const UpdateRealEstateDetail = () => {
 
   const { slug } = useParams();
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   useEffect(() => {
     dispatch(getRealEstateDetail({ slug }));
   }, [slug, dispatch]);
@@ -36,6 +44,7 @@ const UpdateRealEstateDetail = () => {
     if (postSuccess) {
       const timer = setTimeout(() => {
         navigate(`/owner/real-estate/${realEstate?.slug}`);
+        dispatch(clearAlert());
       }, 1500);
       return () => clearTimeout(timer);
     }
@@ -49,16 +58,6 @@ const UpdateRealEstateDetail = () => {
     const formValues = Object.fromEntries(formData.entries());
     dispatch(updateRealEstateDetail({ slug, formValues }));
   };
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   if (isLoading) return <PageLoading />;
 
@@ -98,13 +97,6 @@ const UpdateRealEstateDetail = () => {
           </div>
         </div>
       </main>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

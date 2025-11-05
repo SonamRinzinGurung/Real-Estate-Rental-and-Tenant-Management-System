@@ -4,7 +4,6 @@ import {
   FormTextField,
   FormPasswordField,
   FormSelectField,
-  AlertToast,
   DatePicker,
   CountrySelectField,
 } from "../components";
@@ -21,6 +20,7 @@ import registerImg from "../assets/images/registerImg.svg";
 import { Button, CircularProgress } from "@mui/material";
 import moment from "moment";
 import { ageCalculator } from "../utils/valueFormatter";
+import useToast from "../hooks/useToast";
 
 const Register = () => {
   const { success, userType, errorFlag, errorMsg, isLoading, alertType } =
@@ -28,6 +28,13 @@ const Register = () => {
   const navigate = useNavigate();
   const param = useParams();
   const dispatch = useDispatch();
+
+  useToast({
+    alertFlag: errorFlag,
+    alertType,
+    message: errorMsg,
+    clearAlertAction: clearAlert,
+  });
 
   useEffect(() => {
     if (success) {
@@ -93,16 +100,6 @@ const Register = () => {
       dispatch(registerTenant({ formData }));
     }
   };
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   return (
     <div>
@@ -264,12 +261,6 @@ const Register = () => {
           </div>
         </div>
       </main>
-      <AlertToast
-        alertFlag={errorFlag}
-        alertMsg={errorMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

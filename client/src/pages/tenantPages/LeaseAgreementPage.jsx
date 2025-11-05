@@ -6,7 +6,7 @@ import {
   approveLease,
 } from "../../features/tenantUser/tenantUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoading, AlertToast, ConfirmModal } from "../../components";
+import { PageLoading, ConfirmModal } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
@@ -16,6 +16,7 @@ import { Button, CircularProgress } from "@mui/material";
 import leaseApprovedImg from "../../assets/images/leaseApproved.svg";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
+import useToast from "../../hooks/useToast";
 
 const LeaseAgreementPage = () => {
   const { realEstateId } = useParams();
@@ -35,20 +36,17 @@ const LeaseAgreementPage = () => {
     alertMsg,
   } = useSelector((state) => state.tenantUser);
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   const currentCountry = countries.find(
     (country) => country.label === leaseDetail?.realEstate?.address?.country
   );
   const format = createNumberFormatter(currentCountry?.code);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal
   const [open, setOpen] = useState(false);
@@ -69,16 +67,6 @@ const LeaseAgreementPage = () => {
     dispatch(approveLease({ leaseId: leaseDetail._id, digitalSignature, leaseSignTime }));
     handleModalClose();
   }, [dispatch, leaseDetail, handleModalClose, checked, digitalSignature]);
-
-  // calculate the total rent amount according to payment plan
-  const calculateTotalRent = useCallback(() => {
-    const { paymentPlan, rentAmount } = leaseDetail;
-    if (paymentPlan === "Monthly") return rentAmount;
-    if (paymentPlan === "Every 2 Months") return rentAmount * 2;
-    if (paymentPlan === "Every 3 Months") return rentAmount * 3;
-    if (paymentPlan === "Every 6 Months") return rentAmount * 6;
-    if (paymentPlan === "Every 12 Months") return rentAmount * 12;
-  }, [leaseDetail]);
 
   if (isLoading) return <PageLoading />;
 
@@ -153,7 +141,7 @@ const LeaseAgreementPage = () => {
             <div>
               <h5 className="font-robotoNormal">
                 <span className="font-medium">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
-                {format(leaseDetail?.rentAmount)} per month
+                {format(leaseDetail?.realEstate?.price)} per month
               </h5>
             </div>
           </div>
@@ -183,9 +171,9 @@ const LeaseAgreementPage = () => {
             <h5>1. Payment of Rent</h5>
             <p>
               Tenant shall pay rent in the amount of{" "}
-              <strong>{countryToCurrency[currentCountry.code]} {format(leaseDetail?.rentAmount)}</strong> per
+              <strong>{countryToCurrency[currentCountry.code]} {format(leaseDetail?.realEstate?.price)}</strong> per
               month. Total Rent amount of{" "}
-              <strong>{countryToCurrency[currentCountry.code]} {format(calculateTotalRent())}</strong> shall be due
+              <strong>{countryToCurrency[currentCountry.code]} {format(leaseDetail?.rentAmount)}</strong> shall be due
               and payable <strong>{leaseDetail?.paymentPlan}</strong> on the
               first day of the calendar month and shall be considered late if
               not received by the Landlord on or before the 7th day of the
@@ -339,13 +327,6 @@ const LeaseAgreementPage = () => {
           </div>
         </ConfirmModal>
       </div>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

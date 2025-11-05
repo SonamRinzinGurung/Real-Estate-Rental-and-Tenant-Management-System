@@ -6,29 +6,26 @@ import {
   updateTenantProfile,
 } from "../../features/tenantUser/tenantUserSlice";
 import {
-  AlertToast,
   PageLoading,
   ProfilePageComponent,
 } from "../../components";
+import useToast from "../../hooks/useToast";
 
 const ProfilePageTenant = () => {
   const dispatch = useDispatch();
   const { user, isLoading, alertFlag, alertType, alertMsg, isProcessing } =
     useSelector((store) => store.tenantUser);
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   useEffect(() => {
     dispatch(getProfileDetails());
   }, [dispatch]);
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,12 +45,6 @@ const ProfilePageTenant = () => {
         user={user}
         handleSubmit={handleSubmit}
         isProcessing={isProcessing}
-      />
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleClose}
       />
     </>
   );

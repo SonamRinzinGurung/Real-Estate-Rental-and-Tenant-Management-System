@@ -11,7 +11,6 @@ import {
   Footer,
   ImageCarousal,
   ConfirmModal,
-  AlertToast,
 } from "../../components";
 import { dateFormatter, createNumberFormatter } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
@@ -25,6 +24,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import countryToCurrency from "country-to-currency";
 import { countries } from "../../utils/countryList";
+import useToast from "../../hooks/useToast";
 
 const PersonalRealEstateDetail = () => {
   const { slug } = useParams();
@@ -45,6 +45,13 @@ const PersonalRealEstateDetail = () => {
     postSuccess,
   } = useSelector((store) => store.realEstateOwner);
 
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
+
   const currentCountry = countries.find(
     (country) => country.label === realEstate?.address?.country
   );
@@ -59,17 +66,6 @@ const PersonalRealEstateDetail = () => {
       return () => clearTimeout(timer);
     }
   }, [postSuccess, navigate, slug]);
-
-  //close the alert toast
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //handel modal open and close state
   const [open, setOpen] = useState(false);
@@ -255,12 +251,6 @@ const PersonalRealEstateDetail = () => {
             </div>
           </ConfirmModal>
         </div>
-        <AlertToast
-          alertFlag={alertFlag}
-          alertMsg={alertMsg}
-          alertType={alertType}
-          handleClose={handleAlertClose}
-        />
       </main>
       <Footer />
     </>

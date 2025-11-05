@@ -5,7 +5,7 @@ import {
   clearAlert,
 } from "../../features/rentDetailOwner/rentDetailOwnerSlice";
 import { getOwnerAllLeases } from "../../features/ownerUser/ownerUserSlice";
-import { AlertToast, ConfirmModal, PageLoading } from "../../components";
+import { ConfirmModal, PageLoading } from "../../components";
 import { Button, CircularProgress, TextField, MenuItem } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
@@ -13,6 +13,7 @@ import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import createRentImage from "../../assets/images/createRentImage.svg";
 import { calculateAddedDate } from "../../utils/valueFormatter";
+import useToast from "../../hooks/useToast";
 
 const CreateRentDetail = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,13 @@ const CreateRentDetail = () => {
   );
 
   const { allLeases, isLoading } = useSelector((state) => state.ownerUser);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
 
   // get all real estate
   useEffect(() => {
@@ -86,16 +94,6 @@ const CreateRentDetail = () => {
       return () => clearTimeout(timer);
     }
   }, [success, navigate]);
-
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   //modal
   const [open, setOpen] = useState(false);
@@ -262,13 +260,6 @@ const CreateRentDetail = () => {
       <div className="mt-10 mb-6 md:mb-0 mx-14 self-center">
         <img src={createRentImage} alt="" />
       </div>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleAlertClose}
-      />
     </main>
   );
 };

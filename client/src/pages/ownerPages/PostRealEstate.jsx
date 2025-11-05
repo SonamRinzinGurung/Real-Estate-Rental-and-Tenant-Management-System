@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { FormTextField, FormSelectField, AlertToast, CountrySelectField } from "../../components";
+import { FormTextField, FormSelectField, CountrySelectField } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -22,6 +22,7 @@ import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import countryToCurrency from "country-to-currency";
+import useToast from "../../hooks/useToast";
 
 const PostRealEstate = () => {
   const { alertFlag, alertMsg, alertType, isLoading, postSuccess, realEstate } =
@@ -45,6 +46,13 @@ const PostRealEstate = () => {
   const [values, setFormValues] = useState(initialFormValues);
 
   const [images, setImages] = useState(null);
+
+  useToast({
+    alertFlag,
+    alertType,
+    message: alertMsg,
+    clearAlertAction: clearAlert,
+  });
 
   const handleImagesChange = (e) => {
     const arr = Array.from(e.target.files);
@@ -79,16 +87,6 @@ const PostRealEstate = () => {
     const formData = new FormData(form);
     dispatch(postRealEstate({ formData }));
   };
-
-  const handleClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
 
   const navigate = useNavigate();
 
@@ -331,13 +329,6 @@ const PostRealEstate = () => {
           </div>
         </div>
       </main>
-
-      <AlertToast
-        alertFlag={alertFlag}
-        alertMsg={alertMsg}
-        alertType={alertType}
-        handleClose={handleClose}
-      />
     </div>
   );
 };

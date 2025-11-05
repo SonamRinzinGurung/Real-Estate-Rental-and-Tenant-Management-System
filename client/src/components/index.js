@@ -6,7 +6,6 @@ import FormTextField from "./FormTextField";
 import FormSelectField from "./FormSelectField";
 import { NavBarLinksOwner, NavBarLinksTenant } from "./NavBarLinks";
 import Header from "./Header";
-import AlertToast from "./AlertToast";
 import RealEstateCard from "./RealEstateCard";
 import RealEstateDetailCard from "./RealEstateDetailCard";
 import ImageCarousal from "./ImageCarousal";
@@ -37,7 +36,6 @@ export {
   NavBarLinksOwner,
   NavBarLinksTenant,
   Header,
-  AlertToast,
   RealEstateCard,
   RealEstateDetailCard,
   ImageCarousal,
