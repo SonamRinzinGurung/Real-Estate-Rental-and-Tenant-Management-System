@@ -10,7 +10,7 @@ import { sendEmail } from "../utils/emailSender.js";
 
 /**
  * @description Create Lease
- * @route PATCH /api/owner/lease
+ * @route POST /api/owner/lease
  * @returns {object} Lease object
  */
 const createLease = async (req, res) => {
@@ -42,20 +42,20 @@ const createLease = async (req, res) => {
     throw new NotFoundError("Tenant user not found");
   }
 
-  const realEstateUser = await RealEstate.findById(realEstate);
-  if (!realEstateUser) {
+  const leaseProperty = await RealEstate.findById(realEstate);
+  if (!leaseProperty) {
     throw new NotFoundError("Real estate not found");
   }
 
   const lease = await Lease.create(req.body);
   const to = tenantUser.email;
   const from = ownerUser.email;
-  const subject = `Lease created for rental of property titled ${realEstateUser.title}`;
+  const subject = `Lease created for rental of property titled ${leaseProperty.title}`;
   const body = `
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
-    <p>I hope this email finds you well. I am writing to inform about that the lease for rental of property titled <strong>${realEstateUser.title}</strong> located at ${realEstateUser.address.location}, ${realEstateUser.address.streetName} has been created successfully.</p>
-    <p>Please follow the link to view and approve this lease. Please carefully review the rental lease and let us know if you have any questions or concerns.</p>
-    <a href="${process.env.CLIENT_URL}/#/tenant/lease-agreement/${lease._id}"><strong>View Lease</strong></a><br>
+    <p>I hope this email finds you well. I am writing to inform you that the lease for rental of property titled <strong>${leaseProperty.title}</strong> located at ${leaseProperty.address.streetName}, ${leaseProperty.address.city}, ${leaseProperty.address.state}, ${leaseProperty.address.country} has been created successfully.</p>
+    <p>Please follow the link to view and provide additional information to complete the lease. Please carefully review the rental lease and let us know if you have any questions or concerns.</p>
+    <a href="${process.env.CLIENT_URL}/#/tenant/lease-agreement/${leaseProperty._id}"><strong>View Lease</strong></a><br>
     <p>Please note that the rental lease is legally binding, and both parties are required to adhere to its terms and conditions.</p>
     <p>If you have any questions or concerns about the rental lease or the rental process, please do not hesitate to contact me.</p>
    <br><br>
@@ -65,41 +65,11 @@ const createLease = async (req, res) => {
   //send email to tenant user to approve the lease
   await sendEmail(to, from, subject, body);
 
-  //change the status of the real estate to false
-  realEstateUser.status = false;
-  await realEstateUser.save();
+  //change the status of the real estate to false to indicate it is rented
+  leaseProperty.status = false;
+  await leaseProperty.save();
 
   res.json({ lease });
-};
-
-/**
- * @description Get lease details for tenant user
- * @route GET /api/lease/tenantView/:leaseId
- * @returns {object} 200 - An object containing the lease details
- */
-const getLeaseDetailTenantView = async (req, res) => {
-  const leaseDetail = await Lease.findOne({
-    _id: req.params.leaseId,
-    tenant: req.user.userId,
-  })
-    .populate({
-      path: "realEstate",
-      select: "title address category slug",
-    })
-    .populate({
-      path: "owner",
-      select: "slug firstName lastName email address phoneNumber",
-    })
-    .populate({
-      path: "tenant",
-      select: "firstName lastName",
-    });
-
-  if (!leaseDetail) {
-    throw new NotFoundError("Lease not found");
-  }
-
-  res.json({ leaseDetail });
 };
 
 /**
@@ -417,7 +387,6 @@ const getTenantLeaseDetail = async (req, res) => {
   const leaseDetail = await Lease.findOne({
     realEstate: req.params.realEstateId,
     tenant: req.user.userId,
-    status: { $in: ["Active", "Terminated-pending", "Terminated-approved"] }
   })
     .populate({
       path: "realEstate",
@@ -441,7 +410,6 @@ const getTenantLeaseDetail = async (req, res) => {
 
 export {
   createLease,
-  getLeaseDetailTenantView,
   approveLease,
   getLeaseDetailOwnerView,
   deleteLease,

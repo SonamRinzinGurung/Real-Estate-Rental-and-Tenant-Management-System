@@ -66,20 +66,6 @@ export const getAllContacts = createAsyncThunk(
   }
 );
 
-export const getLeaseWithID = createAsyncThunk(
-  "getLeaseWithID",
-  async ({ leaseId }, thunkAPI) => {
-    try {
-      const { data } = await axiosFetch.get(
-        `/lease/tenantView/${leaseId}`
-      );
-      return await data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
-  }
-);
-
 export const approveLease = createAsyncThunk(
   "approveLease",
   async ({ leaseId, digitalSignature, leaseSignTime }, thunkAPI) => {
@@ -243,20 +229,6 @@ const tenantUserSlice = createSlice({
         state.alertFlag = false;
       })
       .addCase(getAllContacts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.alertFlag = true;
-        state.alertMsg = action.payload;
-        state.alertType = "error";
-      })
-      .addCase(getLeaseWithID.pending, (state, action) => {
-        state.isLoading = true;
-      })
-      .addCase(getLeaseWithID.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.leaseDetail = action.payload.leaseDetail;
-        state.alertFlag = false;
-      })
-      .addCase(getLeaseWithID.rejected, (state, action) => {
         state.isLoading = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

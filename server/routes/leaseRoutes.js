@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import {
   createLease,
-  getLeaseDetailTenantView,
   approveLease,
   getLeaseDetailOwnerView,
   deleteLease,
@@ -21,16 +20,6 @@ import {
  * @route POST /api/lease
  */
 router.post("/", authorizeOwnerUser, createLease);
-
-/**
- * @description Get the lease details for the tenant user (used only for lease agreement view)
- * @route GET /api/lease/tenantView/:leaseId
- */
-router.get(
-  "/tenantView/:leaseId",
-  authorizeTenantUser,
-  getLeaseDetailTenantView
-);
 
 /**
  * @description Approve the lease

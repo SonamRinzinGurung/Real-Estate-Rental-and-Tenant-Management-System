@@ -132,7 +132,7 @@ function App() {
                         <Route path="profile" element={<ProfilePageTenant />} />
                         <Route path="owner-user/:slug" element={<UserDetailPage userType={"tenant"} />} />
                         <Route
-                            path="lease-agreement/:leaseId"
+                            path="lease-agreement/:realEstateId"
                             element={<LeaseAgreementPage />}
                         />
                         <Route

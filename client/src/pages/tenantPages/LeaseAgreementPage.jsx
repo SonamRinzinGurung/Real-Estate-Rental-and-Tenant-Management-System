@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
-  getLeaseWithID,
+  getLeaseWithRealEstateID,
   clearAlert,
   approveLease,
 } from "../../features/tenantUser/tenantUserSlice";
@@ -18,13 +18,13 @@ import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 
 const LeaseAgreementPage = () => {
-  const { leaseId } = useParams();
+  const { realEstateId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getLeaseWithID({ leaseId }));
-  }, [dispatch, leaseId]);
+    dispatch(getLeaseWithRealEstateID({ realEstateId }));
+  }, [dispatch, realEstateId]);
 
   const {
     leaseDetail,
@@ -66,9 +66,9 @@ const LeaseAgreementPage = () => {
       return;
     }
     const leaseSignTime = new Date().toISOString();
-    dispatch(approveLease({ leaseId, digitalSignature, leaseSignTime }));
+    dispatch(approveLease({ leaseId: leaseDetail._id, digitalSignature, leaseSignTime }));
     handleModalClose();
-  }, [dispatch, leaseId, handleModalClose, checked, digitalSignature]);
+  }, [dispatch, leaseDetail, handleModalClose, checked, digitalSignature]);
 
   // calculate the total rent amount according to payment plan
   const calculateTotalRent = useCallback(() => {

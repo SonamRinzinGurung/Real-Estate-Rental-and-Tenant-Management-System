@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  getAllContacts,
   createLease,
   clearAlert,
   getTenantUserDetails
@@ -55,7 +54,10 @@ const CreateLeasePage = () => {
     }));
   }, [realEstate]);
 
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState({
+    startDate: null,
+    endDate: null,
+  });
   const [email, setEmail] = useState("");
 
   const handleFindTenant = useCallback(() => {
@@ -109,12 +111,19 @@ const CreateLeasePage = () => {
   const handleConfirmation = (e) => {
     e.preventDefault();
     const { tenant, realEstate, rentAmount, paymentPlan } = leaseForm;
+
+    if (!tenant) {
+      alert("Please select a tenant");
+      return;
+    }
+
     setFormData({
       tenant: tenant._id,
       realEstate,
-      rentAmount,
+      rentAmount: calculateTotalRent(paymentPlan, rentAmount),
       paymentPlan,
-      startDate: moment(date).format("YYYY-MM").concat("-01"),
+      startDate: moment(date.startDate).startOf("month").format("YYYY-MM-DD"),
+      endDate: moment(date.endDate).endOf("month").format("YYYY-MM-DD"),
     });
 
     handleModalOpen();
@@ -144,6 +153,7 @@ const CreateLeasePage = () => {
                 placeholder="Enter Tenant Email"
                 name="email"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
                 sx={{ width: "300px" }}
                 color="tertiary"
@@ -177,22 +187,22 @@ const CreateLeasePage = () => {
 
               <DatePicker
                 label="Lease Start Date"
-                value={date}
+                value={date.startDate}
                 views={["year", "month"]}
                 handleChange={useCallback(
                   (date) => {
-                    setDate(date);
+                    setDate((prev) => ({ ...prev, startDate: date }));
                   },
                   [setDate]
                 )}
               />
               <DatePicker
                 label="Lease End Date"
-                value={date}
+                value={date.endDate}
                 views={["year", "month"]}
                 handleChange={useCallback(
                   (date) => {
-                    setDate(date);
+                    setDate((prev) => ({ ...prev, endDate: date }));
                   },
                   [setDate]
                 )}

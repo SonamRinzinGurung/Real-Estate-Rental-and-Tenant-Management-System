@@ -22,6 +22,11 @@ const LeaseSchema = new mongoose.Schema(
       required: [true, "Please provide a start date"],
     },
 
+    endDate: {
+      type: String,
+      required: [true, "Please provide an end date"],
+    },
+
     rentAmount: {
       type: Number,
       required: [true, "Please provide a rent amount"],
@@ -41,6 +46,41 @@ const LeaseSchema = new mongoose.Schema(
       required: [true, "Please provide a plan"],
       default: "Monthly",
     },
+
+    tenantInformation: {
+
+      fullName: {
+        type: String,
+        required: false,
+      },
+      phoneNumber: {
+        type: String,
+        required: false,
+      },
+      email: {
+        type: String,
+        required: false,
+      },
+      emergencyContact: {
+        name: {
+          type: String,
+          required: false,
+        },
+        phoneNumber: {
+          type: String,
+          required: false,
+        },
+      },
+      photoId: {
+        type: String,
+        required: false,
+      },
+      proofOfIncome: {
+        type: String,
+        required: false,
+      },
+    },
+
     status: {
       type: String,
       enum: {
@@ -60,5 +100,21 @@ const LeaseSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Method to check if tenant information is complete
+LeaseSchema.methods.isTenantInfoComplete = function () {
+  const tenantInfo = this.tenantInformation || {};
+  const emergencyContact = tenantInfo.emergencyContact || {};
+
+  return !!(
+    tenantInfo.fullName &&
+    tenantInfo.phoneNumber &&
+    tenantInfo.email &&
+    tenantInfo.photoId &&
+    emergencyContact.name &&
+    emergencyContact.phoneNumber &&
+    tenantInfo.proofOfIncome
+  )
+}
 
 export default mongoose.model("Lease", LeaseSchema);
