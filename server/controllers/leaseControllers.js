@@ -55,7 +55,7 @@ const createLease = async (req, res) => {
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
     <p>I hope this email finds you well. I am writing to inform you that the lease for rental of property titled <strong>${leaseProperty.title}</strong> located at ${leaseProperty.address.streetName}, ${leaseProperty.address.city}, ${leaseProperty.address.state}, ${leaseProperty.address.country} has been created successfully.</p>
     <p>Please follow the link to view and provide additional information to complete the lease. Please carefully review the rental lease and let us know if you have any questions or concerns.</p>
-    <a href="${process.env.CLIENT_URL}/#/tenant/lease-agreement/${leaseProperty._id}"><strong>View Lease</strong></a><br>
+    <a href="${process.env.CLIENT_URL}/#/tenant/lease-form/${leaseProperty._id}"><strong>Complete Lease</strong></a><br>
     <p>Please note that the rental lease is legally binding, and both parties are required to adhere to its terms and conditions.</p>
     <p>If you have any questions or concerns about the rental lease or the rental process, please do not hesitate to contact me.</p>
    <br><br>

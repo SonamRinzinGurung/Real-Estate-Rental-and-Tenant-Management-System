@@ -66,7 +66,7 @@ const UserProfileComponent = ({
             <FormTextField
               label="Phone Number"
               name="phoneNumber"
-              type={"number"}
+              type={"text"}
               value={values?.phoneNumber}
               handleChange={handleChange}
             />

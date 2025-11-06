@@ -34,6 +34,7 @@ import VerifyEmailPage from "./VerifyEmailPage";
 import VerificationMessagePage from "./VerificationMessagePage";
 import OwnerChat from "./ownerPages/OwnerChat";
 import TenantChat from "./tenantPages/TenantChat";
+import LeaseTenantInfoForm from "./tenantPages/LeaseTenantInfoForm";
 export {
   Login,
   Register,
@@ -71,4 +72,5 @@ export {
   VerificationMessagePage,
   OwnerChat,
   TenantChat,
+  LeaseTenantInfoForm,
 };

@@ -36,12 +36,9 @@ import {
     VerificationMessagePage,
     OwnerChat,
     TenantChat,
+    LeaseTenantInfoForm,
 } from "./pages";
-import {
-    SharedLayout,
-    ProtectedRoutes,
-    ScrollToTop,
-} from "./components";
+import { SharedLayout, ProtectedRoutes, ScrollToTop } from "./components";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { SocketProvider } from "./utils/SocketContext";
@@ -73,9 +70,9 @@ function App() {
                         path="/owner"
                         element={
                             <SocketProvider>
-                            <ProtectedRoutes source={"owner"}>
-                                <SharedLayout />
-                            </ProtectedRoutes>
+                                <ProtectedRoutes source={"owner"}>
+                                    <SharedLayout />
+                                </ProtectedRoutes>
                             </SocketProvider>
                         }
                     >
@@ -94,90 +91,103 @@ function App() {
                             path="tenant-user/:slug"
                             element={<UserDetailPage userType={"owner"} />}
                         />
-                        <Route path="contacts/all" element={<AllContacts userType={"owner"} />} />
-                        <Route path="lease/create/:slug" element={<CreateLeasePage />} />
-                        <Route
-                            path="lease/:realEstateId/:slug"
-                            element={<LeaseDetailPage />}
-                        />
-                        <Route path="rentDetail" element={<AllRentDetailPage />} />
-                        <Route path="rentDetail/create" element={<CreateRentDetail />} />
-                        <Route
-                            path="rentDetail/:rentDetailId/:slug"
-                            element={<SingleRentDetail />}
-                        />
-                        <Route
-                            path="rentDetail/send-payment-email/:rentDetailId"
-                            element={<SendPaymentEmailPage />}
-                        />
-                        <Route
-                            path="rentDetail/paymentHistory/:rentDetailId/create"
-                            element={<CreatePaymentHistory />}
-                        />
-                        <Route path="chat" element={<OwnerChat />} />
-                    </Route>
-                    <Route
-                        path="/tenant"
-                        element={
-                            <SocketProvider>
-                            <ProtectedRoutes source={"tenant"}>
-                                <SharedLayout />
-                            </ProtectedRoutes>
-                            </SocketProvider>
-                        }
-                    >
-                        <Route index element={<HomepageTenant />} />
-                        <Route path="real-estate/:slug" element={<RealEstateDetail />} />
-                        <Route path="real-estate/saved/all" element={<SavedRealEstate />} />
-                        <Route path="profile" element={<ProfilePageTenant />} />
-                        <Route path="owner-user/:slug" element={<UserDetailPage userType={"tenant"} />} />
-                        <Route
-                            path="lease-agreement/:realEstateId"
-                            element={<LeaseAgreementPage />}
-                        />
-                        <Route
-                            path="rental-properties/all"
-                            element={<AllRentalProperties />}
-                        />
-                        <Route
-                            path="rental-properties/:slug"
-                            element={<RentalPropertyDetail />}
-                        />
-                        <Route
-                            path="lease/:realEstateId/:slug"
-                            element={<LeaseDetailPageTenant />}
-                        />
-                        <Route
-                            path="rentDetail/:realEstateId/:slug"
-                            element={<RentDetailTenantPage />}
-                        />
-                        <Route path="send-complaint/:slug" element={<SendComplaint />} />
-                        <Route path="contacts/all" element={<AllContacts userType={"tenant"} />} />
-                        <Route path="chat" element={<TenantChat />} />
-                    </Route>
-                    <Route path="/login/:role" element={<Login />} />
-                    <Route path="/register/:role" element={<Register />} />
-                    <Route path="/forgot-password/:role" element={<ForgotPassword />} />
-                    <Route
-                        path="/reset-password/:role/:token"
-                        element={<ResetPassword />}
-                    />
-                    <Route
-                        path="/account-created/:role"
-                        element={<VerificationMessagePage />}
-                    />
-                    <Route
-                        path="/verify-account/:role/:token"
-                        element={<VerifyEmailPage />}
-                    />
-                    <Route index element={<Landing />} />
-                    <Route path="*" element={<NotFound />} />
-                    <Route path="about" element={<AboutPage />} />
-                    <Route path="privacy" element={<PrivacyPoliciesPage />} />
-                </Routes>
-            </Router>
-        </ThemeProvider>
-    );
+                      <Route
+                          path="contacts/all"
+                          element={<AllContacts userType={"owner"} />}
+                      />
+                      <Route path="lease/create/:slug" element={<CreateLeasePage />} />
+                      <Route
+                          path="lease/:realEstateId/:slug"
+                          element={<LeaseDetailPage />}
+                      />
+                      <Route path="rentDetail" element={<AllRentDetailPage />} />
+                      <Route path="rentDetail/create" element={<CreateRentDetail />} />
+                      <Route
+                          path="rentDetail/:rentDetailId/:slug"
+                          element={<SingleRentDetail />}
+                      />
+                      <Route
+                          path="rentDetail/send-payment-email/:rentDetailId"
+                          element={<SendPaymentEmailPage />}
+                      />
+                      <Route
+                          path="rentDetail/paymentHistory/:rentDetailId/create"
+                          element={<CreatePaymentHistory />}
+                      />
+                      <Route path="chat" element={<OwnerChat />} />
+                  </Route>
+                  <Route
+                      path="/tenant"
+                      element={
+                          <SocketProvider>
+                              <ProtectedRoutes source={"tenant"}>
+                                  <SharedLayout />
+                              </ProtectedRoutes>
+                          </SocketProvider>
+                      }
+                  >
+                      <Route index element={<HomepageTenant />} />
+                      <Route path="real-estate/:slug" element={<RealEstateDetail />} />
+                      <Route path="real-estate/saved/all" element={<SavedRealEstate />} />
+                      <Route path="profile" element={<ProfilePageTenant />} />
+                      <Route
+                          path="owner-user/:slug"
+                          element={<UserDetailPage userType={"tenant"} />}
+                      />
+                      <Route
+                          path="lease-form/:realEstateId"
+                          element={<LeaseTenantInfoForm />}
+                      />
+                      <Route
+                          path="lease-agreement/:realEstateId"
+                          element={<LeaseAgreementPage />}
+                      />
+                      <Route
+                          path="rental-properties/all"
+                          element={<AllRentalProperties />}
+                      />
+                      <Route
+                          path="rental-properties/:slug"
+                          element={<RentalPropertyDetail />}
+                      />
+                      <Route
+                          path="lease/:realEstateId/:slug"
+                          element={<LeaseDetailPageTenant />}
+                      />
+                      <Route
+                          path="rentDetail/:realEstateId/:slug"
+                          element={<RentDetailTenantPage />}
+                      />
+                      <Route path="send-complaint/:slug" element={<SendComplaint />} />
+                      <Route
+                          path="contacts/all"
+                          element={<AllContacts userType={"tenant"} />}
+                      />
+                      <Route path="chat" element={<TenantChat />} />
+                  </Route>
+                  <Route path="/login/:role" element={<Login />} />
+                  <Route path="/register/:role" element={<Register />} />
+                  <Route path="/forgot-password/:role" element={<ForgotPassword />} />
+                  <Route
+                      path="/reset-password/:role/:token"
+                      element={<ResetPassword />}
+                  />
+                  <Route
+                      path="/account-created/:role"
+                      element={<VerificationMessagePage />}
+                  />
+                  <Route
+                      path="/verify-account/:role/:token"
+                      element={<VerifyEmailPage />}
+                  />
+                  <Route index element={<Landing />} />
+                  <Route path="*" element={<NotFound />} />
+                  <Route path="about" element={<AboutPage />} />
+                  <Route path="privacy" element={<PrivacyPoliciesPage />} />
+              </Routes>
+          </Router>
+      </ThemeProvider>
+  );
 }
 
 export default App;

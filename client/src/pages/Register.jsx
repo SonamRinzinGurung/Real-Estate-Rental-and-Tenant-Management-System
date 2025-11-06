@@ -6,6 +6,7 @@ import {
   FormSelectField,
   DatePicker,
   CountrySelectField,
+  PhoneNumberField,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -163,12 +164,16 @@ const Register = () => {
                   handleChange={handleChange}
                 />
 
-                <FormTextField
-                  label="Phone Number"
-                  name="phoneNumber"
-                  type={"text"}
+                <PhoneNumberField
                   value={values.phoneNumber}
-                  handleChange={handleChange}
+                  handleChange={
+                    (fullPhone) => {
+                      setFormValues({
+                        ...values,
+                        phoneNumber: fullPhone,
+                      });
+                    }
+                  }
                 />
                 <DatePicker
                   value={date}

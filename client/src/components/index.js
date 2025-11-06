@@ -25,7 +25,7 @@ import ChatMessages from "./ChatMessagesComponent";
 import ChatInput from "./ChatInput";
 import CountrySelectField from "./CountrySelectField";
 import ProfilePageComponent from "./ProfilePageComponent";
-
+import PhoneNumberField from "./PhoneNumberField";
 export {
   SharedLayout,
   ProtectedRoutes,
@@ -54,5 +54,6 @@ export {
   ChatMessages,
   ChatInput,
   CountrySelectField,
-  ProfilePageComponent
+  ProfilePageComponent,
+  PhoneNumberField,
 };
