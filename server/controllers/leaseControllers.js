@@ -408,6 +408,40 @@ const getTenantLeaseDetail = async (req, res) => {
   res.json({ leaseDetail });
 };
 
+/**
+ * @description Update lease form details for the tenant user
+ * @route PATCH /api/lease/tenant/updateLeaseForm/:leaseId
+ * @returns {object} 200 - An object containing the updated lease details
+ */
+const leaseUpdateForm = async (req, res) => {
+  const { leaseId } = req.params;
+  const updateData = req.body;
+  console.log("body", updateData);
+  if (req.files) {
+    console.log(req.files)
+  }
+
+  const updatedLease = await Lease.findByIdAndUpdate(leaseId, updateData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedLease) {
+    throw new NotFoundError("Lease not found");
+  }
+
+  const isTenantInfoComplete = updatedLease.isTenantInfoComplete();
+
+  if (isTenantInfoComplete) {
+    updatedLease.status = "Active";
+    await updatedLease.save();
+  } else {
+    throw new BadRequestError("Incomplete tenant information to activate lease");
+  }
+
+  res.json({ updatedLease });
+};
+
 export {
   createLease,
   approveLease,
@@ -418,4 +452,5 @@ export {
   getTenantLeaseDetail,
   terminateLease,
   terminateLeaseApprove,
+  leaseUpdateForm,
 };

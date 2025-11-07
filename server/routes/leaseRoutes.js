@@ -9,12 +9,16 @@ import {
   getAllTenantRentalProperties,
   getTenantLeaseDetail,
   terminateLease,
-  terminateLeaseApprove
+  terminateLeaseApprove,
+  leaseUpdateForm,
 } from "../controllers/leaseControllers.js";
 import {
   authorizeOwnerUser,
   authorizeTenantUser,
 } from "../middleware/userAuthorization.js";
+import upload from "../middleware/multerImageMiddleware.js";
+
+
 /**
  * @description Create a lease
  * @route POST /api/lease
@@ -81,5 +85,11 @@ router.get(
   authorizeTenantUser,
   getTenantLeaseDetail
 );
+
+/**
+ * @description Update lease form details for the tenant user
+ * @route PATCH /api/lease/tenant/updateLeaseForm/:leaseId
+ */
+router.patch("/tenant/updateLeaseForm/:leaseId", authorizeTenantUser, upload.fields([{ name: "photoId", maxCount: 1 }]), leaseUpdateForm);
 
 export default router;

@@ -15,6 +15,7 @@ import { Button, CircularProgress, Box, TextField } from "@mui/material";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 import useToast from "../../hooks/useToast";
+import axiosFetch from "../../utils/axiosCreate";
 
 const LeaseTenantInfoForm = () => {
     const { realEstateId } = useParams();
@@ -45,6 +46,22 @@ const LeaseTenantInfoForm = () => {
         alertMsg,
     } = useSelector((state) => state.tenantUser);
 
+    // preview photoId
+    const [photoId, setPhotoId] = useState(null);
+    const handlePhotoIdChange = (e) => {
+        setPhotoId(URL.createObjectURL(e.target.files[0]));
+    };
+
+    const previewImage = () => {
+        if (photoId) {
+            return (
+                <div className="p-2">
+                    <img src={photoId} alt="photoIdPreview" className="h-24 md:h-28" />
+                </div>
+            );
+        }
+    };
+
     useToast({
         alertFlag,
         alertType,
@@ -59,10 +76,24 @@ const LeaseTenantInfoForm = () => {
         [values]
     );
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         console.log(values)
+        const form = document.getElementById("form");
+        const formData = new FormData(form);
+
+        // update formdata to use phonenumber from state
+        formData.set("phoneNumber", values.phoneNumber);
+        formData.set(
+            "emergencyContactPhoneNumber",
+            values.emergencyContact.phoneNumber
+        );
+
+        const payload = Object.fromEntries(formData.entries());
+        console.log(payload)
+        const { data } = await axiosFetch.patch(`/lease/tenant/updateLeaseForm/${leaseDetail._id}`, formData);
+        console.log(data);
     };
 
     const currentCountry = countries.find(
@@ -182,6 +213,7 @@ const LeaseTenantInfoForm = () => {
                         />
                         <PhoneNumberField
                             value={values.phoneNumber}
+                            name="phoneNumber"
                             handleChange={
                                 (fullPhone) => {
                                     setFormValues({
@@ -220,6 +252,7 @@ const LeaseTenantInfoForm = () => {
                                 />
                                 <PhoneNumberField
                                     value={values.emergencyContact.phoneNumber}
+                                    name="emergencyContactPhoneNumber"
                                     handleChange={
                                         (fullPhone) => {
                                             setFormValues({
@@ -233,6 +266,30 @@ const LeaseTenantInfoForm = () => {
                                     }
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center my-2">
+                        <label
+                            htmlFor="photoId"
+                            className="mb-2 cursor-pointer font-robotoNormal self-center"
+                        >
+                            Upload Photo ID
+                        </label>
+
+                        <input
+                            required
+                            name="photoId"
+                            className="font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
+                            type="file"
+                            id="photoId"
+                            onChange={handlePhotoIdChange}
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                            JPG, JPEG, PNG or GIF (MAX 3.5mb per)
+                        </p>
+                        <div className="self-center border mt-2">
+                            {previewImage()}
                         </div>
                     </div>
 
