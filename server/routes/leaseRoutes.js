@@ -90,6 +90,8 @@ router.get(
  * @description Update lease form details for the tenant user
  * @route PATCH /api/lease/tenant/updateLeaseForm/:leaseId
  */
-router.patch("/tenant/updateLeaseForm/:leaseId", authorizeTenantUser, upload.fields([{ name: "photoId", maxCount: 1 }]), leaseUpdateForm);
+router.patch("/tenant/updateLeaseForm/:leaseId", authorizeTenantUser, upload.fields([{ name: "photoId", maxCount: 1, }, {
+  name: "proofOfIncome", maxCount: 3
+}]), leaseUpdateForm);
 
 export default router;

@@ -26,6 +26,8 @@ import ChatInput from "./ChatInput";
 import CountrySelectField from "./CountrySelectField";
 import ProfilePageComponent from "./ProfilePageComponent";
 import PhoneNumberField from "./PhoneNumberField";
+import ImageDropZone from "./ImageDropZone";
+
 export {
   SharedLayout,
   ProtectedRoutes,
@@ -56,4 +58,5 @@ export {
   CountrySelectField,
   ProfilePageComponent,
   PhoneNumberField,
+  ImageDropZone,
 };

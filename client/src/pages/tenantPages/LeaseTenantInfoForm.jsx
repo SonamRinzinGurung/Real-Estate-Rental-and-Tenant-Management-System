@@ -6,12 +6,12 @@ import {
     approveLease,
 } from "../../features/tenantUser/tenantUserSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { PageLoading, ConfirmModal, FormTextField, PhoneNumberField } from "../../components";
+import { PageLoading, ConfirmModal, FormTextField, PhoneNumberField, ImageDropZone } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
-import { Button, CircularProgress, Box, TextField } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 import useToast from "../../hooks/useToast";
@@ -47,20 +47,8 @@ const LeaseTenantInfoForm = () => {
     } = useSelector((state) => state.tenantUser);
 
     // preview photoId
-    const [photoId, setPhotoId] = useState(null);
-    const handlePhotoIdChange = (e) => {
-        setPhotoId(URL.createObjectURL(e.target.files[0]));
-    };
-
-    const previewImage = () => {
-        if (photoId) {
-            return (
-                <div className="p-2">
-                    <img src={photoId} alt="photoIdPreview" className="h-24 md:h-28" />
-                </div>
-            );
-        }
-    };
+    const [photoId, setPhotoId] = useState([]);
+    const [proofOfIncome, setProofOfIncome] = useState([]);
 
     useToast({
         alertFlag,
@@ -90,6 +78,18 @@ const LeaseTenantInfoForm = () => {
             values.emergencyContact.phoneNumber
         );
 
+        if (photoId.length < 1) {
+            alert("Please upload your Photo ID.");
+            return;
+        }
+
+        if (proofOfIncome.length < 1) {
+            alert("Please upload your Proof of Income.");
+            return;
+        }
+
+        formData.append("photoId", photoId[0]);
+        proofOfIncome.forEach((file) => formData.append("proofOfIncome", file));
         const payload = Object.fromEntries(formData.entries());
         console.log(payload)
         const { data } = await axiosFetch.patch(`/lease/tenant/updateLeaseForm/${leaseDetail._id}`, formData);
@@ -269,30 +269,9 @@ const LeaseTenantInfoForm = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-center my-2">
-                        <label
-                            htmlFor="photoId"
-                            className="mb-2 cursor-pointer font-robotoNormal self-center"
-                        >
-                            Upload Photo ID
-                        </label>
+                    <ImageDropZone fileState={photoId} setFileState={setPhotoId} label="Photo ID" />
 
-                        <input
-                            required
-                            name="photoId"
-                            className="font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
-                            type="file"
-                            id="photoId"
-                            onChange={handlePhotoIdChange}
-                        />
-                        <p className="mt-1 text-sm text-gray-500">
-                            JPG, JPEG, PNG or GIF (MAX 3.5mb per)
-                        </p>
-                        <div className="self-center border mt-2">
-                            {previewImage()}
-                        </div>
-                    </div>
-
+                    <ImageDropZone fileState={proofOfIncome} setFileState={setProofOfIncome} label="Proof of Income" maxFiles={3} />
                     <div className="text-center">
                         <Button
                             type="submit"
