@@ -26,7 +26,7 @@ const postRealEstate = async (req, res) => {
 
   const realEstate = await RealEstate.create(req.body);
 
-  const realEstateImages = await cloudinaryMultipleUpload(req);
+  const realEstateImages = await cloudinaryMultipleUpload(req.files, "realEstateImages");
   realEstate.realEstateImages = realEstateImages;
   await realEstate.save();
 

@@ -76,15 +76,16 @@ const LeaseSchema = new mongoose.Schema(
         required: false,
       },
       proofOfIncome: {
-        type: String,
+        type: [String],
         required: false,
+        default: [],
       },
     },
 
     status: {
       type: String,
       enum: {
-        values: ["Active", "Inactive", "Pending", "Terminated-pending", "Terminated-approved", "Terminated"],
+        values: ["Active", "Inactive", "Pending", "Unsigned", "Terminated-pending", "Terminated-approved", "Terminated"],
         message: "{VALUE} is not supported",
       },
       default: "Pending",

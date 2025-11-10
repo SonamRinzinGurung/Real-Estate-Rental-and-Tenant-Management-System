@@ -9,16 +9,15 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const cloudinaryProfileImageUpload = async (req) => {
-    const file = req.file;
-    let profileImage;
+export const cloudinarySingleImageUpload = async (file, path) => {
+    let imageUrl;
     if (!file) {
         throw new BadRequestError("Please upload an image.");
     }
     await cloudinary.v2.uploader.upload(
         file.path,
         {
-            folder: "real-estate-system/profileImages",
+            folder: "real-estate-system/" + path,
             width: 500,
             height: 500,
             crop: "fill",
@@ -27,34 +26,33 @@ export const cloudinaryProfileImageUpload = async (req) => {
             if (err) {
                 throw new BadRequestError("Error uploading image");
             }
-            profileImage = result.secure_url;
+            imageUrl = result.secure_url;
         }
     );
-    return profileImage;
+    return imageUrl;
 };
 
-export const cloudinaryMultipleUpload = async (req) => {
-    const files = req.files;
-    let realEstateImages = [];
-    if (!files) {
+export const cloudinaryMultipleUpload = async (files, path) => {
+    let imageUrls = [];
+    if (!files || files.length === 0) {
         throw new BadRequestError("Please upload at least one image.");
     }
     for (const file of files) {
         await cloudinary.v2.uploader.upload(
             file.path,
             {
-                folder: "real-estate-system/realEstateImages",
+                folder: "real-estate-system/" + path,
             },
             (err, result) => {
                 if (err) {
                     throw new BadRequestError("Error uploading image");
                 }
-                realEstateImages.push(result.secure_url);
+                imageUrls.push(result.secure_url);
             }
         );
     }
 
-    return realEstateImages;
+    return imageUrls;
 };
 
 export const cloudinaryDeleteImage = async (publicId) => {

@@ -3,7 +3,7 @@ import TenantUser from "../models/TenantUser.js";
 import { BadRequestError, UnAuthorizedError } from "../request-errors/index.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/emailSender.js";
-import { cloudinaryProfileImageUpload } from "../utils/cloudinaryUpload.js";
+import { cloudinarySingleImageUpload } from "../utils/cloudinaryUpload.js";
 
 /**
  * @description Login a user
@@ -137,7 +137,7 @@ const register = async (req, res) => {
     `;
     await sendEmail(to, from, subject, body);
 
-    const profileImage = await cloudinaryProfileImageUpload(req)
+    const profileImage = await cloudinarySingleImageUpload(req.file, "profileImages")
     owner.profileImage = profileImage;
     await owner.save();
 
@@ -176,7 +176,7 @@ const register = async (req, res) => {
     `;
     await sendEmail(to, from, subject, body);
 
-    const profileImage = await cloudinaryProfileImageUpload(req)
+    const profileImage = await cloudinarySingleImageUpload(req.file, "profileImages");
     tenant.profileImage = profileImage;
     await tenant.save();
 

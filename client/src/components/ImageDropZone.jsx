@@ -144,7 +144,7 @@ function ImageDropZone({
             <div {...getRootProps({ className: "dropzone", style })}>
                 <input {...getInputProps()} />
 
-                <div className="flex gap-2 items-center flex-wrap">
+                <div className="flex gap-2 items-center justify-center flex-wrap">
                     <div>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

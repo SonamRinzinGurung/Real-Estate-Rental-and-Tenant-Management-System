@@ -7,7 +7,7 @@ import PaymentHistory from "../models/PaymentHistory.js";
 
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 import { sendEmail } from "../utils/emailSender.js";
-
+import { cloudinarySingleImageUpload, cloudinaryMultipleUpload } from "../utils/cloudinaryUpload.js";
 /**
  * @description Create Lease
  * @route POST /api/owner/lease
@@ -415,11 +415,24 @@ const getTenantLeaseDetail = async (req, res) => {
  */
 const leaseUpdateForm = async (req, res) => {
   const { leaseId } = req.params;
-  const updateData = req.body;
-  console.log("body", updateData);
-  if (req.files) {
-    console.log(req.files)
-  }
+  const updateData = {}
+
+  const photoIdImageUrl = req.files.photoId ? await cloudinarySingleImageUpload(req.files.photoId[0], "leaseDocuments/photoIds") : null;
+
+  const proofOfIncomeImageUrls = req.files.proofOfIncome ? await cloudinaryMultipleUpload(req.files.proofOfIncome, "leaseDocuments/proofOfIncome") : [];
+
+  updateData.tenantInformation = {
+    fullName: req.body.fullName,
+    phoneNumber: req.body.phoneNumber,
+    email: req.body.email,
+    photoId: photoIdImageUrl,
+    proofOfIncome: proofOfIncomeImageUrls,
+    emergencyContact: {
+      name: req.body.emergencyContactName,
+      phoneNumber: req.body.emergencyContactPhoneNumber,
+    },
+  };
+
 
   const updatedLease = await Lease.findByIdAndUpdate(leaseId, updateData, {
     new: true,
@@ -433,13 +446,13 @@ const leaseUpdateForm = async (req, res) => {
   const isTenantInfoComplete = updatedLease.isTenantInfoComplete();
 
   if (isTenantInfoComplete) {
-    updatedLease.status = "Active";
+    updatedLease.status = "Unsigned";
     await updatedLease.save();
   } else {
     throw new BadRequestError("Incomplete tenant information to activate lease");
   }
 
-  res.json({ updatedLease });
+  res.json({ updatedLease, success: true });
 };
 
 export {
