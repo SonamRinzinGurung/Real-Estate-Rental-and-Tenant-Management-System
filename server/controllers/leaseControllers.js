@@ -452,6 +452,11 @@ const leaseUpdateForm = async (req, res) => {
     throw new BadRequestError("Incomplete tenant information to activate lease");
   }
 
+  await updatedLease.populate({
+    path: "realEstate",
+    select: "title address category slug price",
+  });
+
   res.json({ updatedLease, success: true });
 };
 

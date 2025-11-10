@@ -3,19 +3,18 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import {
     getLeaseWithRealEstateID,
     clearAlert,
-    approveLease,
+    updateLeaseTenantInfo
 } from "../../features/tenantUser/tenantUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, ConfirmModal, FormTextField, PhoneNumberField, ImageDropZone } from "../../components";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
-import { createNumberFormatter, dateFormatter, format } from "../../utils/valueFormatter";
+import { createNumberFormatter, dateFormatter } from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
 import { countries } from "../../utils/countryList";
 import countryToCurrency from "country-to-currency";
 import useToast from "../../hooks/useToast";
-import axiosFetch from "../../utils/axiosCreate";
 
 const LeaseTenantInfoForm = () => {
     const { realEstateId } = useParams();
@@ -44,6 +43,7 @@ const LeaseTenantInfoForm = () => {
         alertFlag,
         alertType,
         alertMsg,
+        success
     } = useSelector((state) => state.tenantUser);
 
     // preview photoId
@@ -57,17 +57,41 @@ const LeaseTenantInfoForm = () => {
         clearAlertAction: clearAlert,
     });
 
+    useEffect(() => {
+        if (success) {
+            setTimeout(() => {
+                navigate(`/tenant/lease/${leaseDetail?.realEstate?._id}/${leaseDetail?.realEstate?.slug}`);
+            }, 1600);
+        }
+
+    }, [success, navigate, leaseDetail]);
+
     const handleChange = useCallback(
         (e) => {
-            setFormValues({ ...values, [e.target.name]: e.target.value });
+            setFormValues(prev => ({ ...prev, [e.target.name]: e.target.value }));
         },
-        [values]
+        []
     );
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(values)
+        setOpen(true);
+    };
+
+    const currentCountry = countries.find(
+        (country) => country.label === leaseDetail?.realEstate?.address?.country
+    );
+    const format = createNumberFormatter(currentCountry?.code);
+
+    //modal
+    const [open, setOpen] = useState(false);
+    const handleModalClose = () => {
+        setOpen(false);
+    };
+
+    const handleSubmitForm = useCallback(() => {
+
         const form = document.getElementById("form");
         const formData = new FormData(form);
 
@@ -89,37 +113,11 @@ const LeaseTenantInfoForm = () => {
         }
 
         formData.append("photoId", photoId[0]);
-        proofOfIncome.forEach((file) => formData.append("proofOfIncome", file));
-        const payload = Object.fromEntries(formData.entries());
-        console.log(payload)
-        const { data } = await axiosFetch.patch(`/lease/tenant/updateLeaseForm/${leaseDetail._id}`, formData);
-        console.log(data);
-    };
-
-    const currentCountry = countries.find(
-        (country) => country.label === leaseDetail?.realEstate?.address?.country
-    );
-    const format = createNumberFormatter(currentCountry?.code);
-
-    //modal
-    const [open, setOpen] = useState(false);
-    const handleModalOpen = useCallback(() => setOpen(true), []);
-    const handleModalClose = useCallback(() => setOpen(false), []);
-    const [checked, setChecked] = useState(false);
-    const [digitalSignature, setDigitalSignature] = useState("");
-
-    const handleApproveLease = useCallback(() => {
-        if (!checked) {
-            alert("You must agree to the terms and conditions to proceed.");
-            return;
-        } else if (digitalSignature.trim() === "") {
-            alert("Please provide your digital signature to proceed.");
-            return;
+        for (const file of proofOfIncome) {
+            formData.append("proofOfIncome", file);
         }
-        const leaseSignTime = new Date().toISOString();
-        dispatch(approveLease({ leaseId: leaseDetail._id, digitalSignature, leaseSignTime }));
-        handleModalClose();
-    }, [dispatch, leaseDetail, handleModalClose, checked, digitalSignature]);
+        dispatch(updateLeaseTenantInfo({ leaseId: leaseDetail._id, updateData: formData }));
+    }, [dispatch, leaseDetail?._id, photoId, proofOfIncome, values]);
 
     if (isLoading) return <PageLoading />;
 
@@ -127,6 +125,13 @@ const LeaseTenantInfoForm = () => {
         return (
             <div className="flex justify-center items-start h-screen mt-10">
                 <h1>Lease Does not Exists!</h1>
+            </div>
+        );
+
+    if (leaseDetail.status !== "Pending")
+        return (
+            <div className="flex justify-center items-start h-screen mt-10">
+                <h1>You have already submitted your lease information.</h1>
             </div>
         );
 
@@ -278,7 +283,7 @@ const LeaseTenantInfoForm = () => {
                             variant="contained"
                             size="large"
                             color="primary"
-                            disabled={isLoading}
+                            disabled={isProcessing}
                             sx={{
                                 color: "white",
                                 "&:hover": {
@@ -288,7 +293,7 @@ const LeaseTenantInfoForm = () => {
                                 width: "100%",
                             }}
                         >
-                            {isLoading ? (
+                            {isProcessing ? (
                                 <CircularProgress
                                     size={26}
                                     sx={{
@@ -306,11 +311,9 @@ const LeaseTenantInfoForm = () => {
 
             <div>
                 <ConfirmModal open={open} handleModalClose={handleModalClose}>
-                    <h3 className="text-center">Agree to Lease?</h3>
+                    <h3 className="text-center">Confirm Provided Information</h3>
                     <p className="text-center my-4">
-                        Are you sure you want to agree to this lease? Once you agree to
-                        this lease, you will not be able to cancel it. You will be
-                        agreeing to the terms and conditions of this lease.
+                        Are you sure you want to confirm the provided information? Once you confirm, you will not be able to make changes. Make sure all the information is accurate before proceeding.
                     </p>
                     <div className="flex flex-wrap justify-center gap-8 mt-8">
                         <Button onClick={handleModalClose} color="error">
@@ -318,7 +321,7 @@ const LeaseTenantInfoForm = () => {
                         </Button>
 
                         <Button
-                            onClick={handleApproveLease}
+                            onClick={handleSubmitForm}
                             color="success"
                             variant="contained"
                         >

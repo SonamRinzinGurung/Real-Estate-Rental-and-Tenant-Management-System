@@ -69,16 +69,6 @@ const LeaseDetailPageTenant = () => {
     handleModalClose();
   }, [dispatch, leaseDetail?._id]);
 
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
-
   if (isLoading) return <PageLoading />;
 
   if (!leaseDetail)

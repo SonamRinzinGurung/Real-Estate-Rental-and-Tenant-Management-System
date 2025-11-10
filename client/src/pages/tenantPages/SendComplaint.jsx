@@ -50,16 +50,6 @@ const SendComplaint = () => {
     }
   }, [success, navigate, slug]);
 
-  const handleAlertClose = useCallback(
-    (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      dispatch(clearAlert());
-    },
-    [dispatch]
-  );
-
   const initialFormValues = {
     to: "",
     from: "",

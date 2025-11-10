@@ -66,6 +66,21 @@ export const getAllContacts = createAsyncThunk(
   }
 );
 
+export const updateLeaseTenantInfo = createAsyncThunk(
+  "updateLeaseTenantInfo",
+  async ({ leaseId, updateData }, thunkAPI) => {
+    try {
+      const { data } = await axiosFetch.patch(
+        `/lease/tenant/updateLeaseForm/${leaseId}`,
+        updateData
+      );
+      return await data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const approveLease = createAsyncThunk(
   "approveLease",
   async ({ leaseId, digitalSignature, leaseSignTime }, thunkAPI) => {
@@ -230,6 +245,23 @@ const tenantUserSlice = createSlice({
       })
       .addCase(getAllContacts.rejected, (state, action) => {
         state.isLoading = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(updateLeaseTenantInfo.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(updateLeaseTenantInfo.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.leaseDetail = action.payload.updatedLease;
+        state.alertFlag = true;
+        state.alertMsg = "Lease updated successfully";
+        state.alertType = "success";
+        state.success = true;
+      })
+      .addCase(updateLeaseTenantInfo.rejected, (state, action) => {
+        state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;
         state.alertType = "error";
