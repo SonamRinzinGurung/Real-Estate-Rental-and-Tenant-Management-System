@@ -12,12 +12,7 @@ const DatePickerMUI = ({ value, handleChange, label, views }) => {
         value={value}
         views={views}
         onChange={handleChange}
-        renderInput={useCallback(
-          (params) => (
-            <TextField {...params} />
-          ),
-          []
-        )}
+        slotProps={{ textField: { variant: "outlined" } }}
       />
     </LocalizationProvider>
   );

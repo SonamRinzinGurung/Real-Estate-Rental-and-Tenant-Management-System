@@ -7,6 +7,7 @@ import {
   DatePicker,
   CountrySelectField,
   PhoneNumberField,
+  ImageDropZone,
 } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -59,20 +60,8 @@ const Register = () => {
   const [date, setDate] = useState(null);
 
   // preview image
-  const [image, setImage] = useState(null);
-  const handleImageChange = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
-  };
+  const [image, setImage] = useState([]);
 
-  const previewImage = () => {
-    if (image) {
-      return (
-        <div className="p-2">
-          <img src={image} alt="profilePreview" className="h-24 md:h-28" />
-        </div>
-      );
-    }
-  };
   const handleChange = useCallback(
     (e) => {
       setFormValues({ ...values, [e.target.name]: e.target.value });
@@ -86,6 +75,13 @@ const Register = () => {
     const form = document.getElementById("form");
     const formData = new FormData(form);
     formData.append("role", param.role);
+
+    if (image.length < 1) {
+      dispatch(createAlert("Please upload your profile picture."));
+      return;
+    }
+
+    formData.append("profileImage", image[0]);
     const dob = moment(date).format("YYYY-MM-DD");
     const age = ageCalculator(dob);
     if (age < 18) {
@@ -193,29 +189,11 @@ const Register = () => {
                   handleChange={handleChange}
                 />
 
-                <div className="flex flex-col justify-center my-2">
-                  <label
-                    htmlFor="profileImg"
-                    className="mb-2 cursor-pointer font-robotoNormal self-center"
-                  >
-                    Upload Profile Images
-                  </label>
-
-                  <input
-                    required
-                    name="profileImage"
-                    className="font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-primary focus:outline-none"
-                    type="file"
-                    id="profileImg"
-                    onChange={handleImageChange}
-                  />
-                  <p className="mt-1 text-sm text-gray-500">
-                    JPG, JPEG, PNG or GIF (MAX 3.5mb per)
-                  </p>
-                  <div className="self-center border mt-2">
-                    {previewImage()}
-                  </div>
-                </div>
+                <ImageDropZone
+                  fileState={image}
+                  setFileState={setImage}
+                  label="Profile Picture"
+                />
                 <FormPasswordField
                   value={values.password}
                   handleChange={handleChange}

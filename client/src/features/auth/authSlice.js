@@ -306,9 +306,6 @@ const authSlice = createSlice({
       })
       .addCase(logOut.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.errorFlag = true;
-        state.alertType = "success";
-        state.errorMsg = "Logged out successfully";
       })
       .addCase(logOut.rejected, (state, action) => {
         state.isLoading = false;

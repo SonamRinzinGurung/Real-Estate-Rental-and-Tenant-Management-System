@@ -84,6 +84,11 @@ const realEstateOwnerSlice = createSlice({
       state.alertFlag = false;
       state.alertMsg = "";
     },
+    createAlert: (state, action) => {
+      state.alertFlag = true;
+      state.alertMsg = action.payload;
+      state.alertType = "error";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -171,6 +176,6 @@ const realEstateOwnerSlice = createSlice({
   },
 });
 
-export const { clearAlert } = realEstateOwnerSlice.actions;
+export const { clearAlert, createAlert } = realEstateOwnerSlice.actions;
 
 export default realEstateOwnerSlice.reducer;

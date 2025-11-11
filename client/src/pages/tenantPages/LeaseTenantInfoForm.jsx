@@ -3,7 +3,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import {
     getLeaseWithRealEstateID,
     clearAlert,
-    updateLeaseTenantInfo
+    updateLeaseTenantInfo,
+    createAlert,
 } from "../../features/tenantUser/tenantUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { PageLoading, ConfirmModal, FormTextField, PhoneNumberField, ImageDropZone } from "../../components";
@@ -59,11 +60,11 @@ const LeaseTenantInfoForm = () => {
 
     useEffect(() => {
         if (success) {
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 navigate(`/tenant/lease/${leaseDetail?.realEstate?._id}/${leaseDetail?.realEstate?.slug}`);
             }, 1600);
+            return () => clearTimeout(timer);
         }
-
     }, [success, navigate, leaseDetail]);
 
     const handleChange = useCallback(
@@ -103,12 +104,12 @@ const LeaseTenantInfoForm = () => {
         );
 
         if (photoId.length < 1) {
-            alert("Please upload your Photo ID.");
+            dispatch(createAlert("Please upload your Photo ID."));
             return;
         }
 
         if (proofOfIncome.length < 1) {
-            alert("Please upload your Proof of Income.");
+            dispatch(createAlert("Please upload your Proof of Income."));
             return;
         }
 

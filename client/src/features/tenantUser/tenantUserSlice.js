@@ -150,6 +150,11 @@ const tenantUserSlice = createSlice({
       state.alertFlag = false;
       state.alertMsg = "";
     },
+    createAlert: (state, action) => {
+      state.alertFlag = true;
+      state.alertMsg = action.payload;
+      state.alertType = "error";
+    },
     addTenantRecentMessage: (state, action) => {
       const { chatId, message, sender } = action.payload;
       const chatIndex = state.chats.findIndex((chat) => chat._id === chatId);
@@ -330,6 +335,6 @@ const tenantUserSlice = createSlice({
   },
 });
 
-export const { clearAlert, addTenantRecentMessage, markChatAsRead } = tenantUserSlice.actions;
+export const { clearAlert, createAlert, addTenantRecentMessage, markChatAsRead } = tenantUserSlice.actions;
 
 export default tenantUserSlice.reducer;

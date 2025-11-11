@@ -1,10 +1,16 @@
 import { useState, useCallback, useEffect } from "react";
-import { FormTextField, FormSelectField, CountrySelectField } from "../../components";
+import {
+  FormTextField,
+  FormSelectField,
+  CountrySelectField,
+  ImageDropZone,
+} from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   postRealEstate,
   clearAlert,
+  createAlert,
 } from "../../features/realEstateOwner/realEstateOwnerSlice";
 
 import postRealEstateImg from "../../assets/images/postRealEstateImg.svg";
@@ -20,7 +26,6 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import BungalowIcon from "@mui/icons-material/Bungalow";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
 import countryToCurrency from "country-to-currency";
 import useToast from "../../hooks/useToast";
 
@@ -45,7 +50,7 @@ const PostRealEstate = () => {
 
   const [values, setFormValues] = useState(initialFormValues);
 
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
 
   useToast({
     alertFlag,
@@ -53,23 +58,6 @@ const PostRealEstate = () => {
     message: alertMsg,
     clearAlertAction: clearAlert,
   });
-
-  const handleImagesChange = (e) => {
-    const arr = Array.from(e.target.files);
-    setImages(arr.map((file) => URL.createObjectURL(file)));
-  };
-
-  const previewImage = () => {
-    if (images) {
-      return images.map((image, index) => {
-        return (
-          <div className="p-2" key={index}>
-            <img src={image} alt="profilePreview" className="h-24 md:h-28" />
-          </div>
-        );
-      });
-    }
-  };
 
   const handleChange = useCallback(
     (e) => {
@@ -85,6 +73,16 @@ const PostRealEstate = () => {
 
     const form = document.getElementById("form");
     const formData = new FormData(form);
+
+    if (images.length < 1) {
+      dispatch(createAlert("Please upload at least one image"));
+      return;
+    }
+
+    images.forEach((image) => {
+      formData.append("realEstateImages", image);
+    });
+
     dispatch(postRealEstate({ formData }));
   };
 
@@ -184,7 +182,9 @@ const PostRealEstate = () => {
                     onChange={handleChange}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="start">{countryToCurrency[values.countryCode]}</InputAdornment>
+                        <InputAdornment position="start">
+                          {countryToCurrency[values.countryCode]}
+                        </InputAdornment>
                       ),
                     }}
                   />
@@ -249,34 +249,14 @@ const PostRealEstate = () => {
                     handleChange={handleChange}
                   />
                 </div>
-                <div className="flex flex-col my-2">
-                  <h5>
-                    <PermMediaIcon /> Media
-                  </h5>
-                  <div className="flex flex-col justify-center pb-2">
-                    <label
-                      htmlFor="formFileMultiple"
-                      className="form-label inline-block mb-2 text-gray-500 cursor-pointer font-robotoNormal"
-                    >
-                      Upload Images of the Real Estate
-                    </label>
 
-                    <input
-                      required
-                      name="realEstateImages"
-                      className="form-control block font-robotoNormal w-full px-3 py-1.5 text-base font-normal border border-solid border-gray-300 rounded cursor-pointer focus:border-tertiary focus:outline-none"
-                      type="file"
-                      id="formFileMultiple"
-                      multiple
-                      onChange={handleImagesChange}
-                    />
-                    <p className="mt-1 text-xs text-gray-400">
-                      JPG, JPEG, PNG or GIF (MAX 3.5mb per)
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap self-center border mt-2">
-                    {previewImage()}
-                  </div>
+                <div className="flex flex-col my-2">
+                  <ImageDropZone
+                    fileState={images}
+                    setFileState={setImages}
+                    label={"Upload Images of your Property"}
+                    maxFiles={10}
+                  />
                 </div>
               </div>
 
