@@ -95,7 +95,16 @@ export const getLeaseOwnerView = createAsyncThunk(
   }
 );
 
-export const terminatePendingLease = createAsyncThunk("terminatePendingLease", async ({ leaseId }, thunkAPI) => {
+export const updateLeaseToUnsigned = createAsyncThunk("updateLeaseToUnsigned", async ({ leaseId }, thunkAPI) => {
+  try {
+    const { data } = await axiosFetch.patch(`/lease/owner/updateLeaseUnsigned/${leaseId}`);
+    return await data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+})
+
+export const terminateLease = createAsyncThunk("terminateLease", async ({ leaseId }, thunkAPI) => {
   try {
     const { data } = await axiosFetch.patch(`/lease/terminate/${leaseId}`);
     return await data;
@@ -292,17 +301,33 @@ const ownerUserSlice = createSlice({
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(terminatePendingLease.pending, (state, action) => {
+      .addCase(updateLeaseToUnsigned.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(terminatePendingLease.fulfilled, (state, action) => {
+      .addCase(updateLeaseToUnsigned.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.leaseDetail.status = "Unsigned";
+        state.alertFlag = true;
+        state.alertMsg = action.payload.message;
+        state.alertType = "success";
+      })
+      .addCase(updateLeaseToUnsigned.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.alertFlag = true;
+        state.alertMsg = action.payload;
+        state.alertType = "error";
+      })
+      .addCase(terminateLease.pending, (state, action) => {
+        state.isProcessing = true;
+      })
+      .addCase(terminateLease.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.leaseDetail.status = "Terminated-pending";
         state.alertFlag = true;
         state.alertMsg = action.payload.message;
         state.alertType = "success";
       })
-      .addCase(terminatePendingLease.rejected, (state, action) => {
+      .addCase(terminateLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

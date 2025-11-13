@@ -192,7 +192,7 @@ const terminateLease = async (req, res) => {
   //email details
   const to = tenantUser.email;
   const from = ownerUser.email;
-  const subject = `Lease termination information of ${realEstate.title}`;
+  const subject = `Lease termination notification of ${realEstate.title}`;
   const body = `
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
     <p>I hope this email finds you well. I am writing to inform you about the termination of the rental lease of property titled <strong>${realEstate.title}</strong> 
@@ -201,13 +201,12 @@ const terminateLease = async (req, res) => {
     Please view your lease details to approve the termination of the lease.</p>
     <p>Once you approve the termination, we will proceed with the necessary steps to finalize the termination of the lease. 
     This may include scheduling a final inspection of the property, settling any outstanding rent payments, and returning your security deposit.</p>
-    <p>Please note that you are required to vacate the property within 7 days of approving the termination.</p>
     <p>Thank you for your cooperation during your stay at our property.</p>
     <br><br>
     <p>Best regards,</p>
     <p>${ownerUser.firstName} ${ownerUser.lastName}</p>`;
 
-  //send email to tenant user that lease has been deleted
+  //send email to tenant user that lease has been terminated pending approval
   await sendEmail(to, from, subject, body);
 
   res.json({
@@ -326,8 +325,8 @@ const deleteLease = async (req, res) => {
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
     <p>I hope this email finds you well. I am writing to inform you about the termination of the rental lease of property titled <strong>${realEstate.title}</strong> 
     located at ${realEstate.address.streetName}, ${realEstate.address.city}, ${realEstate.address.state}, ${realEstate.address.country}.</p>
-    <p>The lease was terminated successfully along with the rent details and payment histories associated with it.</p>
-    <p>Please note that you are required to vacate the property within 7 days. 
+    <p>The lease was terminated successfully along with the rent details and payment histories associated with it (if they existed).</p>
+    <p> 
     We will conduct a final inspection of the property to ensure that it is in the same condition as when you moved in, 
     with reasonable wear and tear accepted. 
     Any damages or outstanding rent payments will be deducted from your security deposit.</p>
@@ -500,6 +499,58 @@ const leaseUpdateForm = async (req, res) => {
   res.json({ updatedLease, success: true });
 };
 
+/**
+ * @description Update lease status to "Unsigned"
+ * @route PATCH /api/lease/owner/updateLeaseUnsigned/:leaseId
+ * @returns {object} 200 - An object containing the updated lease details
+ */
+const updateLeaseUnsigned = async (req, res) => {
+  const { leaseId } = req.params;
+
+  const updatedLease = await Lease.findOneAndUpdate(
+    { _id: leaseId, owner: req.user.userId, status: "Pending-updated" },
+    { status: "Unsigned" },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedLease) {
+    throw new NotFoundError("Lease not found");
+  }
+
+  // get the tenant user and owner user details to send email
+  const tenantUser = await TenantUser.findById(updatedLease.tenant);
+  if (!tenantUser) {
+    throw new NotFoundError("Tenant user not found");
+  }
+
+  const realEstate = await RealEstate.findById(updatedLease.realEstate);
+  if (!realEstate) {
+    throw new NotFoundError("Real Estate Not Found");
+  }
+
+  const ownerUser = await OwnerUser.findById(req.user.userId);
+
+  //email details
+  const to = tenantUser.email;
+  const from = ownerUser.email;
+  const subject = `Lease update notification for ${realEstate.title}`;
+  const body = `
+    <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
+    <p>I hope this email finds you well. I am writing to inform you about the status change of the lease for the property titled <strong>${realEstate.title}</strong> 
+    located at ${realEstate.address.streetName}, ${realEstate.address.city}, ${realEstate.address.state}, ${realEstate.address.country}</p>
+    <p> Please note that the lease is now in a "Unsigned" status. This means that the lease requires your signature to be finalized. Visit this <a href="${process.env.CLIENT_URL}/#/tenant/lease-agreement/${realEstate._id}"><strong>link</strong></a> to view and sign the lease.</p>
+    <p>
+    Once you sign the lease, we will proceed with the necessary steps to finalize the lease agreement. This may include scheduling a move-in date and providing you with the keys to the property. Please note that you are required to sign the lease within 7 days of receiving this email. Thank you for your cooperation.</p>
+    <br><br>
+    <p>Best regards,</p>
+    <p>${ownerUser.firstName} ${ownerUser.lastName}</p>`;
+
+  //send email to tenant user that lease has been updated to unsigned
+  await sendEmail(to, from, subject, body);
+
+  res.json({ updatedLease, message: "Lease has been updated to unsigned", success: true });
+};
+
 export {
   createLease,
   approveLease,
@@ -511,4 +562,5 @@ export {
   terminateLease,
   terminateLeaseApprove,
   leaseUpdateForm,
+  updateLeaseUnsigned,
 };

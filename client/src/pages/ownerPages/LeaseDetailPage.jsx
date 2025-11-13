@@ -3,7 +3,8 @@ import {
   getLeaseOwnerView,
   clearAlert,
   deleteLease,
-  terminatePendingLease,
+  terminateLease,
+  updateLeaseToUnsigned,
 } from "../../features/ownerUser/ownerUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate, Link } from "react-router-dom";
@@ -98,8 +99,13 @@ const LeaseDetailPage = () => {
   );
   const format = createNumberFormatter(currentCountry?.code);
 
+  const handleUpdateLeaseToUnsigned = useCallback(() => {
+    dispatch(updateLeaseToUnsigned({ leaseId: leaseDetail?._id }));
+    handleModalClose();
+  }, [dispatch, leaseDetail?._id, handleModalClose]);
+
   const handleTerminateLease = useCallback(() => {
-    dispatch(terminatePendingLease({ leaseId: leaseDetail?._id }));
+    dispatch(terminateLease({ leaseId: leaseDetail?._id }));
     handleModalClose();
   }, [dispatch, leaseDetail?._id, handleModalClose]);
 
@@ -159,7 +165,7 @@ const LeaseDetailPage = () => {
           {
             flags.isUnsigned && (
               <>
-                <PendingActionsIcon color="warning" />
+                <PendingActionsIcon color="info" />
                 <p className="font-bold">Unsigned Lease</p>
               </>
             )
@@ -451,7 +457,7 @@ const LeaseDetailPage = () => {
       </div>
 
       {
-        flags.isPending || flags.isPendingUpdated ? null : (
+        leaseDetail?.digitalSignature && (
           <div className="flex flex-col gap-2 p-4">
             <h5 className="font-semibold">Digital Signature</h5>
             <p className="font-robotoNormal">
@@ -466,16 +472,14 @@ const LeaseDetailPage = () => {
 
       {/* Lease Actions */}
       {
-        (flags.isActive || flags.isTerminatedApproved || flags.isPendingUpdated) && (
+        (!flags.isTerminatedPending) && (
 
-          <div className="flex flex-col gap-4 w-full mx-2 md:mx-0 p-4 lg:-ml-6 shadow-md rounded-md border border-gray-200 items-center my-6">
-
-            <h4 className="font-semibold">Lease Actions</h4>
-
+          <div className="flex flex-col gap-4 w-full mx-2 md:mx-0 px-4 py-4 md:px-48 md:py-6 lg:-ml-6 shadow-md rounded-md border border-gray-200 items-center my-6">
+            <h4 className="font-semibold">Lease Action</h4>
             <p>
-              {flags.isActive && 'You may terminate this lease. This action will change the lease status to "Terminated-pending" and the tenant user will be notified to approve the termination.'}
+              {flags.isActive && 'Terminate this lease. This action will change the lease status to "Terminated-pending". Tenant user will need to approve the termination.'}
 
-              {flags.isTerminatedApproved && "You may delete this lease. This action is irreversible. This will also delete the associated Rent Details and Payment Records."}
+              {(!flags.isActive && !flags.isPendingUpdated) && "You may delete this lease. This action is irreversible. This will also delete the associated Rent Details and Payment Records (if they exist)."}
 
               {flags.isPendingUpdated && 'You may approve this lease. Only approve if all the tenant information provided is valid and all the necessary payments have been received.'}
             </p>
@@ -500,10 +504,10 @@ const LeaseDetailPage = () => {
                 ) : (
                   <>
                     {
-                      flags.isActive && "Terminate Lease"
+                        flags.isActive && "Terminate Lease"
                     }
                     {
-                      flags.isTerminatedApproved && "Delete Lease"
+                        (!flags.isActive && !flags.isPendingUpdated) && "Delete Lease"
                     }
                     {
                       flags.isPendingUpdated && "Approve Lease"
@@ -519,13 +523,13 @@ const LeaseDetailPage = () => {
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
         <h3 className="text-center">
           {flags.isActive && "Terminate Lease"}
-          {flags.isTerminatedApproved && "Delete Lease"}
+          {(!flags.isActive && !flags.isPendingUpdated) && "Delete Lease"}
           {flags.isPendingUpdated && "Approve Lease"}
         </h3>
           <p className="text-center my-4">
-          {flags.isActive && 'Are you sure you want to terminate this lease? This action will change the lease status to "Terminated-pending" and the tenant user will be notified to approve the termination.'}
+          {flags.isActive && 'Are you sure you want to terminate this lease? This action will change the lease status to "Terminated-pending".'}
 
-          {flags.isTerminatedApproved && "Are you sure you want to delete this lease? This action is irreversible. This will also delete the associated Rent Details and Payment Records."}
+          {(!flags.isActive && !flags.isPendingUpdated) && "Are you sure you want to delete this lease? This action is irreversible. This will also delete the associated Rent Details and Payment Records (if they exist)."}
 
           {flags.isPendingUpdated && 'Are you sure you want to approve this lease? Only approve if all the tenant information provided is valid and all the necessary payments have been received.'}
           </p>
@@ -536,12 +540,12 @@ const LeaseDetailPage = () => {
 
             <Button
             onClick={
-              flags.isActive ? handleTerminateLease : flags.isTerminatedApproved ? handleDeleteLease : flags.isPendingUpdated ? handleModalClose : null
+              flags.isActive ? handleTerminateLease : (!flags.isActive && !flags.isPendingUpdated) ? handleDeleteLease : flags.isPendingUpdated ? handleUpdateLeaseToUnsigned : null
             }
             color={flags.isPendingUpdated ? "success" : "error"}
               variant="contained"
             >
-            {flags.isActive ? "Terminate" : flags.isTerminatedApproved ? "Delete" : flags.isPendingUpdated ? "Approve" : ""}
+            {flags.isActive ? "Terminate" : (!flags.isActive && !flags.isPendingUpdated) ? "Delete" : flags.isPendingUpdated ? "Approve" : ""}
             </Button>
           </div>
       </ConfirmModal>

@@ -11,6 +11,7 @@ import {
   terminateLease,
   terminateLeaseApprove,
   leaseUpdateForm,
+  updateLeaseUnsigned,
 } from "../controllers/leaseControllers.js";
 import {
   authorizeOwnerUser,
@@ -93,5 +94,13 @@ router.get(
 router.patch("/tenant/updateLeaseForm/:leaseId", authorizeTenantUser, upload.fields([{ name: "photoId", maxCount: 1, }, {
   name: "proofOfIncome", maxCount: 3
 }]), leaseUpdateForm);
+
+/**
+ * @description Update lease status to "Unsigned"
+ * @route PATCH /api/lease/owner/updateLeaseUnsigned/:leaseId
+ */
+router.patch("/owner/updateLeaseUnsigned/:leaseId", authorizeOwnerUser, updateLeaseUnsigned);
+
+
 
 export default router;
