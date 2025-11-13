@@ -3,7 +3,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ImageViewer from "react-simple-image-viewer";
 
-const ImageCarousal = ({ realEstateImages }) => {
+const ImageCarousal = ({ imageSources, autoPlay = true }) => {
   // currentImageIndex is the index of the image that is currently displayed in the ImageViewer
   const [currentImageIndex, setCurrentImage] = useState(0);
 
@@ -24,8 +24,8 @@ const ImageCarousal = ({ realEstateImages }) => {
 
   return (
     <section className="overflow-hidden rounded-md shadow-lg h-72 md:h-96">
-      <Carousel autoPlay infiniteLoop useKeyboardArrows showThumbs={false}>
-        {realEstateImages?.map((image, index) => (
+      <Carousel autoPlay={autoPlay} infiniteLoop useKeyboardArrows showThumbs={false}>
+        {imageSources?.map((image, index) => (
           <div
             key={index}
             className="h-72 md:h-96 overflow-hidden cursor-pointer"
@@ -43,7 +43,7 @@ const ImageCarousal = ({ realEstateImages }) => {
       {/* Open and View the Image */}
       {isViewerOpen && (
         <ImageViewer
-          src={realEstateImages}
+          src={imageSources}
           currentIndex={currentImageIndex}
           onClose={closeImageViewer}
           disableScroll={false}

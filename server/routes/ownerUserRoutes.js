@@ -12,7 +12,7 @@ import {
  * @description Get Single Tenant User
  * @route GET /api/owner/tenant-user?email={email}&slug={slug}
  */
-router.get("/tenant-user", getSingleTenantUser); // Only the tenant user can access this route
+router.get("/tenant-user", getSingleTenantUser); // Only the owner user can access this route
 
 /**
  * @description Get the current user's details
@@ -34,7 +34,7 @@ router.patch("/addContact/:id", addContactToggle);
 
 /**
  * @description Get All Contacts
- * @route PATCH /api/owner/contacts/all
+ * @route GET /api/owner/contacts/all
  */
 router.get("/contacts/all", getAllContacts);
 

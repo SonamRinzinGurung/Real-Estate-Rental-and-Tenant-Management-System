@@ -7,7 +7,10 @@ import PaymentHistory from "../models/PaymentHistory.js";
 
 import { NotFoundError, BadRequestError } from "../request-errors/index.js";
 import { sendEmail } from "../utils/emailSender.js";
-import { cloudinarySingleImageUpload, cloudinaryMultipleUpload } from "../utils/cloudinaryUpload.js";
+import {
+  cloudinarySingleImageUpload,
+  cloudinaryMultipleUpload,
+} from "../utils/cloudinaryUpload.js";
 /**
  * @description Create Lease
  * @route POST /api/owner/lease
@@ -105,7 +108,7 @@ const approveLease = async (req, res) => {
   const subject = `Lease approved for rental of property titled ${leaseDetail.realEstate.title}`;
   const body = `
     <p> Dear ${leaseDetail.owner.firstName} ${leaseDetail.owner.lastName},</p> 
-    <p>Thank you for your email informing me that the rental lease has been created for the property titled <strong>${leaseDetail.realEstate.title}</strong> at ${leaseDetail.realEstate.address.location}, ${leaseDetail.realEstate.address.streetName}. 
+    <p>Thank you for your email informing me that the rental lease has been created for the property titled <strong>${leaseDetail.realEstate.title}</strong> at ${leaseDetail.realEstate.address.streetName}, ${leaseDetail.realEstate.address.city}, ${leaseDetail.realEstate.address.state}, ${leaseDetail.realEstate.address.country}. 
     I have carefully reviewed the terms and conditions outlined in the rental agreement and I am pleased to inform you that I agree to the terms and conditions.</p>
     <p>I appreciate the effort you have put into creating a rental agreement that protects the interests of both parties. I look forward to a positive and mutually beneficial relationship with you as my landlord.</p>
     <p>Thank you for your assistance.</p>
@@ -135,7 +138,6 @@ const getLeaseDetailOwnerView = async (req, res) => {
   const leaseDetail = await Lease.findOne({
     owner: req.user.userId,
     realEstate: req.params.realEstateId,
-    status: { $in: ["Active", "Pending", "Terminated-pending", "Terminated-approved"] }
   })
     .populate({
       path: "realEstate",
@@ -208,7 +210,10 @@ const terminateLease = async (req, res) => {
   //send email to tenant user that lease has been deleted
   await sendEmail(to, from, subject, body);
 
-  res.json({ message: "Lease updated to pending termination successfully", success: true });
+  res.json({
+    message: "Lease updated to pending termination successfully",
+    success: true,
+  });
 };
 
 const terminateLeaseApprove = async (req, res) => {
@@ -259,7 +264,10 @@ const terminateLeaseApprove = async (req, res) => {
   //send email to tenant user that lease has been deleted
   await sendEmail(to, from, subject, body);
 
-  res.json({ message: "Lease updated to approved termination successfully", success: true });
+  res.json({
+    message: "Lease updated to approved termination successfully",
+    success: true,
+  });
 };
 
 /**
@@ -317,7 +325,7 @@ const deleteLease = async (req, res) => {
   const body = `
     <p> Dear ${tenantUser.firstName} ${tenantUser.lastName},</p>    
     <p>I hope this email finds you well. I am writing to inform you about the termination of the rental lease of property titled <strong>${realEstate.title}</strong> 
-    located at ${realEstate.address.location}, ${realEstate.address.streetName}</p>
+    located at ${realEstate.address.streetName}, ${realEstate.address.city}, ${realEstate.address.state}, ${realEstate.address.country}.</p>
     <p>The lease was terminated successfully along with the rent details and payment histories associated with it.</p>
     <p>Please note that you are required to vacate the property within 7 days. 
     We will conduct a final inspection of the property to ensure that it is in the same condition as when you moved in, 
@@ -415,11 +423,21 @@ const getTenantLeaseDetail = async (req, res) => {
  */
 const leaseUpdateForm = async (req, res) => {
   const { leaseId } = req.params;
-  const updateData = {}
+  const updateData = {};
 
-  const photoIdImageUrl = req.files.photoId ? await cloudinarySingleImageUpload(req.files.photoId[0], "leaseDocuments/photoIds") : null;
+  const photoIdImageUrl = req.files.photoId
+    ? await cloudinarySingleImageUpload(
+      req.files.photoId[0],
+      "leaseDocuments/photoIds"
+    )
+    : null;
 
-  const proofOfIncomeImageUrls = req.files.proofOfIncome ? await cloudinaryMultipleUpload(req.files.proofOfIncome, "leaseDocuments/proofOfIncome") : [];
+  const proofOfIncomeImageUrls = req.files.proofOfIncome
+    ? await cloudinaryMultipleUpload(
+      req.files.proofOfIncome,
+      "leaseDocuments/proofOfIncome"
+    )
+    : [];
 
   updateData.tenantInformation = {
     fullName: req.body.fullName,
@@ -430,9 +448,9 @@ const leaseUpdateForm = async (req, res) => {
     emergencyContact: {
       name: req.body.emergencyContactName,
       phoneNumber: req.body.emergencyContactPhoneNumber,
+      relationship: req.body.emergencyContactRelationship,
     },
   };
-
 
   const updatedLease = await Lease.findByIdAndUpdate(leaseId, updateData, {
     new: true,
@@ -446,16 +464,38 @@ const leaseUpdateForm = async (req, res) => {
   const isTenantInfoComplete = updatedLease.isTenantInfoComplete();
 
   if (isTenantInfoComplete) {
-    updatedLease.status = "Unsigned";
+    updatedLease.status = "Pending-updated";
     await updatedLease.save();
   } else {
-    throw new BadRequestError("Incomplete tenant information to activate lease");
+    throw new BadRequestError(
+      "Incomplete tenant information to activate lease"
+    );
   }
 
-  await updatedLease.populate({
-    path: "realEstate",
-    select: "title address category slug price",
-  });
+  await updatedLease.populate([
+    { path: "realEstate", select: "title address category slug price" },
+    { path: "owner", select: "firstName lastName email" },
+    { path: "tenant", select: "firstName lastName email" },
+  ]);
+
+  const to = updatedLease.owner.email;
+  const from = updatedLease.tenant.email;
+  const subject = `Updated information on lease for property titled ${updatedLease.realEstate.title}`;
+  const body = `
+    <p> Dear ${updatedLease.owner.firstName} ${updatedLease.owner.lastName},</p> 
+    <p>Thank you for your email informing me that the rental lease has been created for the property titled <strong>${updatedLease.realEstate.title}</strong> at ${updatedLease.realEstate.address.streetName}, ${updatedLease.realEstate.address.city}, ${updatedLease.realEstate.address.state}, ${updatedLease.realEstate.address.country}. As requested, I have provided my information with necessary documents to complete the lease.</p>
+    <p>
+    Please review the provided information and documents at your earliest convenience and let me know if there are any further steps required from my end to finalize the lease agreement.
+    I appreciate your assistance throughout this process and look forward to your response.
+    </p>
+    <p>Thank you for your assistance.</p>
+    <br><br>
+    <p>Best Regards,</p>
+    <p>${updatedLease.tenant.firstName} ${updatedLease.tenant.lastName}</p>
+    `;
+
+  //send email to owner user to approve the lease
+  await sendEmail(to, from, subject, body);
 
   res.json({ updatedLease, success: true });
 };

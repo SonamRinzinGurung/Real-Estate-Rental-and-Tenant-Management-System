@@ -29,6 +29,7 @@ const LeaseTenantInfoForm = () => {
         emergencyContact: {
             name: "",
             phoneNumber: "",
+            relationship: "",
         },
 
     });
@@ -92,7 +93,7 @@ const LeaseTenantInfoForm = () => {
     };
 
     const handleSubmitForm = useCallback(() => {
-
+        setOpen(false);
         const form = document.getElementById("form");
         const formData = new FormData(form);
 
@@ -129,9 +130,9 @@ const LeaseTenantInfoForm = () => {
             </div>
         );
 
-    if (leaseDetail.status !== "Pending")
+    if (leaseDetail?.status !== "Pending")
         return (
-            <div className="flex justify-center items-start h-screen mt-10">
+            <div className="flex justify-center items-start h-screen mt-10 mx-4">
                 <h1>You have already submitted your lease information.</h1>
             </div>
         );
@@ -252,6 +253,21 @@ const LeaseTenantInfoForm = () => {
                                             emergencyContact: {
                                                 ...values.emergencyContact,
                                                 name: e.target.value,
+                                            },
+                                        });
+                                    }}
+                                />
+                                <FormTextField
+                                    label="Relationship"
+                                    name="emergencyContactRelationship"
+                                    type={"text"}
+                                    value={values.emergencyContact.relationship}
+                                    handleChange={(e) => {
+                                        setFormValues({
+                                            ...values,
+                                            emergencyContact: {
+                                                ...values.emergencyContact,
+                                                relationship: e.target.value,
                                             },
                                         });
                                     }}

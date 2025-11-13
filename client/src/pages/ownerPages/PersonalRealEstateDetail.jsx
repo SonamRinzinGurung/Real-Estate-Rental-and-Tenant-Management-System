@@ -89,7 +89,7 @@ const PersonalRealEstateDetail = () => {
           <h3 className="font-heading font-bold">Rental Property Detail</h3>
           <section className="flex flex-col gap-12 rounded-md md:flex-row">
             <div className="w-full md:w-2/3">
-              <ImageCarousal realEstateImages={realEstate?.realEstateImages} />
+              <ImageCarousal imageSources={realEstate?.realEstateImages} />
             </div>
             <div className="flex flex-col rounded-md gap-4">
               <div className="flex flex-col gap-2">

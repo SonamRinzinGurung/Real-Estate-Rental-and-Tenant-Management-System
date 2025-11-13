@@ -99,7 +99,7 @@ const RentDetailTenantPage = () => {
         <section className="flex flex-col gap-12 rounded-md md:flex-row">
           <div className="w-full md:w-2/3">
             <ImageCarousal
-              realEstateImages={rentDetail?.realEstate?.realEstateImages}
+              imageSources={rentDetail?.realEstate?.realEstateImages}
             />
           </div>
           <div className="">

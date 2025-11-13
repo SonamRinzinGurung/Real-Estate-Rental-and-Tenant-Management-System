@@ -12,14 +12,13 @@ const getSingleTenantUser = async (req, res) => {
   const { userId } = req.user;
   const email = req.query?.email;
   const slug = req.query?.slug;
-
   let user;
+
   if (email) {
     user = await TenantUser.findOne({ email }).select(
       "-savedProperties -contacts -accountVerificationToken -password"
     );
-  }
-  else if (slug) {
+  } else if (slug) {
     user = await TenantUser.findOne({ slug }).select(
       "-savedProperties -contacts -accountVerificationToken -password"
     );

@@ -112,7 +112,7 @@ const RealEstateDetailCard = ({
             )}
           </div>
         </div>
-        <ImageCarousal realEstateImages={realEstateImages} />
+      <ImageCarousal imageSources={realEstateImages} />
     </section>
   );
 };

@@ -70,6 +70,10 @@ const LeaseSchema = new mongoose.Schema(
           type: String,
           required: false,
         },
+        relationship: {
+          type: String,
+          required: false,
+        },
       },
       photoId: {
         type: String,
@@ -85,7 +89,7 @@ const LeaseSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ["Active", "Inactive", "Pending", "Unsigned", "Terminated-pending", "Terminated-approved", "Terminated"],
+        values: ["Active", "Inactive", "Pending", "Pending-updated", "Unsigned", "Terminated-pending", "Terminated-approved", "Terminated"],
         message: "{VALUE} is not supported",
       },
       default: "Pending",
