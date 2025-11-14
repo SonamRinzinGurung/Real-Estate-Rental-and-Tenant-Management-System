@@ -12,6 +12,7 @@ export const { format } = new Intl.NumberFormat("en-IN", {
 
 
 export const dateFormatter = (date) => {
+  if (!date) return null;
   return moment(date).format("MMM Do, YYYY");
 };
 

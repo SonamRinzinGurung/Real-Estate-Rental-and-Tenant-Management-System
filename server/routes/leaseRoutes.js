@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import {
   createLease,
-  approveLease,
+  signLease,
   getLeaseDetailOwnerView,
   deleteLease,
   getOwnerAllLeases,
@@ -27,10 +27,10 @@ import upload from "../middleware/multerImageMiddleware.js";
 router.post("/", authorizeOwnerUser, createLease);
 
 /**
- * @description Approve the lease
- * @route PATCH /api/lease/approve/:leaseId
+ * @description Sign lease as tenant user to approve the lease
+ * @route PATCH /api/lease/sign/:leaseId
  */
-router.patch("/approve/:leaseId", authorizeTenantUser, approveLease);
+router.patch("/sign/:leaseId", authorizeTenantUser, signLease);
 
 /**
  * @description Get the lease details for the owner user

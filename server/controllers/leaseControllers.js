@@ -10,7 +10,10 @@ import { sendEmail } from "../utils/emailSender.js";
 import {
   cloudinarySingleImageUpload,
   cloudinaryMultipleUpload,
+  cloudinaryDeleteImage,
 } from "../utils/cloudinaryUpload.js";
+import publicIdExtractor from "../utils/publicIdExtractor.js";
+
 /**
  * @description Create Lease
  * @route POST /api/owner/lease
@@ -76,11 +79,11 @@ const createLease = async (req, res) => {
 };
 
 /**
- * @description Approve lease
- * @route PATCH /api/lease/approve/:leaseId
+ * @description Sign lease as tenant user to approve the lease
+ * @route PATCH /api/lease/sign/:leaseId
  * @returns {object} 200 - An object containing the lease details
  */
-const approveLease = async (req, res) => {
+const signLease = async (req, res) => {
   const { digitalSignature, leaseSignTime } = req.body;
   const leaseDetail = await Lease.findOne({
     _id: req.params.leaseId,
@@ -105,22 +108,21 @@ const approveLease = async (req, res) => {
 
   const to = leaseDetail.owner.email;
   const from = leaseDetail.tenant.email;
-  const subject = `Lease approved for rental of property titled ${leaseDetail.realEstate.title}`;
+  const subject = `Lease signed for rental of property titled ${leaseDetail.realEstate.title}`;
   const body = `
     <p> Dear ${leaseDetail.owner.firstName} ${leaseDetail.owner.lastName},</p> 
-    <p>Thank you for your email informing me that the rental lease has been created for the property titled <strong>${leaseDetail.realEstate.title}</strong> at ${leaseDetail.realEstate.address.streetName}, ${leaseDetail.realEstate.address.city}, ${leaseDetail.realEstate.address.state}, ${leaseDetail.realEstate.address.country}. 
-    I have carefully reviewed the terms and conditions outlined in the rental agreement and I am pleased to inform you that I agree to the terms and conditions.</p>
-    <p>I appreciate the effort you have put into creating a rental agreement that protects the interests of both parties. I look forward to a positive and mutually beneficial relationship with you as my landlord.</p>
+    <p>I have signed the lease for the property titled <strong>${leaseDetail.realEstate.title}</strong> at ${leaseDetail.realEstate.address.streetName}, ${leaseDetail.realEstate.address.city}, ${leaseDetail.realEstate.address.state}, ${leaseDetail.realEstate.address.country}. 
+    I have carefully reviewed the terms and conditions outlined in the lease and I am pleased to inform you that I agree to them.</p>
     <p>Thank you for your assistance.</p>
     <br><br>
     <p>Best Regards,</p>
     <p>${leaseDetail.tenant.firstName} ${leaseDetail.tenant.lastName}</p>
     `;
 
-  //send email to owner user to approve the lease
+  //send email to owner user to notify that tenant has signed the lease
   await sendEmail(to, from, subject, body);
 
-  //change the status of the lease to true
+  //change the status of the lease to "Active"
   leaseDetail.status = "Active";
   leaseDetail.digitalSignature = digitalSignature;
   leaseDetail.leaseSignTime = leaseSignTime;
@@ -305,6 +307,25 @@ const deleteLease = async (req, res) => {
     await PaymentHistory.deleteMany({
       rentDetail: rentDetail._id,
     });
+  }
+
+  const photoIdUrl = lease.tenantInformation.photoId;
+  const proofOfIncomeUrls = lease.tenantInformation.proofOfIncome;
+
+  //delete photo id image
+  const photoIdPublicId = publicIdExtractor(photoIdUrl);
+  if (photoIdPublicId) {
+    await cloudinaryDeleteImage(photoIdPublicId);
+  }
+
+  //delete proof of income images
+  if (proofOfIncomeUrls && proofOfIncomeUrls.length > 0) {
+    for (const url of proofOfIncomeUrls) {
+      const publicId = publicIdExtractor(url);
+      if (publicId) {
+        await cloudinaryDeleteImage(publicId);
+      }
+    }
   }
 
   //send email to tenant user that lease has been deleted
@@ -553,7 +574,7 @@ const updateLeaseUnsigned = async (req, res) => {
 
 export {
   createLease,
-  approveLease,
+  signLease,
   getLeaseDetailOwnerView,
   deleteLease,
   getOwnerAllLeases,

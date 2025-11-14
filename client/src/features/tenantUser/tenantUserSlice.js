@@ -81,12 +81,12 @@ export const updateLeaseTenantInfo = createAsyncThunk(
   }
 );
 
-export const approveLease = createAsyncThunk(
-  "approveLease",
+export const signLease = createAsyncThunk(
+  "signLease",
   async ({ leaseId, digitalSignature, leaseSignTime }, thunkAPI) => {
     try {
       const { data } = await axiosFetch.patch(
-        `/lease/approve/${leaseId}`,
+        `/lease/sign/${leaseId}`,
         { digitalSignature, leaseSignTime }
       );
       return await data;
@@ -259,9 +259,8 @@ const tenantUserSlice = createSlice({
       })
       .addCase(updateLeaseTenantInfo.fulfilled, (state, action) => {
         state.isProcessing = false;
-        state.leaseDetail = action.payload.updatedLease;
         state.alertFlag = true;
-        state.alertMsg = "Lease updated successfully";
+        state.alertMsg = "Lease information updated successfully";
         state.alertType = "success";
         state.success = true;
       })
@@ -271,17 +270,17 @@ const tenantUserSlice = createSlice({
         state.alertMsg = action.payload;
         state.alertType = "error";
       })
-      .addCase(approveLease.pending, (state, action) => {
+      .addCase(signLease.pending, (state, action) => {
         state.isProcessing = true;
       })
-      .addCase(approveLease.fulfilled, (state, action) => {
+      .addCase(signLease.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.leaseDetail = action.payload.leaseDetail;
         state.alertFlag = true;
-        state.alertMsg = "Lease approved successfully";
+        state.alertMsg = "Lease signed successfully";
         state.alertType = "success";
       })
-      .addCase(approveLease.rejected, (state, action) => {
+      .addCase(signLease.rejected, (state, action) => {
         state.isProcessing = false;
         state.alertFlag = true;
         state.alertMsg = action.payload;

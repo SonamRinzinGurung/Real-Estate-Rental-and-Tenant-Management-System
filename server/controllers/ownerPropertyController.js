@@ -9,6 +9,7 @@ import {
   cloudinaryMultipleUpload,
   cloudinaryDeleteImage,
 } from "../utils/cloudinaryUpload.js";
+import publicIdExtractor from "../utils/publicIdExtractor.js";
 
 /**
  * @description Post Real Estate
@@ -168,19 +169,15 @@ const deleteProperty = async (req, res) => {
     status: true,
   });
 
-  const realEstateImages = realEstate.realEstateImages;
-  const publicIds = realEstateImages
-    .map((imageURL) => {
-      const parts = imageURL.split("real-estate-system");
-      if (parts.length > 1) {
-        return "real-estate-system" + parts[1].split(".")[0];
+  // delete property images from cloudinary
+  const realEstateImageUrls = realEstate.realEstateImages;
+  if (realEstateImageUrls && realEstateImageUrls.length > 0) {
+    for (const imageUrl of realEstateImageUrls) {
+      const publicId = publicIdExtractor(imageUrl);
+      if (publicId) {
+        await cloudinaryDeleteImage(publicId);
       }
-      return null;
-    })
-    .filter(Boolean);
-
-  for (const publicId of publicIds) {
-    await cloudinaryDeleteImage(publicId);
+    }
   }
 
   res.json({ success: true, message: "Property deleted successfully" });
