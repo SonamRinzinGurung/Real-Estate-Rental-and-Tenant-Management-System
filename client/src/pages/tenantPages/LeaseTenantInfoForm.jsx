@@ -201,12 +201,14 @@ const LeaseTenantInfoForm = () => {
                             {dateFormatter(leaseDetail?.startDate)}
                         </p>
                     </div>
-                    <div>
-                        <p className="">
-                            <span className="font-robotoNormal">Lease End Date</span>:{" "}
-                            {dateFormatter(leaseDetail?.endDate)}
-                        </p>
-                    </div>
+                    {leaseDetail?.endDate && (
+                        <div>
+                            <p className="">
+                                <span className="font-robotoNormal">Lease End Date</span>:{" "}
+                                {dateFormatter(leaseDetail?.endDate)}
+                            </p>
+                        </div>
+                    )}
                     <div>
                         <p className="">
                             <span className="font-robotoNormal">Payment Plan</span>:{" "}

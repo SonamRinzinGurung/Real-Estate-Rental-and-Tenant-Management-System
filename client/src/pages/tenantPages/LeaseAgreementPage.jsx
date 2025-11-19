@@ -11,8 +11,11 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
-import { createNumberFormatter, dateFormatter } from "../../utils/valueFormatter";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import {
+  createNumberFormatter,
+  dateFormatter,
+} from "../../utils/valueFormatter";
 import { Button, CircularProgress } from "@mui/material";
 import leaseApprovedImg from "../../assets/images/leaseApproved.svg";
 import { countries } from "../../utils/countryList";
@@ -91,7 +94,7 @@ const LeaseAgreementPage = () => {
       return;
     }
     setChecked(e.target.checked);
-  }
+  };
 
   const handleApproveLease = useCallback(() => {
     if (!checked) {
@@ -102,7 +105,9 @@ const LeaseAgreementPage = () => {
       return;
     }
     const leaseSignTime = new Date().toISOString();
-    dispatch(signLease({ leaseId: leaseDetail._id, digitalSignature, leaseSignTime }));
+    dispatch(
+      signLease({ leaseId: leaseDetail._id, digitalSignature, leaseSignTime })
+    );
     handleModalClose();
   }, [dispatch, leaseDetail, handleModalClose, checked, digitalSignature]);
 
@@ -128,24 +133,17 @@ const LeaseAgreementPage = () => {
           Go Home
         </Button>
         <div className="w-56">
-          <img
-            src={leaseApprovedImg}
-            className="w-full"
-            alt="login banner"
-          />
+          <img src={leaseApprovedImg} className="w-full" alt="login banner" />
         </div>
       </div>
-    )
-
+    );
   }
 
   return (
     <main className="flex flex-col gap-6 items-center lg:items-start lg:ml-10 mt-8 mx-2 md:mx-0">
       {/* Lease Agreement Page Header */}
       <div className="flex gap-4 items-center">
-        <h3 className="font-heading font-bold">
-          Lease Agreement Page
-        </h3>
+        <h3 className="font-heading font-bold">Lease Agreement Page</h3>
         <div className="flex justify-center items-center gap-2">
           <PendingActionsIcon color="info" />
           <p className="font-bold">Unsigned Lease</p>
@@ -156,9 +154,7 @@ const LeaseAgreementPage = () => {
         {/* Property Details */}
         <div className="flex flex-col gap-2 p-4 shadow-md rounded-md border border-gray-200 max-w-sm">
           <h5 className="font-semibold">Property Details</h5>
-          <Link
-            to={`/tenant/real-estate/${leaseDetail?.realEstate?.slug}`}
-          >
+          <Link to={`/tenant/real-estate/${leaseDetail?.realEstate?.slug}`}>
             <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
               {leaseDetail?.realEstate?.title}
             </h5>
@@ -177,8 +173,7 @@ const LeaseAgreementPage = () => {
           <h5 className="font-semibold">Property Owner</h5>
           <Link to={`/tenant/owner-user/${leaseDetail?.owner?.slug}`}>
             <h5 className="font-robotoNormal hover:text-primaryDark duration-300 ease-in-out cursor-pointer">
-              {leaseDetail?.owner?.firstName}{" "}
-              {leaseDetail?.owner?.lastName}
+              {leaseDetail?.owner?.firstName} {leaseDetail?.owner?.lastName}
             </h5>
           </Link>
           <div className="flex gap-2 items-center">
@@ -266,12 +261,15 @@ const LeaseAgreementPage = () => {
               {dateFormatter(leaseDetail?.startDate)}
             </p>
           </div>
-          <div>
-            <p className="">
-              <span className="font-robotoNormal">Lease End Date</span>:{" "}
-              {dateFormatter(leaseDetail?.endDate)}
-            </p>
-          </div>
+
+          {leaseDetail?.endDate && (
+            <div>
+              <p className="">
+                <span className="font-robotoNormal">Lease End Date</span>:{" "}
+                {dateFormatter(leaseDetail?.endDate)}
+              </p>
+            </div>
+          )}
           <div>
             <p className="">
               <span className="font-robotoNormal">Payment Plan</span>:{" "}
@@ -280,7 +278,8 @@ const LeaseAgreementPage = () => {
           </div>
           <div>
             <p className="">
-              <span className="font-robotoNormal">Rent Amount</span>: {countryToCurrency[currentCountry.code]}{" "}
+              <span className="font-robotoNormal">Rent Amount</span>:{" "}
+              {countryToCurrency[currentCountry.code]}{" "}
               {format(leaseDetail?.realEstate?.price)} per month
             </p>
           </div>
@@ -392,45 +391,42 @@ const LeaseAgreementPage = () => {
 
       <div className="flex flex-col gap-4 p-4">
         <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="agree"
-            onChange={handleCheckboxChange}
-            />
+          <input type="checkbox" id="agree" onChange={handleCheckboxChange} />
           <label htmlFor="agree" className="">
-              By checking this box, I agree to the terms and conditions of
-              this lease.
-            </label>
-          </div>
+            By checking this box, I agree to the terms and conditions of this
+            lease.
+          </label>
+        </div>
 
-          {/* digital signature */}
+        {/* digital signature */}
         <div className="flex flex-col gap-1">
           <p className="font-robotoNormal font-semibold">
             Please type your full name as a digital signature
           </p>
-              <input
-                type="text"
-                value={digitalSignature}
-                onChange={(e) => setDigitalSignature(e.target.value)}
-                className="border border-gray-300 rounded-md p-2"
+          <input
+            type="text"
+            value={digitalSignature}
+            onChange={(e) => setDigitalSignature(e.target.value)}
+            className="border border-gray-300 rounded-md p-2"
           />
         </div>
-          {/* {disclaimer} */}
+        {/* {disclaimer} */}
         <div className="mt-6">
-            <p className="text-sm">
-              <strong>Disclaimer:</strong> This lease is a legally binding
-              document. By signing your name on this lease, you agree to all the terms
-              and conditions outlined herein.
-            </p>
-          </div>
+          <p className="text-sm">
+            <strong>Disclaimer:</strong> This lease is a legally binding
+            document. By signing your name on this lease, you agree to all the
+            terms and conditions outlined herein.
+          </p>
+        </div>
       </div>
-
 
       <div className="flex flex-col gap-4 w-full px-4 py-4 md:px-48 md:py-6 lg:-ml-6 shadow-md rounded-md border border-gray-200 items-center my-6">
         <h4 className="font-semibold">Lease Action</h4>
         <p>
-          If you do not agree to the terms and conditions of this lease, you
-          may choose to not accept it. By clicking the "Sign Lease" button and confirming, you will be agreeing to the terms and conditions of this lease.
+          If you do not agree to the terms and conditions of this lease, you may
+          choose to not accept it. By clicking the "Sign Lease" button and
+          confirming, you will be agreeing to the terms and conditions of this
+          lease.
         </p>
 
         <div className="flex justify-start mt-6">
@@ -454,7 +450,6 @@ const LeaseAgreementPage = () => {
               "Sign Lease"
             )}
           </Button>
-
         </div>
       </div>
 
@@ -462,8 +457,10 @@ const LeaseAgreementPage = () => {
         <ConfirmModal open={open} handleModalClose={handleModalClose}>
           <h3 className="text-center">Agree to Lease?</h3>
           <p className="text-center my-4">
-            Are you sure you want to agree to the terms on this lease? Once you sign this lease, you will not be able to terminate it without the consent of the property owner. You will be
-            agreeing to the terms and conditions of this lease.
+            Are you sure you want to agree to the terms on this lease? Once you
+            sign this lease, you will not be able to terminate it without the
+            consent of the property owner. You will be agreeing to the terms and
+            conditions of this lease.
           </p>
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <Button onClick={handleModalClose} color="error">

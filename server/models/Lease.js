@@ -24,7 +24,7 @@ const LeaseSchema = new mongoose.Schema(
 
     endDate: {
       type: String,
-      required: [true, "Please provide an end date"],
+      required: [false, "Please provide an end date"],
     },
 
     rentAmount: {

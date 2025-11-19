@@ -106,6 +106,12 @@ const signLease = async (req, res) => {
     throw new NotFoundError("Lease not found");
   }
 
+  //change the status of the lease to "Active"
+  leaseDetail.status = "Active";
+  leaseDetail.digitalSignature = digitalSignature;
+  leaseDetail.leaseSignTime = leaseSignTime;
+  await leaseDetail.save();
+
   const to = leaseDetail.owner.email;
   const from = leaseDetail.tenant.email;
   const subject = `Lease signed for rental of property titled ${leaseDetail.realEstate.title}`;
@@ -121,12 +127,6 @@ const signLease = async (req, res) => {
 
   //send email to owner user to notify that tenant has signed the lease
   await sendEmail(to, from, subject, body);
-
-  //change the status of the lease to "Active"
-  leaseDetail.status = "Active";
-  leaseDetail.digitalSignature = digitalSignature;
-  leaseDetail.leaseSignTime = leaseSignTime;
-  await leaseDetail.save();
 
   res.json({ leaseDetail });
 };
